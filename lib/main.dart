@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'tracking_variables_route.dart';
+import 'data_analysis_route.dart';
+import 'survey_route.dart';
 
 void main() => runApp(MyApp());
 
@@ -7,21 +10,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-        title: 'Welcome to Flutter',
         home: AppHome()
-    );
-  }
-
-  void _printMessage() {
-    print('Button pressed');
-  }
-
-  void _showToast(BuildContext context) {
-    final scaffold = Scaffold.of(context);
-    scaffold.showSnackBar(
-      SnackBar(
-        content: const Text('Message'),
-      ),
     );
   }
 }
@@ -33,39 +22,41 @@ class AppHome extends StatelessWidget {
       appBar: AppBar(
         title: Text('Welcome to Your App!'),
       ),
-      body: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: <Widget>[
-          RaisedButton(
-            child: Text('Tracked Variables'),
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => TrackingVariablesRoute()),
-              );
-            },
-          ),
-          RaisedButton(
-            child: Text('Data Analysis'),
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => DataAnalysisRoute()),
-              );
-            },
-          ),
-          RaisedButton(
-            child: Text('Daily Survey'),
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => DailySurveyRoute()),
-              );
-            },
-          ),
-        ],
-      ),
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: <Widget>[
+            RaisedButton(
+              child: Text('Tracked Variables'),
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => TrackingVariablesRoute()),
+                );
+              },
+            ),
+            RaisedButton(
+              child: Text('Data Analysis'),
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => DataAnalysisRoute()),
+                );
+              },
+            ),
+            RaisedButton(
+              child: Text('Daily Survey'),
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => DailySurveyRoute()),
+                );
+              },
+            ),
+          ],
+        ),
+      )
     );
   }
 
@@ -83,53 +74,7 @@ class AppHome extends StatelessWidget {
   }
 }
 
-class TrackingVariablesRoute extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text("Tracked Variables"),
-      ),
-      body: Center(
-        child: RaisedButton(
-          child: Text('+'),
-          onPressed: null,
-        ),
-      ),
-    );
-  }
-}
-
-class DataAnalysisRoute extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text("Data Analysis"),
-      ),
-      body: Center(
-        child: RaisedButton(
-          child: Text('+'),
-          onPressed: null,
-        ),
-      ),
-    );
-  }
-}
-
-class DailySurveyRoute extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text("Daily Survey"),
-      ),
-      body: Center(
-        child: RaisedButton(
-          child: Text('+'),
-          onPressed: null,
-        ),
-      ),
-    );
-  }
-}
+// DONE 1. center the buttons on the home route
+// DONE 2. put the code for each route in a different file (check the style guide!)
+// TODO: 3. get a linter for dart
+// TODO: 4. then add a text field to the other route
