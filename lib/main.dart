@@ -59,22 +59,9 @@ class AppHome extends StatelessWidget {
       )
     );
   }
-
-  void _printMessage() {
-    print('Button pressed');
-  }
-
-  void _showToast(BuildContext context) {
-    final scaffold = Scaffold.of(context);
-    scaffold.showSnackBar(
-      SnackBar(
-        content: const Text('Message'),
-      ),
-    );
-  }
 }
 
 // DONE 1. center the buttons on the home route
 // DONE 2. put the code for each route in a different file (check the style guide!)
-// TODO: 3. get a linter for dart
+// DONE 3. get a linter for dart
 // TODO: 4. then add a text field to the other route
