@@ -2,6 +2,29 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 
 class TrackingVariablesRoute extends StatelessWidget {
+
+  Future<String> createAlertDialog(BuildContext context){
+    TextEditingController customController = TextEditingController();
+
+    return showDialog(context: context, builder: (context){
+      return AlertDialog(
+        title: Text('Your name?'),
+        content: TextField(
+          controller: customController,
+        ),
+        actions: <Widget>[
+          MaterialButton(
+            elevation: 5.0,
+            child: Text('Submit'),
+            onPressed: (){
+              Navigator.of(context).pop(customController.text.toString());
+            },
+          )
+        ],
+      );
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -20,11 +43,18 @@ class TrackingVariablesRoute extends StatelessWidget {
           '+',
           style: TextStyle(fontWeight: FontWeight.bold, fontSize: 35),
         ),
-        onPressed: null,
+        onPressed: () {
+          createAlertDialog(context).then((onValue){
+            SnackBar mySnackBar = SnackBar(content: Text("Hello $onValue",));
+            Scaffold.of(context).showSnackBar(mySnackBar);
+          });
+        },
       ),
     );
   }
 }
+
+// TODO: use modal route for the popup!
 
 /*
 class TrackingVariablesRoute extends StatelessWidget {
