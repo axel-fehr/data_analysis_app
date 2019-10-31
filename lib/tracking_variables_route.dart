@@ -8,14 +8,14 @@ class TrackingVariablesRoute extends StatelessWidget {
 
     return showDialog(context: context, builder: (context){
       return AlertDialog(
-        title: Text('Your name?'),
+        title: Text('Variable name'),
         content: TextField(
           controller: customController,
         ),
         actions: <Widget>[
           MaterialButton(
             elevation: 5.0,
-            child: Text('Submit'),
+            child: Text('Add'),
             onPressed: (){
               Navigator.of(context).pop(customController.text.toString());
             },
@@ -32,11 +32,22 @@ class TrackingVariablesRoute extends StatelessWidget {
         title: Text("Tracked Variables"),
       ),
       body: Center(
-        child: Text(
-          'You haven\'t created a tracking variable yet.'
-          '\nGo ahead and create one!',
-          style: TextStyle(fontSize: 16),
-        ),
+        child: Column(
+          children: <Widget>[
+            Visibility(
+              child: Text(
+                'You haven\'t created a tracking variable yet.'
+                    '\nGo ahead and create one!',
+                style: TextStyle(fontSize: 16),
+              ),
+              visible: true,
+            ),
+            Visibility(
+              child: TrackingVariablesList(), // TODO: add stateful widget class for list of tracking variables
+              visible: false,
+            )
+          ],
+        )
       ),
       floatingActionButton: FloatingActionButton(
         child: Text(
@@ -48,13 +59,82 @@ class TrackingVariablesRoute extends StatelessWidget {
             SnackBar mySnackBar = SnackBar(content: Text("Hello $onValue",));
             Scaffold.of(context).showSnackBar(mySnackBar);
           });
+          // TODO: set visibility of text to false IF a tracking variable is created
         },
       ),
     );
   }
 }
 
-// TODO: use modal route for the popup!
+/*
+// #docregion MyApp
+class MyApp extends StatelessWidget {
+  // #docregion build
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      title: 'Startup Name Generator',
+      home: RandomWords(),
+    );
+  }
+// #enddocregion build
+}
+
+class RandomWords extends StatefulWidget {
+  @override
+  RandomWordsState createState() => RandomWordsState();
+}
+// #enddocregion MyApp
+
+// #docregion RWS-var
+class RandomWordsState extends State<RandomWords> {
+  final _suggestions = <WordPair>[];
+  final _biggerFont = const TextStyle(fontSize: 18.0);
+  // #enddocregion RWS-var
+
+  // #docregion RWS-build
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Startup Name Generator'),
+      ),
+      body: _buildSuggestions(),
+    );
+  }
+
+  // #docregion _buildSuggestions
+  Widget _buildSuggestions() {
+    return ListView.builder(
+        padding: const EdgeInsets.all(16.0),
+        itemBuilder: /*1*/ (context, i) {
+          if (i.isOdd) return Divider(); /*2*/
+
+          final index = i ~/ 2; /*3*/
+          if (index >= _suggestions.length) {
+            _suggestions.addAll(generateWordPairs().take(10)); /*4*/
+          }
+          return _buildRow(_suggestions[index]);
+        });
+  }
+  // #enddocregion _buildSuggestions
+
+  // #docregion _buildRow
+  Widget _buildRow(WordPair pair) {
+    return ListTile(
+      title: Text(
+        pair.asPascalCase,
+        style: _biggerFont,
+      ),
+    );
+  }
+  // #enddocregion _buildRow
+
+// #enddocregion RWS-build
+// #docregion RWS-var
+}
+// #enddocregion RWS-var
+*/
 
 /*
 class TrackingVariablesRoute extends StatelessWidget {
