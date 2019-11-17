@@ -40,7 +40,7 @@ class TrackingVariablesRoute extends StatelessWidget {
                     '\nGo ahead and create one!',
                 style: TextStyle(fontSize: 16),
               ),
-              visible: true,
+              visible: true, // TODO: remove this comment, it's just a test
             ),
             Visibility(
               child: TrackingVariablesList(), // TODO: add stateful widget class for list of tracking variables
