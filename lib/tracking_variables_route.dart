@@ -40,7 +40,7 @@ class TrackingVariablesRoute extends StatelessWidget {
                     '\nGo ahead and create one!',
                 style: TextStyle(fontSize: 16),
               ),
-              visible: true, // TODO: remove this comment, it's just a test
+              visible: true,
             ),
             Visibility(
               child: TrackingVariablesList(), // TODO: add stateful widget class for list of tracking variables
@@ -79,7 +79,7 @@ class TrackingVariablesListState extends State<TrackingVariablesList> {
   Widget build(BuildContext context) {
     return _buildSuggestions();
   }
-
+  // TODO: rename widget
   Widget _buildSuggestions() {
     return ListView.builder(
         padding: const EdgeInsets.all(16.0),
@@ -88,19 +88,17 @@ class TrackingVariablesListState extends State<TrackingVariablesList> {
 
           final index = i ~/ 2;
           if (index >= _suggestions.length) {
-            _suggestions.addAll(generateWordPairs().take(10));
+//            _suggestions.addAll(generateWordPairs().take(10));
+            _suggestions.add(Text("I'm a list item!"));
           }
           return _buildRow(_suggestions[index]);
         });
   }
 
   // #docregion _buildRow
-  Widget _buildRow(WordPair pair) {
+  Widget _buildRow(Text trackingVariableName) {
     return ListTile(
-      title: Text(
-        pair.asPascalCase,
-        style: _biggerFont,
-      ),
+      title: trackingVariableName,
     );
   }
 }
