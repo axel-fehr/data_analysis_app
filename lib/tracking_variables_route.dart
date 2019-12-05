@@ -1,7 +1,28 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 
-class TrackingVariablesRoute extends StatelessWidget {
+/*
+Plan:
+1. DONE make code below work (should work already but check)
+2. SKIP show list on tap
+2. make it work with the list and the button (without the alert dialog)
+3. make it work with the list and the alert dialog
+4. show the list with an entry whose text is the name entered in the alert dialog
+*/
+
+class TrackingVariablesRoute extends StatefulWidget {
+  @override
+  _TrackingVariablesRouteState createState() => _TrackingVariablesRouteState();
+}
+
+class _TrackingVariablesRouteState extends State<TrackingVariablesRoute> {
+  bool showList = false;
+
+  void _handleButtonPressed(bool newValue) {
+    setState(() {
+      showList = newValue;
+    });
+  }
 
   Future<String> createAlertDialog(BuildContext context){
     TextEditingController customController = TextEditingController();
@@ -40,11 +61,11 @@ class TrackingVariablesRoute extends StatelessWidget {
                     '\nGo ahead and create one!',
                 style: TextStyle(fontSize: 16),
               ),
-              visible: true,
+              visible: !showList,
             ),
             Visibility(
               child: TrackingVariablesList(), // TODO: add stateful widget class for list of tracking variables
-              visible: false,
+              visible: showList,
             )
           ],
         )
@@ -55,16 +76,20 @@ class TrackingVariablesRoute extends StatelessWidget {
           style: TextStyle(fontWeight: FontWeight.bold, fontSize: 35),
         ),
         onPressed: () {
-          createAlertDialog(context).then((onValue){
-            SnackBar mySnackBar = SnackBar(content: Text("Hello $onValue",));
-            Scaffold.of(context).showSnackBar(mySnackBar);
+          setState(() {
+            showList = !showList;
           });
+//          createAlertDialog(context).then((onValue){
+//            SnackBar mySnackBar = SnackBar(content: Text("Hello $onValue",));
+//            Scaffold.of(context).showSnackBar(mySnackBar);
+//          });
           // TODO: set visibility of text to false IF a tracking variable is created
         },
       ),
     );
   }
 }
+
 
 class TrackingVariablesList extends StatefulWidget {
   @override
@@ -73,14 +98,13 @@ class TrackingVariablesList extends StatefulWidget {
 
 class TrackingVariablesListState extends State<TrackingVariablesList> {
   final _suggestions = <Text>[];
-  final _biggerFont = const TextStyle(fontSize: 18.0);
 
   @override
   Widget build(BuildContext context) {
-    return _buildSuggestions();
+    return _buildVariablesList();
   }
-  // TODO: rename widget
-  Widget _buildSuggestions() {
+
+  Widget _buildVariablesList() {
     return ListView.builder(
         padding: const EdgeInsets.all(16.0),
         itemBuilder: (context, i) {
