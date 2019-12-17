@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:english_words/english_words.dart';
 
 /*
 Plan:
 1. DONE make code below work (should work already but check)
 2. SKIP show list on tap
-2. make it work with the list and the button (without the alert dialog)
+2. ADD WORD ITEMS TO LIST FIRST make it work with the list and the button (without the alert dialog)
 3. make it work with the list and the alert dialog
 4. show the list with an entry whose text is the name entered in the alert dialog
 */
@@ -64,7 +65,11 @@ class _TrackingVariablesRouteState extends State<TrackingVariablesRoute> {
               visible: !showList,
             ),
             Visibility(
-              child: TrackingVariablesList(), // TODO: add stateful widget class for list of tracking variables
+              child: Container(
+                child: TrackingVariablesList(), // TODO: add stateful widget class for list of tracking variables
+                width: 200,
+                height: 200,
+              ),
               visible: showList,
             )
           ],
