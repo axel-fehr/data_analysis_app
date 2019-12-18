@@ -102,138 +102,16 @@ class TrackingVariablesList extends StatefulWidget {
 }
 
 class TrackingVariablesListState extends State<TrackingVariablesList> {
-  final _suggestions = <Text>[];
+  final _textStyle = TextStyle(fontSize: 30.0);
 
   @override
   Widget build(BuildContext context) {
-    return _buildVariablesList();
-  }
-
-  Widget _buildVariablesList() {
-    return ListView.builder(
-        padding: const EdgeInsets.all(16.0),
-        itemBuilder: (context, i) {
-          if (i.isOdd) return Divider();
-
-          final index = i ~/ 2;
-          if (index >= _suggestions.length) {
-//            _suggestions.addAll(generateWordPairs().take(10));
-            _suggestions.add(Text("I'm a list item!"));
-          }
-          return _buildRow(_suggestions[index]);
-        });
-  }
-
-  // #docregion _buildRow
-  Widget _buildRow(Text trackingVariableName) {
-    return ListTile(
-      title: trackingVariableName,
+//    return _buildVariablesList();
+    return ListView(
+      children: <Text>[Text('Var1', style: _textStyle),
+                       Text('Var2', style: _textStyle),
+                       Text('Var3', style: _textStyle)],
     );
   }
 }
 
-/*
-// #docregion MyApp
-class MyApp extends StatelessWidget {
-  // #docregion build
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Startup Name Generator',
-      home: RandomWords(),
-    );
-  }
-// #enddocregion build
-}
-
-class RandomWords extends StatefulWidget {
-  @override
-  RandomWordsState createState() => RandomWordsState();
-}
-// #enddocregion MyApp
-
-// #docregion RWS-var
-class RandomWordsState extends State<RandomWords> {
-  final _suggestions = <WordPair>[];
-  final _biggerFont = const TextStyle(fontSize: 18.0);
-  // #enddocregion RWS-var
-
-  // #docregion RWS-build
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Startup Name Generator'),
-      ),
-      body: _buildSuggestions(),
-    );
-  }
-
-  // #docregion _buildSuggestions
-  Widget _buildSuggestions() {
-    return ListView.builder(
-        padding: const EdgeInsets.all(16.0),
-        itemBuilder: /*1*/ (context, i) {
-          if (i.isOdd) return Divider(); /*2*/
-
-          final index = i ~/ 2; /*3*/
-          if (index >= _suggestions.length) {
-            _suggestions.addAll(generateWordPairs().take(10)); /*4*/
-          }
-          return _buildRow(_suggestions[index]);
-        });
-  }
-  // #enddocregion _buildSuggestions
-
-  // #docregion _buildRow
-  Widget _buildRow(WordPair pair) {
-    return ListTile(
-      title: Text(
-        pair.asPascalCase,
-        style: _biggerFont,
-      ),
-    );
-  }
-  // #enddocregion _buildRow
-
-// #enddocregion RWS-build
-// #docregion RWS-var
-}
-// #enddocregion RWS-var
-*/
-
-/*
-class TrackingVariablesRoute extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text("Tracked Variables"),
-      ),
-      body: Center(
-        widthFactor: 1.0,
-        child: SizedBox(
-          width: 300.0,
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: <Widget>[
-              Expanded(
-                child: TextField(
-                  decoration: InputDecoration(
-                    border: OutlineInputBorder(),
-                    labelText: 'Variable name',
-                  ),
-                ),
-              ),
-              RaisedButton(
-                child: Text('+'),
-                onPressed: null,
-                ),
-              ],
-            )
-        )
-      ),
-    );
-  }
-}*/
