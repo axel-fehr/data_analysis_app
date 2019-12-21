@@ -1,13 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:english_words/english_words.dart';
 
 /*
 Plan:
 1. DONE make code below work (should work already but check)
 2. SKIP show list on tap
-2. ADD WORD ITEMS TO LIST FIRST make it work with the list and the button (without the alert dialog)
-3. make it work with the list and the alert dialog
+3. DONE make it work with a list with arbitrary items and the button (without the alert dialog)
+4. make it work with the list and the alert dialog (i.e. name of item must be from the alert dialog)
 4. show the list with an entry whose text is the name entered in the alert dialog
 */
 
@@ -19,9 +18,9 @@ class TrackingVariablesRoute extends StatefulWidget {
 class _TrackingVariablesRouteState extends State<TrackingVariablesRoute> {
   bool showList = false;
 
-  void _handleButtonPressed(bool newValue) {
+  void _showListOnButtonPress() {
     setState(() {
-      showList = newValue;
+      showList = true;
     });
   }
 
@@ -75,25 +74,58 @@ class _TrackingVariablesRouteState extends State<TrackingVariablesRoute> {
           ],
         )
       ),
-      floatingActionButton: FloatingActionButton(
-        child: Text(
-          '+',
-          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 35),
-        ),
-        onPressed: () {
-          setState(() {
-            showList = !showList;
-          });
-//          createAlertDialog(context).then((onValue){
-//            SnackBar mySnackBar = SnackBar(content: Text("Hello $onValue",));
-//            Scaffold.of(context).showSnackBar(mySnackBar);
-//          });
-          // TODO: set visibility of text to false IF a tracking variable is created
-        },
-      ),
+      floatingActionButton: AddVariableToTrackButton(handleButtonPress: _showListOnButtonPress),
     );
   }
 }
+
+
+class AddVariableToTrackButton extends StatelessWidget{
+  final Function() handleButtonPress;
+  AddVariableToTrackButton({Key key, @required this.handleButtonPress}) : super(key: key);
+
+  Future<String> createAlertDialog(BuildContext context){
+    TextEditingController customController = TextEditingController();
+
+    return showDialog(context: context, builder: (context){
+      return AlertDialog(
+        title: Text('Variable name'),
+        content: TextField(
+          controller: customController,
+        ),
+        actions: <Widget>[
+          MaterialButton(
+            elevation: 5.0,
+            child: Text('Add'),
+            onPressed: (){
+              Navigator.of(context).pop(customController.text.toString());
+            },
+          )
+        ],
+      );
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return FloatingActionButton(
+      child: Text(
+        '+',
+        style: TextStyle(fontWeight: FontWeight.bold, fontSize: 35),
+      ),
+      onPressed: () {
+        createAlertDialog(context).then((onValue){
+          SnackBar mySnackBar = SnackBar(content: Text("Hello $onValue",));
+          Scaffold.of(context).showSnackBar(mySnackBar);
+          handleButtonPress();
+        });
+        // TODO: set visibility of text to false IF a tracking variable is created
+        // TODO: pass name of variable to list builder
+      },
+    );
+  }
+}
+
 
 
 class TrackingVariablesList extends StatefulWidget {
