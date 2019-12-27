@@ -7,7 +7,7 @@ Plan:
 2. SKIP show list on tap
 3. DONE make it work with a list with arbitrary items and the button (without the alert dialog)
 4. make it work with the list and the alert dialog (i.e. name of item must be from the alert dialog)
-4. show the list with an entry whose text is the name entered in the alert dialog
+5. make it work with multiple items that are added to the list one-by-one
 */
 
 class TrackingVariablesRoute extends StatefulWidget {
@@ -15,10 +15,13 @@ class TrackingVariablesRoute extends StatefulWidget {
   _TrackingVariablesRouteState createState() => _TrackingVariablesRouteState();
 }
 
+
 class _TrackingVariablesRouteState extends State<TrackingVariablesRoute> {
   bool showList = false;
 
-  void _showListOnButtonPress() {
+  void _addVariableToList(String variableName) {
+    // TODO: check if input name is null or empty and change visibility based on that
+    // TODO: show item with name of passed value
     setState(() {
       showList = true;
     });
@@ -65,7 +68,7 @@ class _TrackingVariablesRouteState extends State<TrackingVariablesRoute> {
             ),
             Visibility(
               child: Container(
-                child: TrackingVariablesList(), // TODO: add stateful widget class for list of tracking variables
+                child: TrackingVariablesList(),
                 width: 200,
                 height: 200,
               ),
@@ -74,15 +77,43 @@ class _TrackingVariablesRouteState extends State<TrackingVariablesRoute> {
           ],
         )
       ),
-      floatingActionButton: AddVariableToTrackButton(handleButtonPress: _showListOnButtonPress),
+      floatingActionButton: AddVariableToTrackButton(handleButtonPress: _addVariableToList),
+    );
+  }
+}
+// NOTE: could for example call a function in one widget in the parent widget, and pass the value to the other child widget
+// TODO: could this be made stateless since it gets rendered again anyway since the parent is stateful?
+class TrackingVariablesList extends StatefulWidget {
+  @override
+  TrackingVariablesListState createState() => TrackingVariablesListState();
+}
+
+
+class TrackingVariablesListState extends State<TrackingVariablesList> {
+  final _listTextStyle = TextStyle(fontSize: 30.0);
+
+  void addVariableToList(String variableName) {
+    setState(() {
+      //TODO: implement the addition of a variable with the given name
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+//    return _buildVariablesList();
+    return ListView(
+      children: <Text>[Text(this._variableName, style: _listTextStyle),
+        Text('Var2', style: _listTextStyle),
+        Text('Var3', style: _listTextStyle)],
     );
   }
 }
 
 
 class AddVariableToTrackButton extends StatelessWidget{
-  final Function() handleButtonPress;
-  AddVariableToTrackButton({Key key, @required this.handleButtonPress}) : super(key: key);
+  final handleButtonPress;
+
+  AddVariableToTrackButton({Key key, @required this.handleButtonPress}) : super(key: key); // TODO: UNDERSTAND THIS
 
   Future<String> createAlertDialog(BuildContext context){
     TextEditingController customController = TextEditingController();
@@ -117,33 +148,11 @@ class AddVariableToTrackButton extends StatelessWidget{
         createAlertDialog(context).then((onValue){
           SnackBar mySnackBar = SnackBar(content: Text("Hello $onValue",));
           Scaffold.of(context).showSnackBar(mySnackBar);
-          handleButtonPress();
+          handleButtonPress(onValue);
         });
-        // TODO: set visibility of text to false IF a tracking variable is created
         // TODO: pass name of variable to list builder
+        // TODO: set visibility of text to false IF a tracking variable is created
       },
     );
   }
 }
-
-
-
-class TrackingVariablesList extends StatefulWidget {
-  @override
-  TrackingVariablesListState createState() => TrackingVariablesListState();
-}
-
-class TrackingVariablesListState extends State<TrackingVariablesList> {
-  final _textStyle = TextStyle(fontSize: 30.0);
-
-  @override
-  Widget build(BuildContext context) {
-//    return _buildVariablesList();
-    return ListView(
-      children: <Text>[Text('Var1', style: _textStyle),
-                       Text('Var2', style: _textStyle),
-                       Text('Var3', style: _textStyle)],
-    );
-  }
-}
-
