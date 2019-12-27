@@ -91,6 +91,7 @@ class TrackingVariablesList extends StatefulWidget {
 
 class TrackingVariablesListState extends State<TrackingVariablesList> {
   final _listTextStyle = TextStyle(fontSize: 30.0);
+  var list = ListView();
 
   void addVariableToList(String variableName) {
     setState(() {
@@ -100,12 +101,13 @@ class TrackingVariablesListState extends State<TrackingVariablesList> {
 
   @override
   Widget build(BuildContext context) {
+    return list;
 //    return _buildVariablesList();
-    return ListView(
-      children: <Text>[Text(this._variableName, style: _listTextStyle),
-        Text('Var2', style: _listTextStyle),
-        Text('Var3', style: _listTextStyle)],
-    );
+//    return ListView(
+//      children: <Text>[Text(this._variableName, style: _listTextStyle),
+//        Text('Var2', style: _listTextStyle),
+//        Text('Var3', style: _listTextStyle)],
+//    );
   }
 }
 
