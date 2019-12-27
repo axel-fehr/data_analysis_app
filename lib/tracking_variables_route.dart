@@ -18,11 +18,13 @@ class TrackingVariablesRoute extends StatefulWidget {
 
 class _TrackingVariablesRouteState extends State<TrackingVariablesRoute> {
   bool showList = false;
+  var variablesList = TrackingVariablesList();
 
   void _addVariableToList(String variableName) {
     // TODO: check if input name is null or empty and change visibility based on that
     // TODO: show item with name of passed value
     setState(() {
+      variablesList.createState().addVariableToList(variableName);
       showList = true;
     });
   }
@@ -68,7 +70,7 @@ class _TrackingVariablesRouteState extends State<TrackingVariablesRoute> {
             ),
             Visibility(
               child: Container(
-                child: TrackingVariablesList(),
+                child: variablesList,
                 width: 200,
                 height: 200,
               ),
@@ -91,17 +93,19 @@ class TrackingVariablesList extends StatefulWidget {
 
 class TrackingVariablesListState extends State<TrackingVariablesList> {
   final _listTextStyle = TextStyle(fontSize: 30.0);
-  var list = ListView();
+  var _list = List<Text>();
+//  list.add()
 
   void addVariableToList(String variableName) {
     setState(() {
+      _list.add(Text(variableName, style: _listTextStyle));
       //TODO: implement the addition of a variable with the given name
     });
   }
 
   @override
   Widget build(BuildContext context) {
-    return list;
+    return ListView(children: _list);
 //    return _buildVariablesList();
 //    return ListView(
 //      children: <Text>[Text(this._variableName, style: _listTextStyle),
