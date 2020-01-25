@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:provider/provider.dart';
 
 /*
 Plan:
@@ -10,6 +11,11 @@ Plan:
 5. make it work with multiple items that are added to the list one-by-one
 */
 
+/* tmp:
+1. use provider for show list
+2. use provider for variable list
+ */
+
 class TrackingVariablesRoute extends StatefulWidget {
   @override
   _TrackingVariablesRouteState createState() => _TrackingVariablesRouteState();
@@ -18,13 +24,14 @@ class TrackingVariablesRoute extends StatefulWidget {
 
 class _TrackingVariablesRouteState extends State<TrackingVariablesRoute> {
   bool showList = false;
-  var variablesList = TrackingVariablesList();
+//  var variablesList = TrackingVariablesList();
 
-  void _addVariableToList(String variableName) {
+//  void _addVariableToList(String variableName) {
+  void _addVariableToList() {
     // TODO: check if input name is null or empty and change visibility based on that
     // TODO: show item with name of passed value
     setState(() {
-      variablesList.createState().addVariableToList(variableName);
+//      variablesList.createState().addVariableToList(variableName);
       showList = true;
     });
   }
@@ -58,26 +65,26 @@ class _TrackingVariablesRouteState extends State<TrackingVariablesRoute> {
         title: Text("Tracked Variables"),
       ),
       body: Center(
-        child: Column(
-          children: <Widget>[
-            Visibility(
-              child: Text(
-                'You haven\'t created a tracking variable yet.'
-                    '\nGo ahead and create one!',
-                style: TextStyle(fontSize: 16),
+          child: Column(
+            children: <Widget>[
+              Visibility(
+                child: Text(
+                  'You haven\'t created a tracking variable yet.'
+                      '\nGo ahead and create one!',
+                  style: TextStyle(fontSize: 16),
+                ),
+                visible: !showList,
               ),
-              visible: !showList,
-            ),
-            Visibility(
-              child: Container(
-                child: variablesList,
-                width: 200,
-                height: 200,
-              ),
-              visible: showList,
-            )
-          ],
-        )
+              Visibility(
+                child: Container(
+                  child: TrackingVariablesList(), //variablesList,
+                  width: 200,
+                  height: 200,
+                ),
+                visible: showList,
+              )
+            ],
+          )
       ),
       floatingActionButton: AddVariableToTrackButton(handleButtonPress: _addVariableToList),
     );
@@ -96,22 +103,22 @@ class TrackingVariablesListState extends State<TrackingVariablesList> {
   var _list = List<Text>();
 //  list.add()
 
-  void addVariableToList(String variableName) {
-    setState(() {
-      _list.add(Text(variableName, style: _listTextStyle));
-      //TODO: implement the addition of a variable with the given name
-    });
-  }
+//  void addVariableToList(String variableName) {
+//    setState(() {
+//      _list.add(Text(variableName, style: _listTextStyle));
+//      //TODO: implement the addition of a variable with the given name
+//    });
+//  }
 
   @override
   Widget build(BuildContext context) {
-    return ListView(children: _list);
+//    return ListView(children: _list);
 //    return _buildVariablesList();
-//    return ListView(
-//      children: <Text>[Text(this._variableName, style: _listTextStyle),
-//        Text('Var2', style: _listTextStyle),
-//        Text('Var3', style: _listTextStyle)],
-//    );
+    return ListView(
+      children: <Text>[Text('Var1', style: _listTextStyle),
+        Text('Var2', style: _listTextStyle),
+        Text('Var3', style: _listTextStyle)],
+    );
   }
 }
 
@@ -154,7 +161,8 @@ class AddVariableToTrackButton extends StatelessWidget{
         createAlertDialog(context).then((onValue){
           SnackBar mySnackBar = SnackBar(content: Text("Hello $onValue",));
           Scaffold.of(context).showSnackBar(mySnackBar);
-          handleButtonPress(onValue);
+//          handleButtonPress(onValue);
+          handleButtonPress();
         });
         // TODO: pass name of variable to list builder
         // TODO: set visibility of text to false IF a tracking variable is created
