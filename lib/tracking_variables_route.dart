@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:provider/provider.dart';
+import './providers/show_list_of_trackers.dart';
 
 /*
 Plan:
@@ -14,7 +15,7 @@ Plan:
 /* tmp:
 1. use provider for show list
 2. use provider for variable list
- */
+*/
 
 class TrackingVariablesRoute extends StatefulWidget {
   @override
@@ -29,67 +30,59 @@ class _TrackingVariablesRouteState extends State<TrackingVariablesRoute> {
 //  void _addVariableToList(String variableName) {
   void _addVariableToList() {
     // TODO: check if input name is null or empty and change visibility based on that
-    // TODO: show item with name of passed value
+    // TODO: show item with name of passed value (*list should probably be provided by a provider*)
     setState(() {
 //      variablesList.createState().addVariableToList(variableName);
-      showList = true;
-    });
-  }
-
-  Future<String> createAlertDialog(BuildContext context){
-    TextEditingController customController = TextEditingController();
-
-    return showDialog(context: context, builder: (context){
-      return AlertDialog(
-        title: Text('Variable name'),
-        content: TextField(
-          controller: customController,
-        ),
-        actions: <Widget>[
-          MaterialButton(
-            elevation: 5.0,
-            child: Text('Add'),
-            onPressed: (){
-              Navigator.of(context).pop(customController.text.toString());
-            },
-          )
-        ],
-      );
+//      showList = true;
     });
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text("Tracked Variables"),
+    return ChangeNotifierProvider(
+      builder: (showTrackerListContext) => ShowListOfTrackers(show: false),
+      child: Scaffold(
+        appBar: AppBar(
+          title: Text("Tracked Variables"),
+        ),
+        body: Center(child: ScreenCenter()),
+        floatingActionButton: AddVariableToTrackButton(handleButtonPress: _addVariableToList),
       ),
-      body: Center(
-          child: Column(
-            children: <Widget>[
-              Visibility(
-                child: Text(
-                  'You haven\'t created a tracking variable yet.'
-                      '\nGo ahead and create one!',
-                  style: TextStyle(fontSize: 16),
-                ),
-                visible: !showList,
-              ),
-              Visibility(
-                child: Container(
-                  child: TrackingVariablesList(), //variablesList,
-                  width: 200,
-                  height: 200,
-                ),
-                visible: showList,
-              )
-            ],
-          )
-      ),
-      floatingActionButton: AddVariableToTrackButton(handleButtonPress: _addVariableToList),
     );
   }
 }
+
+class ScreenCenter extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    final showListObject = Provider.of<ShowListOfTrackers>(context);
+    final showList = showListObject.show;
+    return Center(
+      child: Column(
+        children: <Widget>[
+          Visibility(
+            child: Text(
+              'You haven\'t created a tracking variable yet.'
+              '\nGo ahead and create one!',
+            style: TextStyle(fontSize: 16),
+            ),
+            visible: !showList,
+          ),
+          Visibility(
+            child: Container(
+              child: TrackingVariablesList(), //variablesList,
+              width: 200,
+              height: 200,
+            ),
+            visible: showList,
+          )
+        ],
+      ),
+    );
+  }
+}
+
+
 // NOTE: could for example call a function in one widget in the parent widget, and pass the value to the other child widget
 // TODO: could this be made stateless since it gets rendered again anyway since the parent is stateful?
 class TrackingVariablesList extends StatefulWidget {
@@ -126,7 +119,7 @@ class TrackingVariablesListState extends State<TrackingVariablesList> {
 class AddVariableToTrackButton extends StatelessWidget{
   final handleButtonPress;
 
-  AddVariableToTrackButton({Key key, @required this.handleButtonPress}) : super(key: key); // TODO: UNDERSTAND THIS
+  AddVariableToTrackButton({Key key, @required this.handleButtonPress}) : super(key: key); // TODO: UNDERSTAND THIS, does it even make sense to wrap a required parameter with curly braces?
 
   Future<String> createAlertDialog(BuildContext context){
     TextEditingController customController = TextEditingController();
@@ -162,7 +155,9 @@ class AddVariableToTrackButton extends StatelessWidget{
           SnackBar mySnackBar = SnackBar(content: Text("Hello $onValue",));
           Scaffold.of(context).showSnackBar(mySnackBar);
 //          handleButtonPress(onValue);
-          handleButtonPress();
+//          handleButtonPress();
+          final showListObject = Provider.of<ShowListOfTrackers>(context);
+          showListObject.toggleShow(); // TODO: set show to true here, to make sure the list is shown, use a setter instead of the toggle function
         });
         // TODO: pass name of variable to list builder
         // TODO: set visibility of text to false IF a tracking variable is created
