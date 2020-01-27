@@ -13,9 +13,9 @@ class TrackerList with ChangeNotifier {
     return [..._trackers];
   }
 
-//  void addTracker() {
-//    // _items.add(value);
-//    notifyListeners();
-//  }
+  void addTracker(Text trackerName) {
+    _trackers.add(trackerName);
+    notifyListeners();
+  }
 
 }

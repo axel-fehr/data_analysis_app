@@ -13,11 +13,6 @@ Plan:
 5. make it work with multiple items that are added to the list one-by-one
 */
 
-/* tmp:
-1. use provider for show list
-2. use provider for variable list
-*/
-
 class TrackingVariablesRoute extends StatefulWidget {
   @override
   _TrackingVariablesRouteState createState() => _TrackingVariablesRouteState();
@@ -25,18 +20,6 @@ class TrackingVariablesRoute extends StatefulWidget {
 
 
 class _TrackingVariablesRouteState extends State<TrackingVariablesRoute> {
-//  bool showList = false;
-//  var variablesList = TrackingVariablesList();
-
-//  void _addVariableToList(String variableName) {
-  void _addVariableToList() {
-    // TODO: check if input name is null or empty and change visibility based on that
-    // TODO: show item with name of passed value (*list should probably be provided by a provider*)
-    setState(() {
-//      variablesList.createState().addVariableToList(variableName);
-//      showList = true;
-    });
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -98,9 +81,6 @@ class TrackingVariablesList extends StatelessWidget {
 
 
 class AddVariableToTrackButton extends StatelessWidget{
-//  final handleButtonPress;
-
-//  AddVariableToTrackButton({Key key, @required this.handleButtonPress}) : super(key: key); // TODO: UNDERSTAND THIS, does it even make sense to wrap a required parameter with curly braces?
 
   Future<String> createAlertDialog(BuildContext context){
     TextEditingController customController = TextEditingController();
@@ -135,6 +115,10 @@ class AddVariableToTrackButton extends StatelessWidget{
         createAlertDialog(context).then((onValue){
           SnackBar mySnackBar = SnackBar(content: Text("Hello $onValue",));
           Scaffold.of(context).showSnackBar(mySnackBar);
+
+          final trackerListObject = Provider.of<TrackerList>(context);
+          trackerListObject.addTracker(Text(onValue));
+
           final showListObject = Provider.of<ShowListOfTrackers>(context);
           showListObject.setShow(true);
         });
