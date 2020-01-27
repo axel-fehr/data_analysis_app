@@ -1,16 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:provider/provider.dart';
 import 'tracking_variables_route.dart';
 import 'data_analysis_route.dart';
 import 'survey_route.dart';
+import './providers/tracker_list.dart';
 
 void main() => runApp(MyApp());
 
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-        home: AppHome()
+    return ChangeNotifierProvider(
+      builder: (trackerListContext) => TrackerList(),
+      child: MaterialApp(
+          home: AppHome()
+      ),
     );
   }
 }

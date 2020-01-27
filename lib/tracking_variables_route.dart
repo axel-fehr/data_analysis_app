@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:provider/provider.dart';
 import './providers/show_list_of_trackers.dart';
+import './providers/tracker_list.dart';
 
 /*
 Plan:
@@ -83,34 +84,14 @@ class ScreenCenter extends StatelessWidget {
 }
 
 
-// NOTE: could for example call a function in one widget in the parent widget, and pass the value to the other child widget
-// TODO: could this be made stateless since it gets rendered again anyway since the parent is stateful?
-class TrackingVariablesList extends StatefulWidget {
-  @override
-  TrackingVariablesListState createState() => TrackingVariablesListState();
-}
-
-
-class TrackingVariablesListState extends State<TrackingVariablesList> {
-  final _listTextStyle = TextStyle(fontSize: 30.0);
-  var _list = List<Text>();
-//  list.add()
-
-//  void addVariableToList(String variableName) {
-//    setState(() {
-//      _list.add(Text(variableName, style: _listTextStyle));
-//      //TODO: implement the addition of a variable with the given name
-//    });
-//  }
+class TrackingVariablesList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-//    return ListView(children: _list);
-//    return _buildVariablesList();
+    final trackerListObject = Provider.of<TrackerList>(context);
+
     return ListView(
-      children: <Text>[Text('Var1', style: _listTextStyle),
-        Text('Var2', style: _listTextStyle),
-        Text('Var3', style: _listTextStyle)],
+      children: trackerListObject.trackers,
     );
   }
 }
