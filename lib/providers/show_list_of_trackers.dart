@@ -9,6 +9,11 @@ class ShowListOfTrackers with ChangeNotifier {
     return _show;
   }
 
+  void setShow(bool input) {
+    _show = input;
+    notifyListeners();
+  }
+
   void toggleShow() {
     _show = !_show;
     notifyListeners();

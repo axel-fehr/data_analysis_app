@@ -24,7 +24,7 @@ class TrackingVariablesRoute extends StatefulWidget {
 
 
 class _TrackingVariablesRouteState extends State<TrackingVariablesRoute> {
-  bool showList = false;
+//  bool showList = false;
 //  var variablesList = TrackingVariablesList();
 
 //  void _addVariableToList(String variableName) {
@@ -46,7 +46,7 @@ class _TrackingVariablesRouteState extends State<TrackingVariablesRoute> {
           title: Text("Tracked Variables"),
         ),
         body: Center(child: ScreenCenter()),
-        floatingActionButton: AddVariableToTrackButton(handleButtonPress: _addVariableToList),
+        floatingActionButton: AddVariableToTrackButton(),
       ),
     );
   }
@@ -117,9 +117,9 @@ class TrackingVariablesListState extends State<TrackingVariablesList> {
 
 
 class AddVariableToTrackButton extends StatelessWidget{
-  final handleButtonPress;
+//  final handleButtonPress;
 
-  AddVariableToTrackButton({Key key, @required this.handleButtonPress}) : super(key: key); // TODO: UNDERSTAND THIS, does it even make sense to wrap a required parameter with curly braces?
+//  AddVariableToTrackButton({Key key, @required this.handleButtonPress}) : super(key: key); // TODO: UNDERSTAND THIS, does it even make sense to wrap a required parameter with curly braces?
 
   Future<String> createAlertDialog(BuildContext context){
     TextEditingController customController = TextEditingController();
@@ -154,10 +154,8 @@ class AddVariableToTrackButton extends StatelessWidget{
         createAlertDialog(context).then((onValue){
           SnackBar mySnackBar = SnackBar(content: Text("Hello $onValue",));
           Scaffold.of(context).showSnackBar(mySnackBar);
-//          handleButtonPress(onValue);
-//          handleButtonPress();
           final showListObject = Provider.of<ShowListOfTrackers>(context);
-          showListObject.toggleShow(); // TODO: set show to true here, to make sure the list is shown, use a setter instead of the toggle function
+          showListObject.setShow(true);
         });
         // TODO: pass name of variable to list builder
         // TODO: set visibility of text to false IF a tracking variable is created
