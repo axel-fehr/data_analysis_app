@@ -4,17 +4,14 @@ import 'package:flutter/material.dart';
 
 class TrackerList with ChangeNotifier {
   static final _listTextStyle = TextStyle(fontSize: 30.0);
-
-  List<Text> _trackers = <Text>[Text('Var1', style: _listTextStyle),
-                    Text('Var2', style: _listTextStyle),
-                    Text('It works!', style: _listTextStyle)];
+  List<Text> _trackers = <Text>[];
 
   List<Text> get trackers {
     return [..._trackers];
   }
 
-  void addTracker(Text trackerName) {
-    _trackers.add(trackerName);
+  void addTracker(String trackerName) {
+    _trackers.add(Text(trackerName, style: _listTextStyle));
     notifyListeners();
   }
 

@@ -27,7 +27,7 @@ class _TrackingVariablesRouteState extends State<TrackingVariablesRoute> {
       builder: (showTrackerListContext) => ShowListOfTrackers(show: false),
       child: Scaffold(
         appBar: AppBar(
-          title: Text("Tracked Variables"),
+          title: Text("Trackers"),
         ),
         body: Center(child: ScreenCenter()),
         floatingActionButton: AddVariableToTrackButton(),
@@ -46,7 +46,7 @@ class ScreenCenter extends StatelessWidget {
         children: <Widget>[
           Visibility(
             child: Text(
-              'You haven\'t created a tracking variable yet.'
+              'You haven\'t created a tracker yet.'
               '\nGo ahead and create one!',
             style: TextStyle(fontSize: 16),
             ),
@@ -87,7 +87,7 @@ class AddVariableToTrackButton extends StatelessWidget{
 
     return showDialog(context: context, builder: (context){
       return AlertDialog(
-        title: Text('Variable name'),
+        title: Text('Tracker name'),
         content: TextField(
           controller: customController,
         ),
@@ -117,13 +117,11 @@ class AddVariableToTrackButton extends StatelessWidget{
           Scaffold.of(context).showSnackBar(mySnackBar);
 
           final trackerListObject = Provider.of<TrackerList>(context);
-          trackerListObject.addTracker(Text(onValue));
+          trackerListObject.addTracker(onValue);
 
           final showListObject = Provider.of<ShowListOfTrackers>(context);
           showListObject.setShow(true);
         });
-        // TODO: pass name of variable to list builder
-        // TODO: set visibility of text to false IF a tracking variable is created
       },
     );
   }
