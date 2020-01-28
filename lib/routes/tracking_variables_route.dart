@@ -3,6 +3,7 @@ import 'package:flutter/widgets.dart';
 import 'package:provider/provider.dart';
 import '../providers/show_list_of_trackers.dart';
 import '../providers/tracker_list.dart';
+import '../widgets/tracker_list_view.dart';
 
 
 class TrackingVariablesRoute extends StatefulWidget {
@@ -28,6 +29,7 @@ class _TrackingVariablesRouteState extends State<TrackingVariablesRoute> {
   }
 }
 
+
 class ScreenCenter extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -46,7 +48,7 @@ class ScreenCenter extends StatelessWidget {
           ),
           Visibility(
             child: Container(
-              child: TrackingVariablesList(), //variablesList,
+              child: TrackerListView(), //variablesList,
               width: 200,
               height: 200,
             ),
@@ -54,19 +56,6 @@ class ScreenCenter extends StatelessWidget {
           )
         ],
       ),
-    );
-  }
-}
-
-
-class TrackingVariablesList extends StatelessWidget {
-
-  @override
-  Widget build(BuildContext context) {
-    final trackerListObject = Provider.of<TrackerList>(context);
-
-    return ListView(
-      children: trackerListObject.trackers,
     );
   }
 }
