@@ -14,5 +14,4 @@ class TrackerList with ChangeNotifier {
     _trackers.add(Text(trackerName, style: _listTextStyle));
     notifyListeners();
   }
-
 }
