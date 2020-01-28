@@ -1,17 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:provider/provider.dart';
-import './providers/show_list_of_trackers.dart';
-import './providers/tracker_list.dart';
+import '../providers/show_list_of_trackers.dart';
+import '../providers/tracker_list.dart';
 
-/*
-Plan:
-1. DONE make code below work (should work already but check)
-2. SKIP show list on tap
-3. DONE make it work with a list with arbitrary items and the button (without the alert dialog)
-4. make it work with the list and the alert dialog (i.e. name of item must be from the alert dialog)
-5. make it work with multiple items that are added to the list one-by-one
-*/
 
 class TrackingVariablesRoute extends StatefulWidget {
   @override
