@@ -8,6 +8,10 @@
 .buildlog/
 .history
 .svn/
+.dart_tool/
+.packages
+build/
+pubspec.lock
 
 # IntelliJ related
 *.iml
