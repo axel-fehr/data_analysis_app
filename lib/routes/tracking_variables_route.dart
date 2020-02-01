@@ -4,7 +4,7 @@ import 'package:provider/provider.dart';
 import '../providers/show_list_of_trackers.dart';
 import '../providers/tracker_list.dart';
 import '../widgets/tracker_list_view.dart';
- 
+
 class TrackingVariablesRoute extends StatefulWidget {
   @override
   _TrackingVariablesRouteState createState() => _TrackingVariablesRouteState();
@@ -44,9 +44,9 @@ class ScreenCenter extends StatelessWidget {
           ),
           Visibility(
             child: Container(
-              child: TrackerListView(), //variablesList,
-              width: 200,
-              height: 200,
+              child: TrackerListView(),
+              width: double.infinity,
+              height: 300,
             ),
             visible: showList,
           )
@@ -100,7 +100,6 @@ class AddVariableToTrackButton extends StatelessWidget {
           trackerListObject.addTracker(onValue);
 
           final showListObject = Provider.of<ShowListOfTrackers>(context);
-//          showListObject.setShow(true);
           showListObject.show = true;
         });
       },

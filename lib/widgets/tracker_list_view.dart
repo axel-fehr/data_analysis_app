@@ -9,6 +9,7 @@ class TrackerListView extends StatelessWidget {
     final trackerListObject = Provider.of<TrackerList>(context);
 
     return ListView(
+      padding: EdgeInsets.all(16.0),
       children: trackerListObject.trackers,
     );
   }
