@@ -2,7 +2,12 @@ import 'package:flutter/foundation.dart';
 
 class Log {
   bool _value;
-  String _dateTime;
+  DateTime _dateTime;
+
+  Log({@required bool value}) {
+    _value = value;
+    _dateTime = DateTime.now();
+  }
 
   bool get value => _value;
 
@@ -10,9 +15,5 @@ class Log {
     _value = value;
   }
 
-  String get dateTime => _dateTime;
-
-  set dateTime(String value) {
-    _dateTime = value;
-  }
+  DateTime get dateTime => _dateTime;
 }
