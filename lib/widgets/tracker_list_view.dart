@@ -12,5 +12,8 @@ class TrackerListView extends StatelessWidget {
       padding: EdgeInsets.all(16.0),
       children: trackerListObject.trackers,
     );
+
+    // TODO: instead of showing the name of the tracker as text, make the text link to the page where ...
+    // logs can be seen and edited etc.
   }
 }

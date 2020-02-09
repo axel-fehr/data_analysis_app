@@ -11,6 +11,6 @@ class Tracker {
   List<Log> get logs => _logs;
 
   void addLog(logValue) {
-    _logs.add(Log(value: logValue));
+    _logs.add(Log(logValue));
   }
 }

@@ -4,7 +4,7 @@ class Log {
   bool _value;
   DateTime _dateTime;
 
-  Log({@required bool value}) {
+  Log(bool value) {
     _value = value;
     _dateTime = DateTime.now();
   }

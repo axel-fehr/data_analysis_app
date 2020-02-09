@@ -3,7 +3,7 @@ import 'package:flutter/widgets.dart';
 import 'package:provider/provider.dart';
 import '../providers/show_list_of_trackers.dart';
 import '../providers/tracker_list.dart';
-import '../widgets/tracker_list_view.dart';
+import '../widgets/tracker_list_with_add_log_button_list_view.dart';
 
 class TrackingVariablesRoute extends StatefulWidget {
   @override
@@ -44,7 +44,7 @@ class ScreenCenter extends StatelessWidget {
           ),
           Visibility(
             child: Container(
-              child: TrackerListView(),
+              child: TrackerListWithAddLogButtonListView(),
               width: double.infinity,
               height: 300,
             ),
