@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:provider/provider.dart';
 import '../providers/tracker_list.dart';
+import '../classes/tracker.dart';
 
 class TrackerListWithAddLogButtonListView extends StatelessWidget {
   @override
@@ -21,27 +22,46 @@ class TrackerListWithAddLogButtonListView extends StatelessWidget {
   }
 }
 
-void addLog() {
-  // TODO: put this function somewhere where it's easier to access for reuse
-  print("addLogButton pressed");
-  // TODO: add functionality to add a Log (e.g. with an AlertDialog)
-}
-
 class TrackerWithAddLogButton extends StatelessWidget {
-  final _tracker;
+  final Tracker _tracker;
   final buttonSize = 35.0;
-  var _addLogButton;
+  final _addLogButton;
+
+//  void createAddLogAlertDialog() {
+//    TextEditingController customController = TextEditingController();
+//
+//    return showDialog(
+//        context: context,
+//        builder: (context) {
+//          return AlertDialog(
+//            title: Text('Tracker name'),
+//            content: TextField(
+//              controller: customController,
+//            ),
+//            actions: <Widget>[
+//              MaterialButton(
+//                elevation: 5.0,
+//                child: Text('Add'),
+//                onPressed: () {
+//                  Navigator.of(context).pop(customController.text.toString());
+//                },
+//              )
+//            ],
+//          );
+//        });
+//  }
 
   TrackerWithAddLogButton(this._tracker)
       : _addLogButton = FloatingActionButton(
-          onPressed: addLog,
+          onPressed: () => _tracker.addLog(
+              true), // TESTING TODO: ADD A FUNCTION HERE THAT CREATES AN ALERT DIALOG WHERE THE LOG IS ENTERED
           child: Text('+'),
         );
 
   @override
   Widget build(BuildContext context) {
     return Row(mainAxisAlignment: MainAxisAlignment.spaceAround, children: [
-      Expanded(child: _tracker),
+      Expanded(child: Container(child: Text(_tracker.name))),
       Container(
         height: buttonSize,
         width: buttonSize,

@@ -7,10 +7,17 @@ class TrackerListView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final trackerListObject = Provider.of<TrackerList>(context);
+    final List<Text> trackerNameList = <Text>[];
+    final _listTextStyle = TextStyle(fontSize: 35.0);
+
+    trackerListObject.trackerNames.forEach((name) => trackerNameList.add(Text(
+          name,
+          style: _listTextStyle,
+        )));
 
     return ListView(
       padding: EdgeInsets.all(16.0),
-      children: trackerListObject.trackers,
+      children: trackerNameList,
     );
 
     // TODO: instead of showing the name of the tracker as text, make the text link to the page where ...
