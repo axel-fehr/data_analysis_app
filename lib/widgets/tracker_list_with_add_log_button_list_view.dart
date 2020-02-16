@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:provider/provider.dart';
@@ -25,50 +26,62 @@ class TrackerListWithAddLogButtonListView extends StatelessWidget {
 class TrackerWithAddLogButton extends StatelessWidget {
   final Tracker _tracker;
   final buttonSize = 35.0;
-  final _addLogButton;
+//  final _addLogButton;
 
-//  void createAddLogAlertDialog() {
-//    TextEditingController customController = TextEditingController();
-//
-//    return showDialog(
-//        context: context,
-//        builder: (context) {
-//          return AlertDialog(
-//            title: Text('Tracker name'),
-//            content: TextField(
-//              controller: customController,
-//            ),
-//            actions: <Widget>[
-//              MaterialButton(
-//                elevation: 5.0,
-//                child: Text('Add'),
-//                onPressed: () {
-//                  Navigator.of(context).pop(customController.text.toString());
-//                },
-//              )
-//            ],
-//          );
-//        });
-//  }
+  showLogAlertDialog(BuildContext context) {
+    // set up the buttons
+    Widget trueButton = FlatButton(
+      child: Text("False"),
+      onPressed: () {
+        _tracker.addLog(false);
+        Navigator.of(context).pop();
+      },
+    );
 
-  TrackerWithAddLogButton(this._tracker)
-      : _addLogButton = FloatingActionButton(
-          onPressed: () => _tracker.addLog(
-              true), // TESTING TODO: ADD A FUNCTION HERE THAT CREATES AN ALERT DIALOG WHERE THE LOG IS ENTERED
-          child: Text('+'),
-        );
+    Widget falseButton = FlatButton(
+      child: Text("True"),
+      onPressed: () {
+        _tracker.addLog(true);
+        Navigator.of(context).pop();
+      },
+    );
+
+    // set up the AlertDialog
+    CupertinoAlertDialog alert = CupertinoAlertDialog(
+      title: Text("Log"),
+      content: Text("Please enter the log value."),
+      actions: [
+        falseButton,
+        trueButton,
+      ],
+    );
+
+    // show the dialog
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return alert;
+      },
+    );
+  }
+
+//  TODO: WATCH THIS: https://www.youtube.com/watch?v=75CsnyRXf5I
+
+  TrackerWithAddLogButton(this._tracker);
 
   @override
   Widget build(BuildContext context) {
     return Row(mainAxisAlignment: MainAxisAlignment.spaceAround, children: [
       Expanded(child: Container(child: Text(_tracker.name))),
       Container(
-        height: buttonSize,
-        width: buttonSize,
-        child: FittedBox(
-          child: _addLogButton,
-        ),
-      ),
+          height: buttonSize,
+          width: buttonSize,
+          child: FittedBox(
+            child: FloatingActionButton(
+                onPressed: () => showLogAlertDialog(context),
+                child: Text('+') //_addLogButton
+                ),
+          )),
     ]);
   }
 }

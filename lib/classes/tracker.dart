@@ -16,7 +16,7 @@ class Tracker {
   List<Log> get logs => _logs;
 
   void addLog(logValue) {
-    print("adding log");
+    print("adding log, value: $logValue");
     _logs.add(Log(logValue));
   }
 }
