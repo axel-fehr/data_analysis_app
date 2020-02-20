@@ -65,8 +65,6 @@ class TrackerWithAddLogButton extends StatelessWidget {
     );
   }
 
-//  TODO: WATCH THIS: https://www.youtube.com/watch?v=75CsnyRXf5I
-
   TrackerWithAddLogButton(this._tracker);
 
   @override
@@ -79,7 +77,8 @@ class TrackerWithAddLogButton extends StatelessWidget {
           child: FittedBox(
             child: FloatingActionButton(
                 onPressed: () => showLogAlertDialog(context),
-                child: Text('+') //_addLogButton
+                child: Text('+'), //_addLogButton
+                heroTag: this._tracker.name + "_addLogButton",
                 ),
           )),
     ]);

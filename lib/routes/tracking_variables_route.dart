@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:provider/provider.dart';
-import '../providers/show_list_of_trackers.dart';
 import '../providers/tracker_list.dart';
 import '../widgets/tracker_list_with_add_log_button_list_view.dart';
 
@@ -13,15 +12,12 @@ class TrackingVariablesRoute extends StatefulWidget {
 class _TrackingVariablesRouteState extends State<TrackingVariablesRoute> {
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider(
-      builder: (showTrackerListContext) => ShowListOfTrackers(show: false),
-      child: Scaffold(
-        appBar: AppBar(
-          title: Text("Trackers"),
-        ),
-        body: Center(child: ScreenCenter()),
-        floatingActionButton: AddVariableToTrackButton(),
+    return Scaffold(
+      appBar: AppBar(
+        title: Text("Trackers"),
       ),
+      body: Center(child: ScreenCenter()),
+      floatingActionButton: AddVariableToTrackButton(),
     );
   }
 }
@@ -29,8 +25,6 @@ class _TrackingVariablesRouteState extends State<TrackingVariablesRoute> {
 class ScreenCenter extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final showListObject = Provider.of<ShowListOfTrackers>(context);
-    final showList = showListObject.show;
     return Center(
       child: Column(
         children: <Widget>[
@@ -40,7 +34,7 @@ class ScreenCenter extends StatelessWidget {
               '\nGo ahead and create one!',
               style: TextStyle(fontSize: 16),
             ),
-            visible: !showList,
+            visible: Provider.of<TrackerList>(context).trackers.isEmpty,
           ),
           Visibility(
             child: Container(
@@ -48,7 +42,7 @@ class ScreenCenter extends StatelessWidget {
               width: double.infinity,
               height: 300,
             ),
-            visible: showList,
+            visible: Provider.of<TrackerList>(context).trackers.isNotEmpty,
           )
         ],
       ),
@@ -98,9 +92,6 @@ class AddVariableToTrackButton extends StatelessWidget {
 
           final trackerListObject = Provider.of<TrackerList>(context);
           trackerListObject.addTracker(onValue);
-
-          final showListObject = Provider.of<ShowListOfTrackers>(context);
-          showListObject.show = true;
         });
       },
     );
