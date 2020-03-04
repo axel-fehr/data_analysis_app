@@ -1,7 +1,5 @@
 import 'dart:async';
 import 'dart:io';
-import 'package:flutter/foundation.dart';
-import 'package:flutter/material.dart';
 import 'package:path_provider/path_provider.dart';
 
 // Note: Code from this source: https://flutter.dev/docs/cookbook/persistence/reading-writing-files
@@ -18,7 +16,7 @@ class LogsStorage {
     return File('$path/logs.txt');
   }
 
-  Future<int> readCounter() async {
+  Future<int> readLog() async {
     try {
       final file = await _localFile;
 
@@ -32,10 +30,10 @@ class LogsStorage {
     }
   }
 
-  Future<File> writeCounter(int counter) async {
+  Future<File> writeLog(bool value) async {
     final file = await _localFile;
 
     // Write the file
-    return file.writeAsString('$counter');
+    return file.writeAsString('test'); // ('$value')
   }
 }

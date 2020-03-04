@@ -1,10 +1,9 @@
-import 'package:flutter/foundation.dart';
-import 'package:flutter/foundation.dart';
-import 'package:flutter/material.dart';
-import 'package:path_provider/path_provider.dart';
-
 import './log.dart';
 import './logs_storage.dart';
+
+import 'dart:async';
+import 'dart:io';
+import 'package:path_provider/path_provider.dart';
 
 class Tracker {
   String _name;
@@ -21,9 +20,15 @@ class Tracker {
   String get name => _name;
   List<Log> get logs => _logs;
 
-  void addLog(logValue) {
+//  void addLog(bool logValue) {
+//    print("adding log, value: $logValue");
+//    _logs.add(Log(logValue));
+//    var fileWithLog = _logStorage.writeLog(logValue);
+//  }
+
+  Future<File> addLog(bool logValue) {
     print("adding log, value: $logValue");
     _logs.add(Log(logValue));
-    _logStorage.writeCounter(logValue);
+    return _logStorage.writeLog(logValue);
   }
 }
