@@ -30,10 +30,10 @@ class LogsStorage {
     }
   }
 
-  Future<File> writeLog(bool value) async {
+  void writeLog(bool value) async {
     final file = await _localFile;
-
+    print('log saved to disk');
     // Write the file
-    return file.writeAsString('test'); // ('$value')
+    file.writeAsString('$value');
   }
 }

@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:provider/provider.dart';
+
 import '../providers/tracker_list.dart';
 import '../classes/tracker.dart';
 
@@ -30,7 +31,7 @@ class TrackerWithAddLogButton extends StatelessWidget {
 
   showLogAlertDialog(BuildContext context) {
     // set up the buttons
-    Widget trueButton = FlatButton(
+    Widget falseButton = FlatButton(
       child: Text("False"),
       onPressed: () {
         _tracker.addLog(false);
@@ -38,7 +39,7 @@ class TrackerWithAddLogButton extends StatelessWidget {
       },
     );
 
-    Widget falseButton = FlatButton(
+    Widget trueButton = FlatButton(
       child: Text("True"),
       onPressed: () {
         _tracker.addLog(true);
@@ -76,10 +77,10 @@ class TrackerWithAddLogButton extends StatelessWidget {
           width: buttonSize,
           child: FittedBox(
             child: FloatingActionButton(
-                onPressed: () => showLogAlertDialog(context),
-                child: Text('+'), //_addLogButton
-                heroTag: this._tracker.name + "_addLogButton",
-                ),
+              onPressed: () => showLogAlertDialog(context),
+              child: Text('+'), //_addLogButton
+              heroTag: this._tracker.name + "_addLogButton",
+            ),
           )),
     ]);
   }
