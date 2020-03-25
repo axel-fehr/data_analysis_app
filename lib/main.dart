@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:provider/provider.dart';
 
-import 'routes/tracking_variables_route.dart';
+import 'routes/tracker_list_route.dart';
 import 'routes/data_analysis_route.dart';
 import 'routes/survey_route.dart';
 import './providers/tracker_list.dart';
@@ -12,13 +12,54 @@ void main() => runApp(MyApp());
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider(
-      builder: (trackerListContext) => TrackerList(),
-      child: MaterialApp(home: AppHome()),
+    // TODO: CLEAN THIS CODE!
+    TrackerList trackerList = new TrackerList();
+    return FutureBuilder<String>(
+        future: trackerList.loadTrackersFromDisk(),
+        builder: (context, AsyncSnapshot<String> snapshot) {
+//          if (snapshot.hasData) {
+//            return MultiProvider(
+//              providers: [
+//                ChangeNotifierProvider(create: (trackerListContext) => TrackerList(),),
+//              ],
+//              child: MaterialApp(home: AppHome()),
+//            );
+//          }
+//          else {
+//            return CircularProgressIndicator();
+//          }
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return Center(child: CircularProgressIndicator());
+          }
+          else if (snapshot.hasError) {
+            return Text("ERROR: ${snapshot.error}");
+          }
+          else {
+            return MultiProvider(
+              providers: [
+                ChangeNotifierProvider(
+                  create: (trackerListContext) => TrackerList(),),
+              ],
+              child: MaterialApp(home: AppHome()),
+            );
+          }
+        }
     );
+
+//    TrackerList trackerList = new TrackerList();
+//    await trackerList.
+//    return MultiProvider(
+//      providers: [
+////        tracker list is created here
+////        init database here (with await!)
+//        ChangeNotifierProvider(create: (trackerListContext) => TrackerList(),),
+//      ],
+//      child: MaterialApp(home: AppHome()),
+//    );
   }
 }
 
+// TODO: put this in a separate file the routes folder
 class AppHome extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
