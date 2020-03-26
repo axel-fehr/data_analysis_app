@@ -13,12 +13,12 @@ class TrackerDatabase {
   // Initializes the member variable '_database'.
   //
   // This function has to be called with 'await databaseObject.initDatabase()'
-  // before any of the member functions are called!
+  // before any other member functions are called!
   // TODO: rename to setUpDatabase
   Future<void> initDatabase() async {
     WidgetsFlutterBinding.ensureInitialized();
     this._database = openDatabase(
-      join(await getDatabasesPath(), 'counter_database.db'),
+      join(await getDatabasesPath(), 'tracker_database.db'),
       onCreate: (db, version) {
         const command = "CREATE TABLE IF NOT EXISTS $_databaseName(name VARCHAR(128) PRIMARY KEY, type VARCHAR(128))";
         return db.execute(command);
@@ -49,24 +49,35 @@ class TrackerDatabase {
     );
   }
 
-//  // A method that retrieves all the dogs from the dogs table.
-//  Future<List<Tracker>> readTrackers() async {
-//    final Database db = await _database;
-//
-//    final List<Map<String, dynamic>> maps = await db.query(_databaseName);
-//
-//    // Convert the List<Map<String, dynamic> into a List<Tracker>.
-//    return List.generate(maps.length, (i) {
-//      return Tracker(
-//        name: maps[i]['name'],
-//        type: maps[i]['type'],
-//      );
-//    });
-//  }
+  // A method that retrieves all the tracker names from the tracker table.
+  Future<List<String>> readTrackerNames() async {
+    final Database db = await _database;
 
-//  // TODO: return value of counter with a given ID
-//  Future<String> readCounterValue() async {
-//    var trackerList = await readTrackers();
-//    return trackerList[0].name;
-//  }
+    final List<Map<String, dynamic>> maps = await db.query(_databaseName);
+
+    return List.generate(maps.length, (i) {
+      return maps[i]['name'];
+    });
+  }
+
+  // A method that retrieves all the trackers from the tracker table.
+  Future<List<Tracker>> readTrackers() async {
+    final Database db = await _database;
+
+    final List<Map<String, dynamic>> maps = await db.query(_databaseName);
+
+    // Convert the List<Map<String, dynamic> into a List<Tracker>.
+    return List.generate(maps.length, (i) {
+      return Tracker(
+        maps[i]['name'],
+        maps[i]['type'],
+      );
+    });
+  }
+
+  // TODO: return value of counter with a given ID
+  Future<String> readCounterValue() async {
+    var trackerList = await readTrackers();
+    return trackerList[0].name;
+  }
 }

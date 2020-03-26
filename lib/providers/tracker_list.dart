@@ -16,9 +16,15 @@ class TrackerList with ChangeNotifier {
     return [..._trackerNames];
   }
 
+  // Initializes the list of trackers with the ones saved to disk.
+  //
+  // This function has to be called before any other member functions
+  // are called!
   Future<String> loadTrackersFromDisk() async {
-//    await _trackerDatabase.initDatabase();
-    _trackerDatabase.initDatabase().then((onValue) => 'Data loaded.');
+    await _trackerDatabase.initDatabase();
+    _trackers = await _trackerDatabase.readTrackers();
+    _trackerNames = await _trackerDatabase.readTrackerNames();
+    return 'Data loaded.';
   }
 
   void addTracker(String trackerName) async {

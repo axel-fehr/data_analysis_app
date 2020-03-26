@@ -17,17 +17,6 @@ class MyApp extends StatelessWidget {
     return FutureBuilder<String>(
         future: trackerList.loadTrackersFromDisk(),
         builder: (context, AsyncSnapshot<String> snapshot) {
-//          if (snapshot.hasData) {
-//            return MultiProvider(
-//              providers: [
-//                ChangeNotifierProvider(create: (trackerListContext) => TrackerList(),),
-//              ],
-//              child: MaterialApp(home: AppHome()),
-//            );
-//          }
-//          else {
-//            return CircularProgressIndicator();
-//          }
           if (snapshot.connectionState == ConnectionState.waiting) {
             return Center(child: CircularProgressIndicator());
           }
@@ -38,24 +27,13 @@ class MyApp extends StatelessWidget {
             return MultiProvider(
               providers: [
                 ChangeNotifierProvider(
-                  create: (trackerListContext) => TrackerList(),),
+                  create: (trackerListContext) => trackerList,),
               ],
               child: MaterialApp(home: AppHome()),
             );
           }
         }
     );
-
-//    TrackerList trackerList = new TrackerList();
-//    await trackerList.
-//    return MultiProvider(
-//      providers: [
-////        tracker list is created here
-////        init database here (with await!)
-//        ChangeNotifierProvider(create: (trackerListContext) => TrackerList(),),
-//      ],
-//      child: MaterialApp(home: AppHome()),
-//    );
   }
 }
 
