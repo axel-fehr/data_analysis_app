@@ -34,6 +34,7 @@ class TrackerList with ChangeNotifier {
     _trackerNames.add(trackerName);
     notifyListeners();
     await _trackerDatabase.insertTracker(trackerToAdd);
+    await trackerToAdd.loadLogsFromDisk();
     // TODO: does this really work as expected,, since the return type is not Future<void>? does the function really fully execute the last line?
     // TODO: IS THIS FUNCTION EVEN EXECUTED SYNCHRONOUSLY OR ASYNCHRONOUSLY? BECAUSE IT DOES NOT RETURN A FUTURE BUT USES THE ASYNC KEYWORD
   }
