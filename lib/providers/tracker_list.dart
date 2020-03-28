@@ -16,13 +16,14 @@ class TrackerList with ChangeNotifier {
     return [..._trackerNames];
   }
 
-  // Initializes the list of trackers with the ones saved to disk.
-  //
-  // This function has to be called before any other member functions
-  // are called!
+  /// Initializes the list of trackers with the ones saved to disk.
+  ///
+  /// This function has to be called before any other member functions
+  /// are called!
   Future<String> loadTrackersFromDisk() async {
     await _trackerDatabase.initDatabase();
     _trackers = await _trackerDatabase.readTrackers();
+    _trackers.forEach((tracker) async => await tracker.loadLogsFromDisk());
     _trackerNames = await _trackerDatabase.readTrackerNames();
     return 'Data loaded.';
   }
@@ -31,7 +32,9 @@ class TrackerList with ChangeNotifier {
     Tracker trackerToAdd = Tracker(trackerName, 'Boolean'); // TODO: make tracker type a non-hard coded argument here
     _trackers.add(trackerToAdd);
     _trackerNames.add(trackerName);
-    _trackerDatabase.insertTracker(trackerToAdd);
     notifyListeners();
+    await _trackerDatabase.insertTracker(trackerToAdd);
+    // TODO: does this really work as expected,, since the return type is not Future<void>? does the function really fully execute the last line?
+    // TODO: IS THIS FUNCTION EVEN EXECUTED SYNCHRONOUSLY OR ASYNCHRONOUSLY? BECAUSE IT DOES NOT RETURN A FUTURE BUT USES THE ASYNC KEYWORD
   }
 }

@@ -1,15 +1,20 @@
 import './log.dart';
+import './log_database.dart';
 
 class Tracker {
   String _name;
   String _type;
   List<Log> _logs = [];
-//  LogsStorage _logStorage; // TODO: initialize object with name of file with the stored logs, name will be based on tracker name
+  LogDatabase _logDatabase;
 
-  Tracker(String name, String type) {
-    _name = name;
-    _type = type;
-//    _logStorage = LogsStorage();
+  Tracker(this._name, this._type) {
+    _logDatabase = new LogDatabase(_name);
+  }
+
+  Future<String> loadLogsFromDisk() async {
+    await _logDatabase.setUpDatabase();
+    _logs = await _logDatabase.readLogs();
+    return 'Data loaded.';
   }
 
   String get type => _type;
@@ -18,8 +23,9 @@ class Tracker {
 
   void addLog(bool logValue) {
     print("adding log, value: $logValue");
-    _logs.add(Log(logValue));
-//    _logStorage.writeLog(logValue);
+    Log addedLog = new Log(logValue);
+    _logs.add(addedLog);
+    _logDatabase.insertLog(addedLog);
   }
 
   Map<String, dynamic> toMap() {
@@ -29,8 +35,6 @@ class Tracker {
     };
   }
 
-  // Implement toString to make it easier to see information about
-  // each dog when using the print statement.
   @override
   String toString() {
     return 'Tracker{name: $_name, type: $_type}';

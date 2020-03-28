@@ -1,10 +1,10 @@
 class Log {
   bool _value;
-  DateTime _dateTime;
+  DateTime _timeStamp;
 
   Log(bool value) {
     _value = value;
-    _dateTime = DateTime.now();
+    _timeStamp = DateTime.now();
   }
 
   bool get value => _value;
@@ -13,5 +13,17 @@ class Log {
     _value = value;
   }
 
-  DateTime get dateTime => _dateTime;
+  DateTime get timeStamp => _timeStamp;
+
+  Map<String, dynamic> toMap() {
+    return {
+      'timeStamp' : _timeStamp.toIso8601String(),
+      'value' : _value,
+    };
+  }
+
+  @override
+  String toString() {
+    return 'Tracker{timeStamp: ${_timeStamp.toIso8601String()}, value: $_value}';
+  }
 }

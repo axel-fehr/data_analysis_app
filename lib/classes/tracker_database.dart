@@ -1,33 +1,34 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
-import 'package:path_provider/path_provider.dart';
 
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
 import 'tracker.dart';
 
 class TrackerDatabase {
-  static const String _databaseName = 'counter';
+  static const String _databaseName = 'trackers';
   Future<Database> _database;
 
-  // Initializes the member variable '_database'.
-  //
-  // This function has to be called with 'await databaseObject.initDatabase()'
-  // before any other member functions are called!
+  /// Initializes the member variable '_database'.
+  ///
+  /// This function has to be called with 'await databaseObject.initDatabase()'
+  /// before any other member functions are called! This is because this
+  /// function is essential but cannot be executed in the constructor because
+  /// it is asynchronous.
   // TODO: rename to setUpDatabase
   Future<void> initDatabase() async {
     WidgetsFlutterBinding.ensureInitialized();
     this._database = openDatabase(
       join(await getDatabasesPath(), 'tracker_database.db'),
       onCreate: (db, version) {
-        const command = "CREATE TABLE IF NOT EXISTS $_databaseName(name VARCHAR(128) PRIMARY KEY, type VARCHAR(128))";
+        String command = "CREATE TABLE IF NOT EXISTS $_databaseName(name VARCHAR(128) PRIMARY KEY, type VARCHAR(128))";
         return db.execute(command);
       },
       version: 1,
     );
   }
 
-  // Inserts a tracker object into the database
+  /// Inserts a tracker object into the database
   Future<void> insertTracker(Tracker tracker) async {
     final Database db = await _database;
 
@@ -49,7 +50,7 @@ class TrackerDatabase {
     );
   }
 
-  // A method that retrieves all the tracker names from the tracker table.
+  /// Retrieves all the tracker names from the tracker table.
   Future<List<String>> readTrackerNames() async {
     final Database db = await _database;
 
@@ -60,10 +61,9 @@ class TrackerDatabase {
     });
   }
 
-  // A method that retrieves all the trackers from the tracker table.
+  /// Retrieves all the trackers from the tracker table.
   Future<List<Tracker>> readTrackers() async {
     final Database db = await _database;
-
     final List<Map<String, dynamic>> maps = await db.query(_databaseName);
 
     // Convert the List<Map<String, dynamic> into a List<Tracker>.
