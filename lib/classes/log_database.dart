@@ -79,7 +79,8 @@ class LogDatabase {
     // Convert the List<Map<String, dynamic> into a List<Log>.
     return List.generate(maps.length, (i) {
       return Log(
-        mapIntLogValueFromDatabaseToBool(maps[i]['value']), // TODO: FIX BUG CAUSED HERE BY TIMESTAMP THAT IS CREATED IN CONSTRUCTOR, USE ORIGINAL TIMESTAMP INSTEAD! LOAD TIMESTAMP THAT IS SAVED ALONG WITH THE VALUE HERE
+        mapIntLogValueFromDatabaseToBool(maps[i]['value']),
+        timeStamp: DateTime.parse(maps[i]['timeStamp']),
       );
     });
   }
