@@ -74,10 +74,4 @@ class TrackerDatabase {
       );
     });
   }
-
-  // TODO: return value of counter with a given ID
-  Future<String> readCounterValue() async {
-    var trackerList = await readTrackers();
-    return trackerList[0].name;
-  }
 }
