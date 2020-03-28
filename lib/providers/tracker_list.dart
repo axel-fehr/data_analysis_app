@@ -6,7 +6,6 @@ class TrackerList with ChangeNotifier {
   List<Tracker> _trackers = <Tracker>[];
   List<String> _trackerNames = <String>[];
   TrackerDatabase _trackerDatabase = new TrackerDatabase();
-  // TODO: rename trackerDatabase to something that makes it clearer that the database just contains the names
 
   List<Tracker> get trackers {
     return [..._trackers];

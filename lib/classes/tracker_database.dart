@@ -5,6 +5,8 @@ import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
 import 'tracker.dart';
 
+/// Provides a database of trackers (names and types, not their logs),
+/// and functions needed to store, manipulate and read entries.
 class TrackerDatabase {
   static const String _databaseName = 'trackers';
   Future<Database> _database;
