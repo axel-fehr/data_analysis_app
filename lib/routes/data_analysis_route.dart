@@ -6,7 +6,7 @@ class DataAnalysisRoute extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Data Analysis"),
+        title: Text('Data Analysis'),
       ),
       body: Center(
         child: RaisedButton(

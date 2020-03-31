@@ -5,7 +5,7 @@ import '../classes/tracker_database.dart';
 class TrackerList with ChangeNotifier {
   List<Tracker> _trackers = <Tracker>[];
   List<String> _trackerNames = <String>[];
-  TrackerDatabase _trackerDatabase = new TrackerDatabase();
+  final TrackerDatabase _trackerDatabase = TrackerDatabase();
 
   List<Tracker> get trackers {
     return [..._trackers];

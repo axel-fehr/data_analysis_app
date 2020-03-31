@@ -2,13 +2,13 @@ import './log.dart';
 import './log_database.dart';
 
 class Tracker {
-  String _name;
-  String _type;
+  final String _name;
+  final String _type;
   List<Log> _logs = [];
   LogDatabase _logDatabase;
 
   Tracker(this._name, this._type) {
-    _logDatabase = new LogDatabase(_name);
+    _logDatabase = LogDatabase(_name);
   }
 
   Future<String> loadLogsFromDisk() async {
@@ -22,8 +22,8 @@ class Tracker {
   List<Log> get logs => _logs;
 
   void addLog(bool logValue) {
-    print("adding log, value: $logValue");
-    Log addedLog = new Log(logValue);
+    print('adding log, value: $logValue');
+    Log addedLog = Log(logValue);
     _logs.add(addedLog);
     _logDatabase.insertLog(addedLog);
   }

@@ -14,7 +14,7 @@ class _TrackingVariablesRouteState extends State<TrackingVariablesRoute> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Trackers"),
+        title: Text('Trackers'),
       ),
       body: Center(child: ScreenCenter()),
       floatingActionButton: AddVariableToTrackButton(),
@@ -86,7 +86,7 @@ class AddVariableToTrackButton extends StatelessWidget {
         createAlertDialog(context).then((onValue) {
           SnackBar mySnackBar = SnackBar(
               content: Text(
-            "Hello $onValue",
+            'Hello $onValue',
           ));
           Scaffold.of(context).showSnackBar(mySnackBar);
 

@@ -10,7 +10,7 @@ void main() => runApp(MyApp());
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    TrackerList trackerList = new TrackerList();
+    TrackerList trackerList = TrackerList();
     return FutureBuilder<String>(
         future: trackerList.loadTrackersFromDisk(),
         builder: (context, AsyncSnapshot<String> snapshot) {
@@ -18,7 +18,7 @@ class MyApp extends StatelessWidget {
             return Center(child: CircularProgressIndicator());
           }
           else if (snapshot.hasError) {
-            return Text("ERROR: ${snapshot.error}");
+            return Text('ERROR: ${snapshot.error}');
           }
           else {
             return MultiProvider(

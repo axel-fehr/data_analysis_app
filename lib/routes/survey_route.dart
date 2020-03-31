@@ -6,7 +6,7 @@ class DailySurveyRoute extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Daily Survey"),
+        title: Text('Daily Survey'),
       ),
       body: Center(
         child: RaisedButton(

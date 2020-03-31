@@ -20,10 +20,10 @@ class TrackerDatabase {
   // TODO: rename to setUpDatabase
   Future<void> initDatabase() async {
     WidgetsFlutterBinding.ensureInitialized();
-    this._database = openDatabase(
+    _database = openDatabase(
       join(await getDatabasesPath(), 'tracker_database.db'),
       onCreate: (db, version) {
-        String command = "CREATE TABLE IF NOT EXISTS $_databaseName(name VARCHAR(128) PRIMARY KEY, type VARCHAR(128))";
+        String command = 'CREATE TABLE IF NOT EXISTS $_databaseName(name VARCHAR(128) PRIMARY KEY, type VARCHAR(128))';
         return db.execute(command);
       },
       version: 1,
@@ -47,7 +47,7 @@ class TrackerDatabase {
     await db.update(
       _databaseName,
       tracker.toMap(),
-      where: "name = ?",
+      where: 'name = ?',
       whereArgs: [tracker.name],
     );
   }

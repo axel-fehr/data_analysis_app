@@ -25,11 +25,11 @@ class LogDatabase {
   /// it is asynchronous.
   Future<void> setUpDatabase() async {
     WidgetsFlutterBinding.ensureInitialized();
-    this._database = openDatabase(
+    _database = openDatabase(
       join(await getDatabasesPath(), _trackerName + '_log_database.db'),
       onCreate: (db, version) {
         // TODO: adjust the type used to store values based on the type of tracker
-        String command = "CREATE TABLE IF NOT EXISTS $_databaseName(timeStamp DATETIME PRIMARY KEY, value INTEGER)";
+        String command = 'CREATE TABLE IF NOT EXISTS $_databaseName(timeStamp DATETIME PRIMARY KEY, value INTEGER)';
         return db.execute(command);
       },
       version: 1,
@@ -53,7 +53,7 @@ class LogDatabase {
     await db.update(
       _databaseName,
       log.toMap(),
-      where: "timeStamp = ?",
+      where: 'timeStamp = ?',
       whereArgs: [log.timeStamp],
     );
   }

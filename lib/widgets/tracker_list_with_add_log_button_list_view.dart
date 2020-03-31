@@ -11,7 +11,7 @@ class TrackerListWithAddLogButtonListView extends StatelessWidget {
   Widget build(BuildContext context) {
     var listOfTrackers = Provider.of<TrackerList>(context).trackers;
 
-    var trackerWithAddLogButtonList = List<TrackerWithAddLogButton>();
+    List<TrackerWithAddLogButton> trackerWithAddLogButtonList = [];
 
     listOfTrackers.forEach(
         (e) => trackerWithAddLogButtonList.add(TrackerWithAddLogButton(e)));
@@ -29,10 +29,10 @@ class TrackerWithAddLogButton extends StatelessWidget {
   final buttonSize = 35.0;
 //  final _addLogButton;
 
-  showLogAlertDialog(BuildContext context) {
+  void showLogAlertDialog(BuildContext context) {
     // set up the buttons
     Widget falseButton = FlatButton(
-      child: Text("False"),
+      child: Text('False'),
       onPressed: () {
         _tracker.addLog(false);
         Navigator.of(context).pop();
@@ -40,7 +40,7 @@ class TrackerWithAddLogButton extends StatelessWidget {
     );
 
     Widget trueButton = FlatButton(
-      child: Text("True"),
+      child: Text('True'),
       onPressed: () {
         _tracker.addLog(true);
         Navigator.of(context).pop();
@@ -49,8 +49,8 @@ class TrackerWithAddLogButton extends StatelessWidget {
 
     // set up the AlertDialog
     CupertinoAlertDialog alert = CupertinoAlertDialog(
-      title: Text("Log"),
-      content: Text("Please enter the log value."),
+      title: Text('Log'),
+      content: Text('Please enter the log value.'),
       actions: [
         falseButton,
         trueButton,
@@ -79,7 +79,7 @@ class TrackerWithAddLogButton extends StatelessWidget {
             child: FloatingActionButton(
               onPressed: () => showLogAlertDialog(context),
               child: Text('+'), //_addLogButton
-              heroTag: this._tracker.name + "_addLogButton",
+              heroTag: _tracker.name + '_addLogButton',
             ),
           )),
     ]);
