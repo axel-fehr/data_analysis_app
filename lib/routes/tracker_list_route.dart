@@ -4,12 +4,12 @@ import 'package:provider/provider.dart';
 import '../providers/tracker_list.dart';
 import '../widgets/tracker_list_with_add_log_button_list_view.dart';
 
-class TrackingVariablesRoute extends StatefulWidget {
+class TrackerListRoute extends StatefulWidget {
   @override
-  _TrackingVariablesRouteState createState() => _TrackingVariablesRouteState();
+  _TrackerListRouteState createState() => _TrackerListRouteState();
 }
 
-class _TrackingVariablesRouteState extends State<TrackingVariablesRoute> {
+class _TrackerListRouteState extends State<TrackerListRoute> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
