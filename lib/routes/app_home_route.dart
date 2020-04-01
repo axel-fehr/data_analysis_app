@@ -10,7 +10,7 @@ class AppHome extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title: Text('Welcome to Your App!'),
+          title: Text('Welcome to Your App!'), // TODO: change the title
         ),
         body: Center(
           child: Column(
@@ -18,12 +18,12 @@ class AppHome extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: <Widget>[
               RaisedButton(
-                child: Text('Tracked Variables'),
+                child: Text('Trackers'), // TODO: Is it obvious / understandable what this is and does?
                 onPressed: () {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                        builder: (context) => TrackingVariablesRoute()),
+                        builder: (context) => TrackerListRoute()),
                   );
                 },
               ),
