@@ -5,12 +5,12 @@ import 'package:provider/provider.dart';
 
 import '../providers/tracker_list.dart';
 import '../classes/tracker.dart';
+import '../routes/tracker_logs_analysis_route.dart';
 
 class TrackerListWithAddLogButtonListView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    var listOfTrackers = Provider.of<TrackerList>(context).trackers;
-
+    List<Tracker> listOfTrackers = Provider.of<TrackerList>(context).trackers;
     List<TrackerWithAddLogButton> trackerWithAddLogButtonList = [];
 
     listOfTrackers.forEach(
@@ -27,7 +27,6 @@ class TrackerListWithAddLogButtonListView extends StatelessWidget {
 class TrackerWithAddLogButton extends StatelessWidget {
   final Tracker _tracker;
   final buttonSize = 35.0;
-//  final _addLogButton;
 
   void showLogAlertDialog(BuildContext context) {
     // set up the buttons
@@ -71,14 +70,23 @@ class TrackerWithAddLogButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Row(mainAxisAlignment: MainAxisAlignment.spaceAround, children: [
-      Expanded(child: Container(child: Text(_tracker.name))),
+      Expanded(
+        child: InkWell(
+          child: Container(child: Text(_tracker.name)),
+          onTap: () => Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) => TrackerLogsAnalysisRoute(_tracker.name)),
+          ),
+        ),
+      ),
       Container(
           height: buttonSize,
           width: buttonSize,
           child: FittedBox(
             child: FloatingActionButton(
               onPressed: () => showLogAlertDialog(context),
-              child: Text('+'), //_addLogButton
+              child: Text('+'),
               heroTag: _tracker.name + '_addLogButton',
             ),
           )),
