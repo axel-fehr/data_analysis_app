@@ -28,6 +28,8 @@ class TrackerWithAddLogButton extends StatelessWidget {
   final Tracker _tracker;
   final buttonSize = 35.0;
 
+  TrackerWithAddLogButton(this._tracker);
+
   void showLogAlertDialog(BuildContext context) {
     // set up the buttons
     Widget falseButton = FlatButton(
@@ -64,8 +66,6 @@ class TrackerWithAddLogButton extends StatelessWidget {
       },
     );
   }
-
-  TrackerWithAddLogButton(this._tracker);
 
   @override
   Widget build(BuildContext context) {
