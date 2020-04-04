@@ -50,24 +50,37 @@ class LogDatabase {
   Future<void> updateLog(Log log) async {
     final Database db = await _database;
 
+    LOG TIME STAMPS ARE SUDDENLY DIFFERENT HERE WHEN DB IS READ IN COMPARISON TO FUNCTION THAT CALLS THIS FUNCTION. WHY?!
+    print('\n\nIn updateLog...');
+    print('\ngiven log: ${log.value}, ${log.timeStamp}');
+    List<Log> tmp = await readLogs();
+    print('\nlogs found in database:');
+    tmp.forEach((log) => print('${log.value}, ${log.timeStamp}'));
+    print('\nlogs after update:');
+    tmp.forEach((log) => print('${log.value}, ${log.timeStamp}'));
+
+
     await db.update(
       _databaseName,
       log.toMap(),
       where: 'timeStamp = ?',
-      whereArgs: [log.timeStamp],
+      whereArgs: [log.timeStamp.toIso8601String()],
     );
   }
 
-  bool mapIntLogValueFromDatabaseToBool(int logValueFromDatabase) {
-    if (logValueFromDatabase == 0) {
-      return false;
-    }
-    else if (logValueFromDatabase == 1) {
-      return true;
-    }
-    else {
-      throw('Integers other than 0 and 1 are not converted to Booleans.');
-    }
+  /// Deletes a log from the database.
+  ///
+  /// Arguments:
+  /// timeStampOfLogToDelete -- time stamp of the log that will be deleted, the
+  ///                           time stamp serves as a unique identifier
+  Future<void> deleteLog(DateTime timeStampOfLogToDelete) async {
+    final Database db = await _database;
+
+    await db.delete(
+      _databaseName,
+      where: 'timeStamp = ?',
+      whereArgs: [timeStampOfLogToDelete],
+    );
   }
 
   /// Retrieves all the logs from the tracker table.
@@ -83,5 +96,17 @@ class LogDatabase {
         timeStamp: DateTime.parse(maps[i]['timeStamp']),
       );
     });
+  }
+
+  bool mapIntLogValueFromDatabaseToBool(int logValueFromDatabase) {
+    if (logValueFromDatabase == 0) {
+      return false;
+    }
+    else if (logValueFromDatabase == 1) {
+      return true;
+    }
+    else {
+      throw('Integers other than 0 and 1 are not converted to Booleans.');
+    }
   }
 }

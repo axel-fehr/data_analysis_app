@@ -76,7 +76,7 @@ class TrackerWithAddLogButton extends StatelessWidget {
           onTap: () => Navigator.push(
             context,
             MaterialPageRoute(
-                builder: (context) => TrackerLogsAnalysisRoute(_tracker.name)),
+                builder: (context) => TrackerLogsAnalysisRoute(_tracker)),
           ),
         ),
       ),

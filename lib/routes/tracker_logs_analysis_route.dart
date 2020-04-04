@@ -8,9 +8,10 @@ import '../classes/tracker.dart';
 import '../classes/log.dart';
 
 class TrackerLogsAnalysisRoute extends StatelessWidget {
-  final String _trackerName;
+  // tracker whose logs are shown and summarized on the screen
+  final Tracker _tracker;
 
-  TrackerLogsAnalysisRoute(this._trackerName);
+  TrackerLogsAnalysisRoute(this._tracker);
 
   @override
   Widget build(BuildContext context) {
@@ -19,16 +20,16 @@ class TrackerLogsAnalysisRoute extends StatelessWidget {
         title: Text('Analysis'),
       ),
       body: Center(
-        child: LogList(_trackerName),
+        child: LogList(_tracker),
       ),
     );
   }
 }
 
 class LogList extends StatelessWidget {
-  final String _trackerName;
+  final Tracker _tracker;
 
-  LogList(this._trackerName);
+  LogList(this._tracker);
 
   @override
   Widget build(BuildContext context) {
@@ -38,7 +39,7 @@ class LogList extends StatelessWidget {
         children: <Widget>[
           Text('Logs:'),
           Container(
-            child: LogListWithEditButtonsListView(_trackerName),
+            child: LogValuesWithEditButtonsListView(_tracker),
             height: 500,
           )
         ],
@@ -48,30 +49,20 @@ class LogList extends StatelessWidget {
   }
 }
 
-class LogListWithEditButtonsListView extends StatelessWidget {
-  final String _trackerName;
+class LogValuesWithEditButtonsListView extends StatelessWidget {
+  // tracker whose logs are going to be shown as a list
+  final Tracker _trackerCorrespondingToLogs;
 
-  LogListWithEditButtonsListView(this._trackerName);
-
-  /// Returns the tracker that has the name given by the field '_trackerName'.
-  Tracker getTrackerWithTrackerName(BuildContext context) {
-    List<Tracker> listOfTrackers = Provider.of<TrackerList>(context).trackers;
-
-    Tracker matchingTracker = listOfTrackers.singleWhere(
-        (tracker) => tracker.name == _trackerName,
-        orElse: () => throw ('Provided tracker name not found in list.'));
-
-    return matchingTracker;
-  }
+  LogValuesWithEditButtonsListView(this._trackerCorrespondingToLogs);
 
   @override
   Widget build(BuildContext context) {
-    Tracker correspondingTracker = getTrackerWithTrackerName(context);
+//    Tracker correspondingTracker = getTrackerWithTrackerName(context);
     List<Padding> logValueList = [];
 
-    correspondingTracker.logs.forEach((log) => logValueList.add(Padding(
+    _trackerCorrespondingToLogs.logs.forEach((log) => logValueList.add(Padding(
           padding: const EdgeInsets.only(top: 8.0),
-          child: LogWithEditButton(log),
+          child: LogWithEditButton(log, _trackerCorrespondingToLogs),
         )));
 
     return ListView(
@@ -82,23 +73,32 @@ class LogListWithEditButtonsListView extends StatelessWidget {
 
 class LogWithEditButton extends StatelessWidget {
   final Log _log;
+  final Tracker _trackerCorrespondingToLog;
 
-  LogWithEditButton(this._log);
-  //TODO: let's have edit / pencil icon next to each item on button press, when pressed, popup dialog opens where log can be deleted or value can be changed
+  LogWithEditButton(this._log, this._trackerCorrespondingToLog);
+
   void showLogEditAlertDialog(BuildContext context) {
     // TODO: change the alert dialog depending on the type of the tracker (create one separate widget for each alert dialog (for each tracker type))
+    bool oppositeValue = !_log.value;
+    TrackerList listOfTrackers = Provider.of<TrackerList>(context);
+
     Widget changeLogButton = FlatButton(
-      child: Text('Change to False'),
+      child: Text("Change to '$oppositeValue'"),
       onPressed: () {
-        print('pressed change'); // TODO: implement change of log value (update DB as well!)
+        print('pressed change'); // TODO: remove this
+        listOfTrackers.changeLogValue(_trackerCorrespondingToLog,
+                                      _log.timeStamp,
+                                      oppositeValue);
         Navigator.of(context).pop();
       },
     );
-    // TODO: consider using a provider for the log and tracker database, needed at a lot of places, use provider here then
+
     Widget deleteLogButton = FlatButton(
       child: Icon(Icons.delete),
       onPressed: () {
-        print('pressed delete'); // TODO: implement deletion of log (update DB as well!)
+        print('pressed delete'); // TODO: delete this
+        listOfTrackers.deleteLog(_trackerCorrespondingToLog, _log.timeStamp);
+        // TODO: make sure the time stamp recovered from the DB strings are the same as the original that is saved
         Navigator.of(context).pop();
       },
     );
