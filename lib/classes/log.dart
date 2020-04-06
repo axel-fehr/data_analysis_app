@@ -4,7 +4,7 @@ class Log {
 
   Log(bool value, {DateTime timeStamp}) {
     _value = value;
-    _timeStamp ??= DateTime.now();
+    _timeStamp = timeStamp ?? DateTime.now();
   }
 
   bool get value => _value;
