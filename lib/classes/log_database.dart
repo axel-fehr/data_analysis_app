@@ -50,16 +50,6 @@ class LogDatabase {
   Future<void> updateLog(Log log) async {
     final Database db = await _database;
 
-    LOG TIME STAMPS ARE SUDDENLY DIFFERENT HERE WHEN DB IS READ IN COMPARISON TO FUNCTION THAT CALLS THIS FUNCTION. WHY?!
-    print('\n\nIn updateLog...');
-    print('\ngiven log: ${log.value}, ${log.timeStamp}');
-    List<Log> tmp = await readLogs();
-    print('\nlogs found in database:');
-    tmp.forEach((log) => print('${log.value}, ${log.timeStamp}'));
-    print('\nlogs after update:');
-    tmp.forEach((log) => print('${log.value}, ${log.timeStamp}'));
-
-
     await db.update(
       _databaseName,
       log.toMap(),

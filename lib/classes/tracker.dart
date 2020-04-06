@@ -35,20 +35,10 @@ class Tracker {
   ///                         to be changed
   /// newLogValue: value that the log will have after the change
   void changeLogValue(DateTime timeStampOfLogToChange, bool newLogValue) {
-
-    print('\n\nIn changeLogValue...');
-    print('\ngiven timestamp: $timeStampOfLogToChange');
-    print('\nstored logs before update');
-    _logs.forEach((log) => print('${log.value}, ${log.timeStamp}'));
-
-
     Log matchingLog = _logs.singleWhere(
             (log) => log.timeStamp == timeStampOfLogToChange,
         orElse: () =>
         throw ('No log found that matches the given time stamp.'));
-
-    print('\nmatching log: ${matchingLog.value}, ${matchingLog.timeStamp}');
-
     matchingLog.value = newLogValue;
     _logDatabase.updateLog((matchingLog));
   }

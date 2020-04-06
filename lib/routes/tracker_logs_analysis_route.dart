@@ -98,7 +98,6 @@ class LogWithEditButton extends StatelessWidget {
       onPressed: () {
         print('pressed delete'); // TODO: delete this
         listOfTrackers.deleteLog(_trackerCorrespondingToLog, _log.timeStamp);
-        // TODO: make sure the time stamp recovered from the DB strings are the same as the original that is saved
         Navigator.of(context).pop();
       },
     );
@@ -128,7 +127,7 @@ class LogWithEditButton extends StatelessWidget {
         Expanded(child: Text(_log.value.toString())),
         InkWell(
           child: Icon(Icons.create),
-          onTap: () => showLogEditAlertDialog(context), // print('edit'),
+          onTap: () => showLogEditAlertDialog(context),
         ),
       ],
     );

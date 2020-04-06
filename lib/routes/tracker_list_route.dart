@@ -17,7 +17,7 @@ class _TrackerListRouteState extends State<TrackerListRoute> {
         title: Text('Trackers'),
       ),
       body: Center(child: ScreenCenter()),
-      floatingActionButton: AddVariableToTrackButton(),
+      floatingActionButton: AddTrackerButton(),
     );
   }
 }
@@ -29,7 +29,7 @@ class ScreenCenter extends StatelessWidget {
       child: Column(
         children: <Widget>[
           Visibility(
-            child: Text(
+            child: Text( // TODO: put this in the center of the screen and make it bigger
               'You haven\'t created a tracker yet.'
               '\nGo ahead and create one!',
               style: TextStyle(fontSize: 16),
@@ -50,7 +50,7 @@ class ScreenCenter extends StatelessWidget {
   }
 }
 
-class AddVariableToTrackButton extends StatelessWidget {
+class AddTrackerButton extends StatelessWidget {
   Future<String> createAlertDialog(BuildContext context) {
     TextEditingController customController = TextEditingController();
 
@@ -86,9 +86,9 @@ class AddVariableToTrackButton extends StatelessWidget {
         createAlertDialog(context).then((onValue) {
           SnackBar mySnackBar = SnackBar(
               content: Text(
-            'Hello $onValue',
+            'Hello $onValue', // TODO: snackbar is unnecessary, since the appearing tracker already provides feedback. don't show the snackbar. makes the code simpler as well.
           ));
-          Scaffold.of(context).showSnackBar(mySnackBar);
+          Scaffold.of(context).showSnackBar(mySnackBar); // TODO: see above
 
           final trackerListObject = Provider.of<TrackerList>(context);
           trackerListObject.addTracker(onValue);

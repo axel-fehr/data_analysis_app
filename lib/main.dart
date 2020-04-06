@@ -12,7 +12,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     TrackerList trackerList = TrackerList();
     return FutureBuilder<String>(
-        future: trackerList.loadTrackersFromDisk(),
+        future: trackerList.loadTrackersFromDisk(), // TODO: is the future builder even necessary, since the async function is actually void? Read online that works, verfy that
         builder: (context, AsyncSnapshot<String> snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return Center(child: CircularProgressIndicator());
