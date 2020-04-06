@@ -69,7 +69,7 @@ class LogDatabase {
     await db.delete(
       _databaseName,
       where: 'timeStamp = ?',
-      whereArgs: [timeStampOfLogToDelete],
+      whereArgs: [timeStampOfLogToDelete.toIso8601String()],
     );
   }
 
