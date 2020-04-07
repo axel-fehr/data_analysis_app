@@ -78,12 +78,6 @@ class AddTrackerButton extends StatelessWidget {
       ),
       onPressed: () {
         createAlertDialog(context).then((onValue) {
-          SnackBar mySnackBar = SnackBar(
-              content: Text(
-            'Hello $onValue', // TODO: snackbar is unnecessary, since the appearing tracker already provides feedback. don't show the snackbar. makes the code simpler as well.
-          ));
-          Scaffold.of(context).showSnackBar(mySnackBar); // TODO: see above
-
           final trackerListObject = Provider.of<TrackerList>(context);
           trackerListObject.addTracker(onValue);
         });
