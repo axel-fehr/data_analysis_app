@@ -38,7 +38,7 @@ class ScreenCenter extends StatelessWidget {
         return Container(
           child: TrackerListWithAddLogButtonListView(),
           width: double.infinity,
-          height: 300,
+          height: double.infinity,
       );
     }
   }
