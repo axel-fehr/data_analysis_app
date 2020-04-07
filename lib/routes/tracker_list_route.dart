@@ -16,7 +16,7 @@ class _TrackerListRouteState extends State<TrackerListRoute> {
       appBar: AppBar(
         title: Text('Trackers'),
       ),
-      body: Center(child: ScreenCenter()),
+      body: ScreenCenter(),
       floatingActionButton: AddTrackerButton(),
     );
   }
@@ -25,28 +25,23 @@ class _TrackerListRouteState extends State<TrackerListRoute> {
 class ScreenCenter extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Center(
-      child: Column(
-        children: <Widget>[
-          Visibility(
-            child: Text( // TODO: put this in the center of the screen and make it bigger
-              'You haven\'t created a tracker yet.'
-              '\nGo ahead and create one!',
-              style: TextStyle(fontSize: 16),
-            ),
-            visible: Provider.of<TrackerList>(context).trackers.isEmpty,
-          ),
-          Visibility(
-            child: Container(
-              child: TrackerListWithAddLogButtonListView(),
-              width: double.infinity,
-              height: 300,
-            ),
-            visible: Provider.of<TrackerList>(context).trackers.isNotEmpty,
-          )
-        ],
-      ),
-    );
+    if (Provider.of<TrackerList>(context).trackers.isEmpty) {
+      return Center(
+        child: Text(
+          // TODO: put this in the center of the screen and make it bigger
+          'You haven\'t created a tracker yet.'
+          '\nGo ahead and create one!',
+          style: TextStyle(fontSize: 16),
+          textAlign: TextAlign.center,
+        ),
+      );
+    } else {
+        return Container(
+          child: TrackerListWithAddLogButtonListView(),
+          width: double.infinity,
+          height: 300,
+      );
+    }
   }
 }
 
