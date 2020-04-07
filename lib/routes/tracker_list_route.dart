@@ -28,10 +28,9 @@ class ScreenCenter extends StatelessWidget {
     if (Provider.of<TrackerList>(context).trackers.isEmpty) {
       return Center(
         child: Text(
-          // TODO: put this in the center of the screen and make it bigger
           'You haven\'t created a tracker yet.'
           '\nGo ahead and create one!',
-          style: TextStyle(fontSize: 16),
+          style: TextStyle(fontSize: 20),
           textAlign: TextAlign.center,
         ),
       );
