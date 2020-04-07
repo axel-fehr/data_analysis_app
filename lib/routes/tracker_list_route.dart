@@ -16,13 +16,13 @@ class _TrackerListRouteState extends State<TrackerListRoute> {
       appBar: AppBar(
         title: Text('Trackers'),
       ),
-      body: ScreenCenter(),
+      body: Content(),
       floatingActionButton: AddTrackerButton(),
     );
   }
 }
 
-class ScreenCenter extends StatelessWidget {
+class Content extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     if (Provider.of<TrackerList>(context).trackers.isEmpty) {
@@ -35,10 +35,10 @@ class ScreenCenter extends StatelessWidget {
         ),
       );
     } else {
-        return Container(
-          child: TrackerListWithAddLogButtonListView(),
-          width: double.infinity,
-          height: double.infinity,
+      return Container(
+        child: TrackerListWithAddLogButtonListView(),
+        width: double.infinity,
+        height: double.infinity,
       );
     }
   }
