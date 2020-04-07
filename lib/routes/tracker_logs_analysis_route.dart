@@ -19,9 +19,7 @@ class TrackerLogsAnalysisRoute extends StatelessWidget {
       appBar: AppBar(
         title: Text('Analysis'),
       ),
-      body: Center(
-        child: LogList(_tracker),
-      ),
+      body: LogList(_tracker),
     );
   }
 }
@@ -33,18 +31,23 @@ class LogList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(8.0),
-      child: Column(
-        children: <Widget>[
-          Text('Logs:'),
-          Container(
-            child: LogValuesWithEditButtonsListView(_tracker),
-            height: 500,
-          )
-        ],
-        crossAxisAlignment: CrossAxisAlignment.start,
-      ),
+    return Column(
+      children: <Widget>[
+        Padding(
+          child: Text(
+            'Logs:',
+            style: TextStyle(
+                fontSize: 16,
+                decoration: TextDecoration.underline,
+                fontWeight: FontWeight.bold),
+          ),
+          padding: const EdgeInsets.only(top: 8.0, left: 8.0),
+        ),
+        Expanded(
+          child: LogValuesWithEditButtonsListView(_tracker),
+        )
+      ],
+      crossAxisAlignment: CrossAxisAlignment.start,
     );
   }
 }
@@ -56,10 +59,12 @@ class LogValuesWithEditButtonsListView extends StatefulWidget {
   LogValuesWithEditButtonsListView(this._trackerCorrespondingToLogs);
 
   @override
-  _LogValuesWithEditButtonsListViewState createState() => _LogValuesWithEditButtonsListViewState();
+  _LogValuesWithEditButtonsListViewState createState() =>
+      _LogValuesWithEditButtonsListViewState();
 }
 
-class _LogValuesWithEditButtonsListViewState extends State<LogValuesWithEditButtonsListView> {
+class _LogValuesWithEditButtonsListViewState
+    extends State<LogValuesWithEditButtonsListView> {
 
   /// Triggers a rebuild of the list of logs after the deletion of a log.
   ///
@@ -85,12 +90,13 @@ class _LogValuesWithEditButtonsListViewState extends State<LogValuesWithEditButt
   Widget build(BuildContext context) {
     List<Padding> logValueList = [];
 
-    widget._trackerCorrespondingToLogs.logs.forEach((log) => logValueList.add(Padding(
-      padding: const EdgeInsets.only(top: 8.0),
-      child: LogWithEditButton(log,
-                               widget._trackerCorrespondingToLogs,
-                               updateLogListOnLogDeletionCallback: updateLogListOnLogDeletion),
-    )));
+    widget._trackerCorrespondingToLogs.logs
+        .forEach((log) => logValueList.add(Padding(
+              padding: const EdgeInsets.only(top: 8.0, left: 8.0),
+              child: LogWithEditButton(log, widget._trackerCorrespondingToLogs,
+                  updateLogListOnLogDeletionCallback:
+                      updateLogListOnLogDeletion),
+            )));
 
     return ListView(
       children: logValueList,
@@ -104,7 +110,7 @@ class LogWithEditButton extends StatelessWidget {
   final VoidCallback updateLogListOnLogDeletionCallback;
 
   LogWithEditButton(this._log, this._trackerCorrespondingToLog,
-                    {@required this.updateLogListOnLogDeletionCallback});
+      {@required this.updateLogListOnLogDeletionCallback});
 
   void showLogEditAlertDialog(BuildContext context) {
     // TODO: change the alert dialog depending on the type of the tracker (create one separate widget for each alert dialog (for each tracker type))
@@ -115,9 +121,8 @@ class LogWithEditButton extends StatelessWidget {
       child: Text("Change to '$oppositeValue'"),
       onPressed: () {
         print('pressed change'); // TODO: remove this
-        listOfTrackers.changeLogValue(_trackerCorrespondingToLog,
-                                      _log.timeStamp,
-                                      oppositeValue);
+        listOfTrackers.changeLogValue(
+            _trackerCorrespondingToLog, _log.timeStamp, oppositeValue);
         Navigator.of(context).pop();
       },
     );
