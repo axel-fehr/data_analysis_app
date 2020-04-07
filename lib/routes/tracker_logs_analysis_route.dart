@@ -49,21 +49,48 @@ class LogList extends StatelessWidget {
   }
 }
 
-class LogValuesWithEditButtonsListView extends StatelessWidget {
+class LogValuesWithEditButtonsListView extends StatefulWidget {
   // tracker whose logs are going to be shown as a list
   final Tracker _trackerCorrespondingToLogs;
 
   LogValuesWithEditButtonsListView(this._trackerCorrespondingToLogs);
 
   @override
+  _LogValuesWithEditButtonsListViewState createState() => _LogValuesWithEditButtonsListViewState();
+}
+
+class _LogValuesWithEditButtonsListViewState extends State<LogValuesWithEditButtonsListView> {
+
+  /// Triggers a rebuild of the list of logs after the deletion of a log.
+  ///
+  /// This function is workaround needed because using the notifying all
+  /// listeners after deleting a log of a tracker does not immediately trigger a rebuild of the
+  /// list such that the log that was deleted does not disappear in the list.
+  /// The reason for this is not entirely understood but could be because the
+  /// context of the log that is being deleted is still there when the listeners
+  /// are notified and the associated row in the list is therefore still
+  /// rebuilt.
+  /// Calling this function when a log is deleted in the LogWithEditButton widget
+  /// ensures the list is immediately updated and the deleted log disappears
+  /// as the user would expect.
+  void updateLogListOnLogDeletion() {
+    print('\n\nCallback executed!\n\n');
+    // setState is empty because the change to the state was already done in
+    // the function of the provider of the tracker list called in
+    // showLogEditAlertDialog of the widget LogWithEditButton.
+    setState(() {});
+  }
+
+  @override
   Widget build(BuildContext context) {
-//    Tracker correspondingTracker = getTrackerWithTrackerName(context);
     List<Padding> logValueList = [];
 
-    _trackerCorrespondingToLogs.logs.forEach((log) => logValueList.add(Padding(
-          padding: const EdgeInsets.only(top: 8.0),
-          child: LogWithEditButton(log, _trackerCorrespondingToLogs),
-        )));
+    widget._trackerCorrespondingToLogs.logs.forEach((log) => logValueList.add(Padding(
+      padding: const EdgeInsets.only(top: 8.0),
+      child: LogWithEditButton(log,
+                               widget._trackerCorrespondingToLogs,
+                               updateLogListOnLogDeletionCallback: updateLogListOnLogDeletion),
+    )));
 
     return ListView(
       children: logValueList,
@@ -74,8 +101,10 @@ class LogValuesWithEditButtonsListView extends StatelessWidget {
 class LogWithEditButton extends StatelessWidget {
   final Log _log;
   final Tracker _trackerCorrespondingToLog;
+  final VoidCallback updateLogListOnLogDeletionCallback;
 
-  LogWithEditButton(this._log, this._trackerCorrespondingToLog);
+  LogWithEditButton(this._log, this._trackerCorrespondingToLog,
+                    {@required this.updateLogListOnLogDeletionCallback});
 
   void showLogEditAlertDialog(BuildContext context) {
     // TODO: change the alert dialog depending on the type of the tracker (create one separate widget for each alert dialog (for each tracker type))
@@ -99,6 +128,9 @@ class LogWithEditButton extends StatelessWidget {
         print('pressed delete'); // TODO: delete this
         listOfTrackers.deleteLog(_trackerCorrespondingToLog, _log.timeStamp);
         Navigator.of(context).pop();
+        // function call below is a needed workaround, see documentation of
+        // 'updateLogListOnLogDeletion'
+        updateLogListOnLogDeletionCallback();
       },
     );
 
