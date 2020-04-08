@@ -17,9 +17,7 @@ class TrackerListWithAddLogButtonListView extends StatelessWidget {
         (e) => trackerWithAddLogButtonList.add(TrackerWithAddLogButton(e)));
 
     return ListView(
-      padding: EdgeInsets.all(16.0),
       children: trackerWithAddLogButtonList,
-      // TODO: add space between the elements (e.g. with a grey separating line)
     );
   }
 }
@@ -29,6 +27,48 @@ class TrackerWithAddLogButton extends StatelessWidget {
   final buttonSize = 35.0;
 
   TrackerWithAddLogButton(this._tracker);
+
+  @override
+  Widget build(BuildContext context) {
+    return ListTile(
+      title: TrackerName(tracker: _tracker),
+      trailing: AddLogButton(buttonSize: buttonSize, tracker: _tracker),
+    );
+  }
+}
+
+class TrackerName extends StatelessWidget {
+  const TrackerName({
+    Key key,
+    @required Tracker tracker,
+  })  : _tracker = tracker,
+        super(key: key);
+
+  final Tracker _tracker;
+
+  @override
+  Widget build(BuildContext context) {
+    return InkWell(
+      child: Text(_tracker.name),
+      onTap: () => Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (context) => TrackerLogsAnalysisRoute(_tracker)),
+      ),
+    );
+  }
+}
+
+class AddLogButton extends StatelessWidget {
+  const AddLogButton({
+    Key key,
+    @required this.buttonSize,
+    @required Tracker tracker,
+  })  : _tracker = tracker,
+        super(key: key);
+
+  final double buttonSize;
+  final Tracker _tracker;
 
   void showLogAlertDialog(BuildContext context) {
     // set up the buttons
@@ -69,27 +109,18 @@ class TrackerWithAddLogButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Row(mainAxisAlignment: MainAxisAlignment.spaceAround, children: [
-      Expanded(
-        child: InkWell(
-          child: Container(child: Text(_tracker.name)),
-          onTap: () => Navigator.push(
-            context,
-            MaterialPageRoute(
-                builder: (context) => TrackerLogsAnalysisRoute(_tracker)),
-          ),
-        ),
-      ),
-      Container(
-          height: buttonSize,
-          width: buttonSize,
-          child: FittedBox(
-            child: FloatingActionButton(
-              onPressed: () => showLogAlertDialog(context),
-              child: Text('+'),
-              heroTag: _tracker.name + '_addLogButton',
+    return Container(
+        height: buttonSize,
+        width: buttonSize,
+        child: FittedBox(
+          child: FloatingActionButton(
+            onPressed: () => showLogAlertDialog(context),
+            child: Text(
+              '+',
+              style: TextStyle(fontSize: 32),
             ),
-          )),
-    ]);
+            heroTag: _tracker.name + '_addLogButton',
+          ),
+        ));
   }
 }

@@ -65,19 +65,18 @@ class LogValuesWithEditButtonsListView extends StatefulWidget {
 
 class _LogValuesWithEditButtonsListViewState
     extends State<LogValuesWithEditButtonsListView> {
-
   /// Triggers a rebuild of the list of logs after the deletion of a log.
   ///
   /// This function is workaround needed because using the notifying all
-  /// listeners after deleting a log of a tracker does not immediately trigger a rebuild of the
-  /// list such that the log that was deleted does not disappear in the list.
-  /// The reason for this is not entirely understood but could be because the
-  /// context of the log that is being deleted is still there when the listeners
-  /// are notified and the associated row in the list is therefore still
-  /// rebuilt.
-  /// Calling this function when a log is deleted in the LogWithEditButton widget
-  /// ensures the list is immediately updated and the deleted log disappears
-  /// as the user would expect.
+  /// listeners after deleting a log of a tracker does not immediately trigger
+  /// a rebuild of the list such that the log that was deleted does not
+  /// disappear in the list. The reason for this is not entirely understood but
+  /// could be because the context of the log that is being deleted is still
+  /// there when the listeners are notified and the associated row in the list
+  /// is therefore still rebuilt.
+  /// Calling this function when a log is deleted in the LogWithEditButton
+  /// widget ensures the list is immediately updated and the deleted log
+  /// disappears as the user would expect.
   void updateLogListOnLogDeletion() {
     print('\n\nCallback executed!\n\n');
     // setState is empty because the change to the state was already done in
@@ -88,15 +87,12 @@ class _LogValuesWithEditButtonsListViewState
 
   @override
   Widget build(BuildContext context) {
-    List<Padding> logValueList = [];
+    List<LogWithEditButton> logValueList = [];
 
-    widget._trackerCorrespondingToLogs.logs
-        .forEach((log) => logValueList.add(Padding(
-              padding: const EdgeInsets.only(top: 8.0, left: 8.0),
-              child: LogWithEditButton(log, widget._trackerCorrespondingToLogs,
-                  updateLogListOnLogDeletionCallback:
-                      updateLogListOnLogDeletion),
-            )));
+    widget._trackerCorrespondingToLogs.logs.forEach((log) => logValueList.add(
+          LogWithEditButton(log, widget._trackerCorrespondingToLogs,
+              updateLogListOnLogDeletionCallback: updateLogListOnLogDeletion),
+        ));
 
     return ListView(
       children: logValueList,
@@ -159,14 +155,12 @@ class LogWithEditButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      children: <Widget>[
-        Expanded(child: Text(_log.value.toString())),
-        InkWell(
-          child: Icon(Icons.create),
-          onTap: () => showLogEditAlertDialog(context),
-        ),
-      ],
+    return ListTile(
+      title: Text(_log.value.toString()),
+      trailing: InkWell(
+        child: Icon(Icons.create),
+        onTap: () => showLogEditAlertDialog(context),
+      ),
     );
   }
 }
