@@ -52,6 +52,16 @@ class TrackerDatabase {
     );
   }
 
+  Future<void> deleteTracker(Tracker trackerToDelete) async {
+    final Database db = await _database;
+
+    await db.delete(
+      _databaseName,
+      where: 'name = ?',
+      whereArgs: [trackerToDelete.name],
+    );
+  }
+
   /// Retrieves all the tracker names from the tracker table.
   Future<List<String>> readTrackerNames() async {
     final Database db = await _database;

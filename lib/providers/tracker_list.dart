@@ -39,6 +39,16 @@ class TrackerList with ChangeNotifier {
     // TODO: IS THIS FUNCTION EVEN EXECUTED SYNCHRONOUSLY OR ASYNCHRONOUSLY? BECAUSE IT DOES NOT RETURN A FUTURE BUT USES THE ASYNC KEYWORD
   }
 
+  void removeTracker(Tracker trackerToRemove) async {
+    _trackerNames.remove(trackerToRemove.name);
+    _trackers.remove(trackerToRemove);
+    notifyListeners();
+    await _trackerDatabase.deleteTracker(trackerToRemove);
+    await trackerToRemove.deleteLogDatabase();
+    // TODO: does this really work as expected,, since the return type is not Future<void>? does the function really fully execute the last line?
+    // TODO: IS THIS FUNCTION EVEN EXECUTED SYNCHRONOUSLY OR ASYNCHRONOUSLY? BECAUSE IT DOES NOT RETURN A FUTURE BUT USES THE ASYNC KEYWORD
+  }
+
   /// Changes the value of a log of a tracker with a given name, notifies all
   /// listeners and saves the changes to disk.
   ///

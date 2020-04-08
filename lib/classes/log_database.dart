@@ -8,6 +8,7 @@ import './log.dart';
 class LogDatabase {
   final String _trackerName;
   final String _databaseName;
+  String _databasePath;
   Future<Database> _database;
 
   /// Instantiates an instance of the class.
@@ -25,8 +26,9 @@ class LogDatabase {
   /// it is asynchronous.
   Future<void> setUpDatabase() async {
     WidgetsFlutterBinding.ensureInitialized();
+    _databasePath = join(await getDatabasesPath(), _trackerName + '_log_database.db');
     _database = openDatabase(
-      join(await getDatabasesPath(), _trackerName + '_log_database.db'),
+      _databasePath,
       onCreate: (db, version) {
         // TODO: adjust the type used to store values based on the type of tracker
         String command = 'CREATE TABLE IF NOT EXISTS $_databaseName(timeStamp DATETIME PRIMARY KEY, value INTEGER)';
@@ -34,6 +36,11 @@ class LogDatabase {
       },
       version: 1,
     );
+  }
+
+  Future<void> deleteDatabaseFromDisk() async {
+    await deleteDatabase(_databasePath);
+    print('log database deleted.');
   }
 
   /// Inserts a log object into the database

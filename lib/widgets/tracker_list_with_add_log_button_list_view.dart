@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:provider/provider.dart';
+import 'package:flutter_slidable/flutter_slidable.dart';
 
 import '../providers/tracker_list.dart';
 import '../classes/tracker.dart';
@@ -30,9 +31,25 @@ class TrackerWithAddLogButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ListTile(
-      title: TrackerName(tracker: _tracker),
-      trailing: AddLogButton(buttonSize: buttonSize, tracker: _tracker),
+    return Slidable(
+      actionPane: SlidableDrawerActionPane(),
+      actionExtentRatio: 0.25,
+      child: Container(
+        color: Colors.white,
+        child: ListTile(
+          title: TrackerName(tracker: _tracker),
+          trailing: AddLogButton(buttonSize: buttonSize, tracker: _tracker),
+        ),
+      ),
+      actions: <Widget>[], // shown when user swipes to the right
+      secondaryActions: <Widget>[
+        IconSlideAction(
+          caption: 'Delete',
+          color: Colors.red,
+          icon: Icons.delete,
+          onTap: () => Provider.of<TrackerList>(context).removeTracker(_tracker),
+        ),
+      ],
     );
   }
 }

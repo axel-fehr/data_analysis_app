@@ -17,6 +17,10 @@ class Tracker {
     return 'Data loaded.';
   }
 
+  Future<void> deleteLogDatabase() async {
+    await _logDatabase.deleteDatabaseFromDisk();
+  }
+
   String get type => _type;
   String get name => _name;
   List<Log> get logs => _logs;
