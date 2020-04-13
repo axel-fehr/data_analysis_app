@@ -173,7 +173,7 @@ class LogWithEditButton extends StatelessWidget {
 }
 
 //// TODO: create a custom LogStats Widget for each type of tracker
-class LogStats extends StatefulWidget {
+class LogStats extends StatelessWidget {
   final String trackerName;
   final TextStyle sectionHeadlineTextStyle;
 
@@ -183,15 +183,10 @@ class LogStats extends StatefulWidget {
   });
 
   @override
-  _LogStatsState createState() => _LogStatsState();
-}
-
-class _LogStatsState extends State<LogStats> {
-  @override
   Widget build(BuildContext context) {
     TrackerList listOfTrackers = Provider.of<TrackerList>(context);
     Tracker tracker = listOfTrackers.trackers
-        .singleWhere((tracker) => tracker.name == widget.trackerName);
+        .singleWhere((tracker) => tracker.name == trackerName);
     int totalNumLogs = tracker.logs.length;
     int numTrueLogs = tracker.logs.where((log) => log.value == true).length;
     int numFalseLogs = totalNumLogs - numTrueLogs;
@@ -205,7 +200,7 @@ class _LogStatsState extends State<LogStats> {
             child: Padding(
               child: Text(
                 'Stats:',
-                style: widget.sectionHeadlineTextStyle,
+                style: sectionHeadlineTextStyle,
               ),
               padding: EdgeInsets.only(left: 8.0),
             ),
