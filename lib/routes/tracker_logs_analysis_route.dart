@@ -26,6 +26,10 @@ class TrackerLogsAnalysisRoute extends StatelessWidget {
 
 class LogList extends StatelessWidget {
   final Tracker _tracker;
+  final TextStyle sectionHeadlineTextStyle = TextStyle(
+      fontSize: 16,
+      decoration: TextDecoration.underline,
+      fontWeight: FontWeight.bold);
 
   LogList(this._tracker);
 
@@ -36,15 +40,19 @@ class LogList extends StatelessWidget {
         Padding(
           child: Text(
             'Logs:',
-            style: TextStyle(
-                fontSize: 16,
-                decoration: TextDecoration.underline,
-                fontWeight: FontWeight.bold),
+            style: sectionHeadlineTextStyle,
           ),
           padding: const EdgeInsets.only(top: 8.0, left: 8.0),
         ),
         Expanded(
           child: LogValuesWithEditButtonsListView(_tracker),
+        ),
+        Divider(
+          color: Colors.black,
+        ),
+        LogStats(
+          sectionHeadlineTextStyle: sectionHeadlineTextStyle,
+          trackerName: _tracker.name,
         )
       ],
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -78,7 +86,6 @@ class _LogValuesWithEditButtonsListViewState
   /// widget ensures the list is immediately updated and the deleted log
   /// disappears as the user would expect.
   void updateLogListOnLogDeletion() {
-    print('\n\nCallback executed!\n\n');
     // setState is empty because the change to the state was already done in
     // the function of the provider of the tracker list called in
     // showLogEditAlertDialog of the widget LogWithEditButton.
@@ -161,6 +168,74 @@ class LogWithEditButton extends StatelessWidget {
         child: Icon(Icons.create),
         onTap: () => showLogEditAlertDialog(context),
       ),
+    );
+  }
+}
+
+//// TODO: create a custom LogStats Widget for each type of tracker
+class LogStats extends StatefulWidget {
+  final String trackerName;
+  final TextStyle sectionHeadlineTextStyle;
+
+  LogStats({
+    @required this.trackerName,
+    @required this.sectionHeadlineTextStyle,
+  });
+
+  @override
+  _LogStatsState createState() => _LogStatsState();
+}
+
+class _LogStatsState extends State<LogStats> {
+  @override
+  Widget build(BuildContext context) {
+    TrackerList listOfTrackers = Provider.of<TrackerList>(context);
+    Tracker tracker = listOfTrackers.trackers
+        .singleWhere((tracker) => tracker.name == widget.trackerName);
+    int totalNumLogs = tracker.logs.length;
+    int numTrueLogs = tracker.logs.where((log) => log.value == true).length;
+    int numFalseLogs = totalNumLogs - numTrueLogs;
+    int percentageTrue = ((numTrueLogs / totalNumLogs) * 100).toInt();
+    int percentageFalse = 100 - percentageTrue;
+
+    return Container(
+      child: Column(
+        children: <Widget>[
+          Container(
+            child: Padding(
+              child: Text(
+                'Stats:',
+                style: widget.sectionHeadlineTextStyle,
+              ),
+              padding: EdgeInsets.only(left: 8.0),
+            ),
+            alignment: Alignment.centerLeft,
+          ),
+          StatisticWithPadding('# logs: $totalNumLogs'),
+          StatisticWithPadding('# true: $numTrueLogs'),
+          StatisticWithPadding('# false: $numFalseLogs'),
+          StatisticWithPadding('% true: $percentageTrue%'),
+          StatisticWithPadding('% false: $percentageFalse%'),
+        ],
+      ),
+      height: 150,
+    );
+  }
+}
+
+class StatisticWithPadding extends StatelessWidget {
+  final String _textToDisplay;
+
+  StatisticWithPadding(this._textToDisplay);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      child: Padding(
+        child: Text(_textToDisplay),
+        padding: const EdgeInsets.only(top: 8.0, left: 8.0),
+      ),
+      alignment: Alignment.centerLeft,
     );
   }
 }
