@@ -5,7 +5,6 @@ import 'package:flutter/cupertino.dart';
 
 import '../../providers/tracker_list.dart';
 import '../../classes/tracker.dart';
-import '../../classes/log.dart';
 import 'styling.dart';
 
 class LogStatsOfBinaryTracker extends StatelessWidget {
@@ -22,19 +21,15 @@ class LogStatsOfBinaryTracker extends StatelessWidget {
     return Container(
       child: Column(
         children: <Widget>[
-          Container(
-            child: Padding(
-              child: Text(
-                'Stats:',
-                style: sectionHeadlineTextStyle,
-              ),
-              padding: EdgeInsets.only(left: 8.0),
-            ),
-            alignment: Alignment.centerLeft,
+          LogStatsSectionHeadline(
+            textToDisplay: 'Overall Statistics:',
+            sectionHeadlineTextStyle: sectionHeadlineTextStyle,
           ),
-          BinaryTrackerOverallStats(
-              trackerName: trackerName,
-              sectionHeadlineTextStyle: sectionHeadlineTextStyle),
+          BinaryTrackerOverallStats(trackerName: trackerName),
+//          BinaryTrackerStatsOverChosenPeriod(
+//            trackerName: trackerName,
+//            sectionHeadlineTextStyle: sectionHeadlineTextStyle,
+//          ),
         ],
       ),
       height: 300,
@@ -45,11 +40,9 @@ class LogStatsOfBinaryTracker extends StatelessWidget {
 /// Displays the statistics of all logs belonging to the tracker.
 class BinaryTrackerOverallStats extends StatelessWidget {
   final String trackerName;
-  final TextStyle sectionHeadlineTextStyle;
 
   BinaryTrackerOverallStats({
     @required this.trackerName,
-    @required this.sectionHeadlineTextStyle,
   });
 
   @override
@@ -70,6 +63,63 @@ class BinaryTrackerOverallStats extends StatelessWidget {
         StatisticWithPadding('# false: $numFalseLogs'),
         StatisticWithPadding('% true: $percentageTrue%'),
         StatisticWithPadding('% false: $percentageFalse%'),
+      ],
+    );
+  }
+}
+
+class BinaryTrackerStatsOverChosenPeriod extends StatefulWidget {
+  final String trackerName;
+  final TextStyle sectionHeadlineTextStyle;
+
+  BinaryTrackerStatsOverChosenPeriod({
+    @required this.trackerName,
+    @required this.sectionHeadlineTextStyle,
+  });
+
+  @override
+  _BinaryTrackerStatsOverChosenPeriodState createState() =>
+      _BinaryTrackerStatsOverChosenPeriodState();
+}
+
+class _BinaryTrackerStatsOverChosenPeriodState
+    extends State<BinaryTrackerStatsOverChosenPeriod> {
+  String chosenPeriod = 'Day'; // the period with which the statistics will be calculated
+  // TODO: compute and display stats for given period
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      children: <Widget>[
+        Padding(
+          child: LogStatsSectionHeadline(
+            textToDisplay: 'Statistics by ',
+            sectionHeadlineTextStyle: widget.sectionHeadlineTextStyle,
+          ),
+          padding: EdgeInsets.only(top: 8.0),
+        ),
+        DropdownButton<String>(
+          value: chosenPeriod,
+          icon: Icon(Icons.arrow_downward),
+          iconSize: 24,
+//          elevation: 16,
+//          style: TextStyle(color: Colors.blue),
+          underline: Container(
+            height: 1,
+            color: Colors.black,
+          ),
+          onChanged: (String newValue) {
+            setState(() {
+              chosenPeriod = newValue;
+            });
+          },
+          items: <String>['Day', 'Week', 'Month']
+              .map<DropdownMenuItem<String>>((String value) {
+            return DropdownMenuItem<String>(
+              value: value,
+              child: Text(value),
+            );
+          }).toList(),
+        ),
       ],
     );
   }
