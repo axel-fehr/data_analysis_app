@@ -2,6 +2,30 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter/cupertino.dart';
 
+class LogStatsSectionHeadline extends StatelessWidget {
+  final TextStyle sectionHeadlineTextStyle;
+  final String textToDisplay;
+
+  LogStatsSectionHeadline({
+    @required this.textToDisplay,
+    @required this.sectionHeadlineTextStyle,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      child: Padding(
+        child: Text(
+          textToDisplay,
+          style: sectionHeadlineTextStyle,
+        ),
+        padding: EdgeInsets.only(left: 8.0),
+      ),
+      alignment: Alignment.centerLeft,
+    );
+  }
+}
+
 class StatisticWithPadding extends StatelessWidget {
   final String _textToDisplay;
 
