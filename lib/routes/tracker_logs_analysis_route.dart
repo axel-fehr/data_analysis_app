@@ -6,6 +6,7 @@ import 'package:flutter/cupertino.dart';
 import '../providers/tracker_list.dart';
 import '../classes/tracker.dart';
 import '../classes/log.dart';
+import '../widgets/log_statistics_widgets/log_stats_of_binary_tracker.dart';
 
 class TrackerLogsAnalysisRoute extends StatelessWidget {
   // tracker whose logs are shown and summarized on the screen
@@ -172,7 +173,6 @@ class LogWithEditButton extends StatelessWidget {
   }
 }
 
-//// TODO: create a custom LogStats Widget for each type of tracker
 class LogStats extends StatelessWidget {
   final String trackerName;
   final TextStyle sectionHeadlineTextStyle;
@@ -184,53 +184,10 @@ class LogStats extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    TrackerList listOfTrackers = Provider.of<TrackerList>(context);
-    Tracker tracker = listOfTrackers.trackers
-        .singleWhere((tracker) => tracker.name == trackerName);
-    int totalNumLogs = tracker.logs.length;
-    int numTrueLogs = tracker.logs.where((log) => log.value == true).length;
-    int numFalseLogs = totalNumLogs - numTrueLogs;
-    int percentageTrue = ((numTrueLogs / totalNumLogs) * 100).toInt();
-    int percentageFalse = 100 - percentageTrue;
-
-    return Container(
-      child: Column(
-        children: <Widget>[
-          Container(
-            child: Padding(
-              child: Text(
-                'Stats:',
-                style: sectionHeadlineTextStyle,
-              ),
-              padding: EdgeInsets.only(left: 8.0),
-            ),
-            alignment: Alignment.centerLeft,
-          ),
-          StatisticWithPadding('# logs: $totalNumLogs'),
-          StatisticWithPadding('# true: $numTrueLogs'),
-          StatisticWithPadding('# false: $numFalseLogs'),
-          StatisticWithPadding('% true: $percentageTrue%'),
-          StatisticWithPadding('% false: $percentageFalse%'),
-        ],
-      ),
-      height: 150,
-    );
-  }
-}
-
-class StatisticWithPadding extends StatelessWidget {
-  final String _textToDisplay;
-
-  StatisticWithPadding(this._textToDisplay);
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      child: Padding(
-        child: Text(_textToDisplay),
-        padding: const EdgeInsets.only(top: 8.0, left: 8.0),
-      ),
-      alignment: Alignment.centerLeft,
+    // TODO: return a different widget here depending on the tracker type
+    return LogStatsOfBinaryTracker(
+      trackerName: trackerName,
+      sectionHeadlineTextStyle: sectionHeadlineTextStyle,
     );
   }
 }
