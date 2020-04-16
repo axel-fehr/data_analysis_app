@@ -45,7 +45,7 @@ class Content extends StatelessWidget {
 }
 
 class AddTrackerButton extends StatelessWidget {
-  Future<String> createAlertDialog(BuildContext context) {
+  Future<String> createAlertDialogToAddTracker(BuildContext context) {
     TextEditingController customController = TextEditingController();
 
     return showDialog(
@@ -77,7 +77,7 @@ class AddTrackerButton extends StatelessWidget {
         style: TextStyle(fontWeight: FontWeight.bold, fontSize: 35),
       ),
       onPressed: () {
-        createAlertDialog(context).then((onValue) {
+        createAlertDialogToAddTracker(context).then((onValue) {
           final trackerListObject = Provider.of<TrackerList>(context);
           trackerListObject.addTracker(onValue);
         });
