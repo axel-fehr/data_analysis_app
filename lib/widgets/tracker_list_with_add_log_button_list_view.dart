@@ -47,7 +47,8 @@ class TrackerWithAddLogButton extends StatelessWidget {
           caption: 'Delete',
           color: Colors.red,
           icon: Icons.delete,
-          onTap: () => Provider.of<TrackerList>(context).removeTracker(_tracker),
+          onTap: () =>
+              Provider.of<TrackerList>(context).removeTracker(_tracker),
         ),
       ],
     );
@@ -76,7 +77,17 @@ class TrackerName extends StatelessWidget {
   }
 }
 
-class AddLogButton extends StatelessWidget {
+/// A button that can be used to add logs.
+///
+/// How it is displayed and what it does when pressed depends on whether there
+/// already is a log that was logged on the same day for that tracker or not.
+/// If there is, it will not be possible to add another log. This is done to
+/// ensure that there cannot be multiple logs from the same day for the same
+/// tracker. If there is not, a log can be added.
+class AddLogButton extends StatefulWidget {
+  final double buttonSize;
+  final Tracker _tracker;
+
   const AddLogButton({
     Key key,
     @required this.buttonSize,
@@ -84,29 +95,33 @@ class AddLogButton extends StatelessWidget {
   })  : _tracker = tracker,
         super(key: key);
 
-  final double buttonSize;
-  final Tracker _tracker;
+  @override
+  _AddLogButtonState createState() => _AddLogButtonState();
+}
 
-  void showLogAlertDialog(BuildContext context) {
-    // set up the buttons
+class _AddLogButtonState extends State<AddLogButton> {
+  void showAddLogAlertDialog(BuildContext context) {
     Widget falseButton = FlatButton(
       child: Text('False'),
       onPressed: () {
-        _tracker.addLog(false);
+        widget._tracker.addLog(false);
         Navigator.of(context).pop();
+        // triggers rebuild to disable functionality to add logs until the next day
+        setState(() {});
       },
     );
 
     Widget trueButton = FlatButton(
       child: Text('True'),
       onPressed: () {
-        _tracker.addLog(true);
+        widget._tracker.addLog(true);
         Navigator.of(context).pop();
+        // triggers rebuild to disable functionality to add logs until the next day
+        setState(() {});
       },
     );
 
-    // set up the AlertDialog
-    CupertinoAlertDialog alert = CupertinoAlertDialog(
+    CupertinoAlertDialog addLogAlertDialog = CupertinoAlertDialog(
       title: Text('Log'),
       content: Text('Please enter the log value.'),
       actions: [
@@ -115,28 +130,51 @@ class AddLogButton extends StatelessWidget {
       ],
     );
 
-    // show the dialog
     showDialog(
       context: context,
       builder: (BuildContext context) {
-        return alert;
+        return addLogAlertDialog;
       },
     );
   }
 
+  void showExplanationForDisabledButton(BuildContext context) {
+    final snackBar = SnackBar(
+      content: Text(
+        'You can only add one log per day. '
+        'You can modify the log you added today by '
+        'tapping on the tracker name.',
+        style: TextStyle(fontSize: 18.0),
+      ),
+      duration: Duration(seconds: 6),
+    );
+    Scaffold.of(context).showSnackBar(snackBar);
+  }
+
   @override
   Widget build(BuildContext context) {
+    DateTime lastLogTimeStamp = widget._tracker.logs.last.timeStamp;
+    DateTime now = DateTime.now();
+    bool logFromSameDayExists = ((lastLogTimeStamp.year == now.year) &
+        (lastLogTimeStamp.month == now.month) &
+        (lastLogTimeStamp.day == now.day));
+
     return Container(
-        height: buttonSize,
-        width: buttonSize,
+        height: widget.buttonSize,
+        width: widget.buttonSize,
         child: FittedBox(
           child: FloatingActionButton(
-            onPressed: () => showLogAlertDialog(context),
+            onPressed: () => logFromSameDayExists
+                ? showExplanationForDisabledButton(context)
+                : showAddLogAlertDialog(context),
             child: Text(
               '+',
               style: TextStyle(fontSize: 32),
             ),
-            heroTag: _tracker.name + '_addLogButton',
+            heroTag: widget._tracker.name + '_addLogButton',
+            backgroundColor: logFromSameDayExists
+                ? Colors.blue[50]
+                : ThemeData().accentColor,
           ),
         ));
   }
