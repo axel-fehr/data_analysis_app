@@ -153,11 +153,17 @@ class _AddLogButtonState extends State<AddLogButton> {
 
   @override
   Widget build(BuildContext context) {
-    DateTime lastLogTimeStamp = widget._tracker.logs.last.timeStamp;
-    DateTime now = DateTime.now();
-    bool logFromSameDayExists = ((lastLogTimeStamp.year == now.year) &
-        (lastLogTimeStamp.month == now.month) &
-        (lastLogTimeStamp.day == now.day));
+    bool logFromSameDayExists;
+    if (widget._tracker.logs.isNotEmpty) {
+      DateTime lastLogTimeStamp = widget._tracker.logs.last.timeStamp;
+      DateTime now = DateTime.now();
+      logFromSameDayExists = ((lastLogTimeStamp.year == now.year) &
+      (lastLogTimeStamp.month == now.month) &
+      (lastLogTimeStamp.day == now.day));
+    }
+    else {
+      logFromSameDayExists = false;
+    }
 
     return Container(
         height: widget.buttonSize,
