@@ -334,18 +334,33 @@ class BinaryTrackerCorrelations extends StatelessWidget {
           getCorrelationsWithOtherTrackersOrderedByMagnitude(context);
       List<double> sortedCorrelations =
           trackersOrderedByMagnitudeOfCorrelation['correlations'];
-      List<double> trackerNames =
+      List<String> trackerNames =
           trackersOrderedByMagnitudeOfCorrelation['trackerNames'];
 
-      // TODO: use list of listtiles here where each list tile contains the tracker name and the correlation
-      return ListView(
-        children: List<Widget>.generate(sortedCorrelations.length,
-            (index) => Text(sortedCorrelations[index].toString())),
-      );
-      // TODO: would be nice to display how many values the correlation was computed with
-      // TODO: is it possible to give some kind of 'confidence' about the correlation based on the number of samples? If yes, do that
+      print('\nnum correlations: ${sortedCorrelations.length}');
+      print('num tracker names: ${trackerNames.length}');
+
+      if (sortedCorrelations.length != trackerNames.length) {
+        throw('Number of correlations and number of returned tracker names is'
+              'not equal.');
+      }
+
+      if (sortedCorrelations.isEmpty) {
+        return Text('No correlations to display.'); // TODO: add an explanation here and what is needed to display correlations
+      }
+      else {
+        // TODO: use list of list tiles here where each list tile contains the tracker name and the correlation
+        return ListView(
+          children: List<Widget>.generate(sortedCorrelations.length,
+                  (index) => Text(sortedCorrelations[index].toString())),
+        );
+        // TODO: would be nice to display how many values the correlation was computed with
+        // TODO: is it possible to give some kind of 'confidence' about the correlation based on the number of samples? If yes, do that
+      }
     } else {
-      return Text('ordered correlations with other trackers');
+      return Text('Correlations cannot be computed because this tracker does '
+                  'not have any logs. Add logs and the app will display '
+                  'correlations for you here');
     }
   }
   // TODO: SIMPLIFY STATEMENTS WITH ELEMENT_AT & USE MAP INSTEAD OF LIST OF LISTS
