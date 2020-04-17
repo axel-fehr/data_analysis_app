@@ -61,17 +61,27 @@ class BinaryTrackerOverallStats extends StatelessWidget {
     int totalNumLogs = tracker.logs.length;
     int numTrueLogs = tracker.logs.where((log) => log.value == true).length;
     int numFalseLogs = totalNumLogs - numTrueLogs;
-    int percentageTrue = ((numTrueLogs / totalNumLogs) * 100).toInt();
-    int percentageFalse = 100 - percentageTrue;
+
+    int percentageTrue;
+    int percentageFalse;
+    if (totalNumLogs != 0) {
+      percentageTrue = ((numTrueLogs / totalNumLogs) * 100).toInt();
+      percentageFalse = 100 - percentageTrue;
+    }
+
+    List<Widget> statsToDisplay = [
+      StatisticWithPadding('# logs: $totalNumLogs'),
+      StatisticWithPadding('# true: $numTrueLogs'),
+      StatisticWithPadding('# false: $numFalseLogs'),
+    ];
+
+    if (totalNumLogs != 0) {
+      statsToDisplay.add(StatisticWithPadding('% true: $percentageTrue%'));
+      statsToDisplay.add(StatisticWithPadding('% false: $percentageFalse%'));
+    }
 
     return Column(
-      children: <Widget>[
-        StatisticWithPadding('# logs: $totalNumLogs'),
-        StatisticWithPadding('# true: $numTrueLogs'),
-        StatisticWithPadding('# false: $numFalseLogs'),
-        StatisticWithPadding('% true: $percentageTrue%'),
-        StatisticWithPadding('% false: $percentageFalse%'),
-      ],
+      children: statsToDisplay,
     );
   }
 }
