@@ -15,7 +15,7 @@ class TrackerListWithAddLogButtonListView extends StatelessWidget {
     List<TrackerWithAddLogButton> trackerWithAddLogButtonList = [];
 
     listOfTrackers.forEach(
-        (e) => trackerWithAddLogButtonList.add(TrackerWithAddLogButton(e)));
+        (tracker) => trackerWithAddLogButtonList.add(TrackerWithAddLogButton(tracker)));
 
     return ListView(
       children: trackerWithAddLogButtonList,
