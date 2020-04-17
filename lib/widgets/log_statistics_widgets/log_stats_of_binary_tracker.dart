@@ -111,8 +111,9 @@ class BinaryTrackerCorrelations extends StatelessWidget {
     List<Tracker> trackerListCopy = List<Tracker>.from(listOfTrackers.trackers);
     Tracker trackerCorrespondingToLogs =
         trackerListCopy.singleWhere((tracker) => tracker.name == trackerName);
-    trackerListCopy.remove(
-        trackerCorrespondingToLogs); // avoids computing the correlation with the tracker itself
+
+    // avoids computing the correlation with the tracker itself
+    trackerListCopy.remove(trackerCorrespondingToLogs);
 
     List<double> correlationsWithOtherTrackers = [];
     List<String> namesOfOtherTrackers = [];
@@ -162,17 +163,15 @@ class BinaryTrackerCorrelations extends StatelessWidget {
       Tracker tracker1, Tracker tracker2) {
     List<List<int>> sameDateLogsIndices =
         getIndicesOfLogsAddedOnTheSameDay(tracker1.logs, tracker2.logs);
-    List<int> tracker1MatchingLogIndices = sameDateLogsIndices.elementAt(0);
-    List<int> tracker2MatchingLogIndices = sameDateLogsIndices.elementAt(1);
+    List<int> tracker1MatchingLogIndices = sameDateLogsIndices[0];
+    List<int> tracker2MatchingLogIndices = sameDateLogsIndices[1];
 
     List<Log> tracker1MatchingLogs = List.generate(
         tracker1MatchingLogIndices.length,
-        (index) => tracker1.logs
-            .elementAt(tracker1MatchingLogIndices.elementAt(index)));
+        (index) => tracker1.logs[tracker1MatchingLogIndices[index]]);
     List<Log> tracker2MatchingLogs = List.generate(
         tracker2MatchingLogIndices.length,
-        (index) => tracker1.logs
-            .elementAt(tracker2MatchingLogIndices.elementAt(index)));
+        (index) => tracker1.logs[tracker2MatchingLogIndices[index]]);
 
     List<int> tracker1MatchingLogValuesAsInt =
         convertBooleanLogValuesToInt(tracker1MatchingLogs);
@@ -217,7 +216,7 @@ class BinaryTrackerCorrelations extends StatelessWidget {
     List<int> logs2MatchingIndices = [];
     for (int idx1 = 0; idx1 < logDates1.length; idx1++) {
       for (int idx2 = 1; idx2 < logDates2.length; idx2++) {
-        if (logDates1.elementAt(idx1) == logDates2.elementAt(idx2)) {
+        if (logDates1[idx1] == logDates2[idx2]) {
           logs1MatchingIndices.add(idx1);
           logs2MatchingIndices.add(idx2);
         }
@@ -263,8 +262,7 @@ class BinaryTrackerCorrelations extends StatelessWidget {
 
     var sumOfProducts = 0;
     for (int i = 0; i < xValuesMinusMean.length; i++) {
-      sumOfProducts +=
-          xValuesMinusMean.elementAt(i) * yValuesMinusMean.elementAt(i);
+      sumOfProducts += xValuesMinusMean[i] * yValuesMinusMean[i];
     }
     var numerator = sumOfProducts;
 
@@ -337,33 +335,29 @@ class BinaryTrackerCorrelations extends StatelessWidget {
       List<String> trackerNames =
           trackersOrderedByMagnitudeOfCorrelation['trackerNames'];
 
-      print('\nnum correlations: ${sortedCorrelations.length}');
-      print('num tracker names: ${trackerNames.length}');
-
       if (sortedCorrelations.length != trackerNames.length) {
-        throw('Number of correlations and number of returned tracker names is'
-              'not equal.');
+        throw ('Number of correlations and number of returned tracker names is'
+            'not equal.');
       }
 
       if (sortedCorrelations.isEmpty) {
-        return Text('No correlations to display.'); // TODO: add an explanation here and what is needed to display correlations
-      }
-      else {
+        return Text(
+            'No correlations to display.'); // TODO: add an explanation here and what is needed to display correlations
+      } else {
         // TODO: use list of list tiles here where each list tile contains the tracker name and the correlation
         return ListView(
           children: List<Widget>.generate(sortedCorrelations.length,
-                  (index) => Text(sortedCorrelations[index].toString())),
+              (index) => Text(sortedCorrelations[index].toString())),
         );
         // TODO: would be nice to display how many values the correlation was computed with
         // TODO: is it possible to give some kind of 'confidence' about the correlation based on the number of samples? If yes, do that
       }
     } else {
       return Text('Correlations cannot be computed because this tracker does '
-                  'not have any logs. Add logs and the app will display '
-                  'correlations for you here');
+          'not have any logs. Add logs and the app will display '
+          'correlations for you here');
     }
   }
-  // TODO: SIMPLIFY STATEMENTS WITH ELEMENT_AT & USE MAP INSTEAD OF LIST OF LISTS
 }
 
 class BinaryTrackerStatsOverChosenPeriod extends StatefulWidget {
