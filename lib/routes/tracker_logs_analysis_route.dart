@@ -6,7 +6,7 @@ import 'package:flutter/cupertino.dart';
 import '../providers/tracker_list.dart';
 import '../classes/tracker.dart';
 import '../classes/log.dart';
-import '../widgets/log_statistics_widgets/log_stats_of_binary_tracker.dart';
+import '../widgets/log_statistics_widgets/for_binary_trackers/binary_tracker_log_stats.dart';
 
 class TrackerLogsAnalysisRoute extends StatelessWidget {
   // tracker whose logs are shown and summarized on the screen
