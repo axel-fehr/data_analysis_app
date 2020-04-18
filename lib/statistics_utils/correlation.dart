@@ -66,7 +66,7 @@ List<List<int>> getIndicesOfLogsAddedOnTheSameDay(
   List<int> logs1MatchingIndices = [];
   List<int> logs2MatchingIndices = [];
   for (int idx1 = 0; idx1 < logDates1.length; idx1++) {
-    for (int idx2 = 1; idx2 < logDates2.length; idx2++) {
+    for (int idx2 = 0; idx2 < logDates2.length; idx2++) {
       if (logDates1[idx1] == logDates2[idx2]) {
         logs1MatchingIndices.add(idx1);
         logs2MatchingIndices.add(idx2);
@@ -80,10 +80,10 @@ DateTime convertTimeStampToDate(DateTime timeStamp) {
   int year = timeStamp.year;
   int month = timeStamp.month;
   int day = timeStamp.day;
-  return DateTime(month = month, day = day, year = year);
+  return DateTime(year, month, day);
 }
 
-double computeCorrelationWithListsOfNumbers(List x, List y) {
+double computeCorrelationWithListsOfNumbers(List<num> x, List<num> y) {
   // TODO: check with examples whether this function works
   if (x.length != y.length) {
     throw ('Input lists must have the same length.');
@@ -92,17 +92,26 @@ double computeCorrelationWithListsOfNumbers(List x, List y) {
     throw ('Lists must not be empty.');
   }
 
-  var meanX = sum(x) / x.length;
-  var meanY = sum(y) / y.length;
+  List<double> typeSafeX;
+  if (x is List<int>) {
+    typeSafeX = List.generate(x.length, (idx) => x[idx].toDouble());
+  }
+  List<double> typeSafeY;
+  if (y is List<int>) {
+    typeSafeY = List.generate(y.length, (idx) => y[idx].toDouble());
+  }
 
-  List xValuesMinusMean = x.map((value) => value - meanX).toList();
-  List yValuesMinusMean = x.map((value) => value - meanY).toList();
+  double meanX = sum(typeSafeX) / x.length;
+  double meanY = sum(typeSafeY) / y.length;
 
-  var sumOfProducts = 0;
+  List<double> xValuesMinusMean = typeSafeX.map((value) => value - meanX).toList();
+  List<double> yValuesMinusMean = typeSafeY.map((value) => value - meanY).toList();
+
+  double sumOfProducts = 0;
   for (int i = 0; i < xValuesMinusMean.length; i++) {
     sumOfProducts += xValuesMinusMean[i] * yValuesMinusMean[i];
   }
-  var numerator = sumOfProducts;
+  double numerator = sumOfProducts;
 
   double xValuesMinusMeanSumOfSquares =
       sum(xValuesMinusMean.map((value) => value * value).toList());
@@ -115,7 +124,7 @@ double computeCorrelationWithListsOfNumbers(List x, List y) {
   return correlationCoefficient;
 }
 
-double sum(List numbers) {
+double sum(List<double> numbers) {
   return numbers.reduce((value, element) => value + element);
 }
 
@@ -130,7 +139,7 @@ double sum(List numbers) {
 /// trackerNames -- list of tracker names, where each name corresponds to
 ///                 the tracker that was used to compute the correlation with
 ///                 the same index in 'correlationsBetweenTrackers'
-Map sortCorrelationsByMagnitudeAndSortTrackerNamesAccordingly(
+Map<String, List> sortCorrelationsByMagnitudeAndSortTrackerNamesAccordingly(
     List<double> correlationsBetweenTrackers, List<String> trackerNames) {
   int compareAbsoluteValue(int a, int b) {
     if (a.abs() > b.abs()) {
@@ -149,7 +158,7 @@ Map sortCorrelationsByMagnitudeAndSortTrackerNamesAccordingly(
   List<String> sortedTrackerNames = List.generate(correlationsWithIndex.length,
       (index) => trackerNames[correlationsWithIndex[index][1]]);
   List<double> sortedCorrelations = List.generate(
-      correlationsWithIndex.length, (index) => correlationsWithIndex[index]);
+      correlationsWithIndex.length, (index) => correlationsWithIndex[index][0]);
 
   return {
     'correlations': sortedCorrelations,
