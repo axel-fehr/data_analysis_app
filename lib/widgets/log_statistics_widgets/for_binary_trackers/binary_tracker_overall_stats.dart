@@ -3,9 +3,9 @@ import 'package:flutter/widgets.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter/cupertino.dart';
 
-import '../../providers/tracker_list.dart';
-import '../../classes/tracker.dart';
-import 'styling.dart';
+import '../../../providers/tracker_list.dart';
+import '../../../classes/tracker.dart';
+import '../styling.dart';
 
 /// Displays the statistics of all logs belonging to the tracker.
 class BinaryTrackerOverallStats extends StatelessWidget {

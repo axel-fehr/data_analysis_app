@@ -3,9 +3,9 @@ import 'package:flutter/widgets.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter/cupertino.dart';
 
-import '../../providers/tracker_list.dart';
-import '../../classes/tracker.dart';
-import '../../statistics_utils/correlation.dart';
+import '../../../providers/tracker_list.dart';
+import '../../../classes/tracker.dart';
+import '../../../statistics_utils/correlation.dart';
 
 class BinaryTrackerCorrelations extends StatelessWidget {
   final String trackerName; // TODO: more descriptive and less ambiguous name

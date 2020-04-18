@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter/cupertino.dart';
 
-import 'styling.dart';
+import '../styling.dart';
 
 class BinaryTrackerStatsOverChosenPeriod extends StatefulWidget {
   final String trackerName;

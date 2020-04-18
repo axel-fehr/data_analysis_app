@@ -4,7 +4,7 @@ import 'package:flutter/cupertino.dart';
 
 import 'binary_tracker_correlations.dart';
 import 'binary_tracker_overall_stats.dart';
-import 'styling.dart';
+import '../styling.dart';
 
 class LogStatsOfBinaryTracker extends StatelessWidget {
   final String trackerName;
