@@ -24,7 +24,8 @@ class BinaryTrackerCorrelations extends StatelessWidget {
   /// 2. a list of correlation coefficients as doubles that were computed with
   /// the trackers given in the list of tracker names (same order). This list
   /// is ordered by magnitude in descending order.
-  Map getCorrelationsWithOtherTrackersOrderedByMagnitude(BuildContext context) {
+  Map<String, List> getCorrelationsWithOtherTrackersOrderedByMagnitude(
+      BuildContext context) {
     TrackerList listOfTrackers = Provider.of<TrackerList>(context);
     listOfTrackers.trackers
         .forEach((tracker) => checkIfMultipleLogsOnSameDay(tracker));
@@ -46,14 +47,11 @@ class BinaryTrackerCorrelations extends StatelessWidget {
       }
     });
 
-    Map sortedCorrelationsAndTrackerNames =
+    Map<String, List> sortedCorrelationsAndTrackerNames =
         sortCorrelationsByMagnitudeAndSortTrackerNamesAccordingly(
             correlationsWithOtherTrackers, namesOfOtherTrackers);
 
-    return {
-      'correlations': sortedCorrelationsAndTrackerNames['correlations'],
-      'trackerNames': sortedCorrelationsAndTrackerNames['trackerNames'],
-    };
+    return sortedCorrelationsAndTrackerNames;
   }
 
   /// Returns a Boolean value indicating whether there is at least one log in
@@ -62,14 +60,22 @@ class BinaryTrackerCorrelations extends StatelessWidget {
     if (tracker1.logs.isEmpty || tracker2.logs.isEmpty) {
       return false;
     }
-    tracker1.logs.forEach((tracker1Log) {
-      tracker2.logs.forEach((tracker2Log) {
-        if (convertTimeStampToDate(tracker1Log.timeStamp) ==
-            convertTimeStampToDate(tracker2Log.timeStamp)) {
+
+    for (int tracker1LogIdx = 0;
+        tracker1LogIdx < tracker1.logs.length;
+        tracker1LogIdx++) {
+      for (int tracker2LogIdx = 0;
+          tracker2LogIdx < tracker2.logs.length;
+          tracker2LogIdx++) {
+        DateTime tracker1LogDate =
+            convertTimeStampToDate(tracker1.logs[tracker1LogIdx].timeStamp);
+        DateTime tracker2LogDate =
+            convertTimeStampToDate(tracker2.logs[tracker2LogIdx].timeStamp);
+        if (tracker1LogDate == tracker2LogDate) {
           return true;
         }
-      });
-    });
+      }
+    }
     return false;
   }
 
@@ -111,9 +117,13 @@ class BinaryTrackerCorrelations extends StatelessWidget {
             'No correlations to display.'); // TODO: add an explanation here and what is needed to display correlations
       } else {
         // TODO: use list of list tiles here where each list tile contains the tracker name and the correlation
-        return ListView(
-          children: List<Widget>.generate(sortedCorrelations.length,
-              (index) => Text(sortedCorrelations[index].toString())),
+        return Container(
+          child: ListView(
+            children: List<Widget>.generate(sortedCorrelations.length,
+                (index) => Text(sortedCorrelations[index].toString())),
+          ),
+          height: 100,
+          width: double.infinity,
         );
         // TODO: would be nice to display how many values the correlation was computed with
         // TODO: is it possible to give some kind of 'confidence' about the correlation based on the number of samples? If yes, do that
