@@ -24,7 +24,7 @@ double computeCorrelationBetweenTwoTrackers(
       (index) => tracker1.logs[tracker1MatchingLogIndices[index]]);
   List<Log> tracker2MatchingLogs = List.generate(
       tracker2MatchingLogIndices.length,
-      (index) => tracker1.logs[tracker2MatchingLogIndices[index]]);
+      (index) => tracker2.logs[tracker2MatchingLogIndices[index]]);
 
   List<int> tracker1MatchingLogValuesAsInt =
       convertBooleanLogValuesToInt(tracker1MatchingLogs);
@@ -104,8 +104,10 @@ double computeCorrelationWithListsOfNumbers(List<num> x, List<num> y) {
   double meanX = sum(typeSafeX) / x.length;
   double meanY = sum(typeSafeY) / y.length;
 
-  List<double> xValuesMinusMean = typeSafeX.map((value) => value - meanX).toList();
-  List<double> yValuesMinusMean = typeSafeY.map((value) => value - meanY).toList();
+  List<double> xValuesMinusMean =
+      typeSafeX.map((value) => value - meanX).toList();
+  List<double> yValuesMinusMean =
+      typeSafeY.map((value) => value - meanY).toList();
 
   double sumOfProducts = 0;
   for (int i = 0; i < xValuesMinusMean.length; i++) {
