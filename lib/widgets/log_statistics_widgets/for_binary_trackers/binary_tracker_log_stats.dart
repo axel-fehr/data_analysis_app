@@ -29,7 +29,7 @@ class LogStatsOfBinaryTracker extends StatelessWidget {
             textToDisplay: 'Correlations:',
             sectionHeadlineTextStyle: sectionHeadlineTextStyle,
           ),
-          BinaryTrackerCorrelations(trackerName: trackerName),
+          BinaryTrackerCorrelations(nameOfTrackerBeingAnalyzed: trackerName),
 //          BinaryTrackerStatsOverChosenPeriod(
 //            trackerName: trackerName,
 //            sectionHeadlineTextStyle: sectionHeadlineTextStyle,
