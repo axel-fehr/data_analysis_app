@@ -4,17 +4,17 @@ import './log_database.dart';
 class Tracker {
   final String _name;
   final String _type;
-  List<Log> _logs = [];
+  List<Log> _logs;
   LogDatabase _logDatabase;
 
   Tracker(this._name, this._type) {
     _logDatabase = LogDatabase(_name);
   }
 
-  Future<String> loadLogsFromDisk() async {
+  Future<List<Log>> loadLogsFromDisk() async {
     await setUpLogDatabase();
     _logs = await _logDatabase.readLogs();
-    return 'Data loaded.';
+    return _logs;
   }
 
   Future<void> setUpLogDatabase() async {

@@ -7,15 +7,15 @@ import 'package:flutter_slidable/flutter_slidable.dart';
 import '../providers/tracker_list.dart';
 import '../classes/tracker.dart';
 import '../routes/tracker_logs_analysis_route.dart';
+import '../utils/general.dart';
 
 class TrackerListWithAddLogButtonListView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     List<Tracker> listOfTrackers = Provider.of<TrackerList>(context).trackers;
     List<TrackerWithAddLogButton> trackerWithAddLogButtonList = [];
-
-    listOfTrackers.forEach(
-        (tracker) => trackerWithAddLogButtonList.add(TrackerWithAddLogButton(tracker)));
+    listOfTrackers.forEach((tracker) =>
+        trackerWithAddLogButtonList.add(TrackerWithAddLogButton(tracker)));
 
     return ListView(
       children: trackerWithAddLogButtonList,
@@ -98,6 +98,38 @@ class AddLogButton extends StatefulWidget {
 }
 
 class _AddLogButtonState extends State<AddLogButton> {
+  @override
+  Widget build(BuildContext context) {
+    bool logFromSameDayExists;
+    if (widget._tracker.logs.isNotEmpty) {
+      DateTime lastLogTimeStamp = widget._tracker.logs.last.timeStamp;
+      DateTime currentDate = convertTimeStampToDate(DateTime.now());
+      logFromSameDayExists =
+          (convertTimeStampToDate(lastLogTimeStamp) == currentDate);
+    } else {
+      logFromSameDayExists = false;
+    }
+
+    return Container(
+        height: widget.buttonSize,
+        width: widget.buttonSize,
+        child: FittedBox(
+          child: FloatingActionButton(
+            onPressed: () => logFromSameDayExists
+                ? showExplanationForDisabledButton(context)
+                : showAddLogAlertDialog(context),
+            child: Text(
+              '+',
+              style: TextStyle(fontSize: 32),
+            ),
+            heroTag: widget._tracker.name + '_addLogButton',
+            backgroundColor: logFromSameDayExists
+                ? Colors.blue[50]
+                : ThemeData().accentColor,
+          ),
+        ));
+  }
+
   void showAddLogAlertDialog(BuildContext context) {
     Widget falseButton = FlatButton(
       child: Text('False'),
@@ -147,39 +179,5 @@ class _AddLogButtonState extends State<AddLogButton> {
       duration: Duration(seconds: 6),
     );
     Scaffold.of(context).showSnackBar(snackBar);
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    bool logFromSameDayExists;
-    if (widget._tracker.logs.isNotEmpty) {
-      DateTime lastLogTimeStamp = widget._tracker.logs.last.timeStamp;
-      DateTime now = DateTime.now();
-      logFromSameDayExists = ((lastLogTimeStamp.year == now.year) &
-      (lastLogTimeStamp.month == now.month) &
-      (lastLogTimeStamp.day == now.day));
-    }
-    else {
-      logFromSameDayExists = false;
-    }
-
-    return Container(
-        height: widget.buttonSize,
-        width: widget.buttonSize,
-        child: FittedBox(
-          child: FloatingActionButton(
-            onPressed: () => logFromSameDayExists
-                ? showExplanationForDisabledButton(context)
-                : showAddLogAlertDialog(context),
-            child: Text(
-              '+',
-              style: TextStyle(fontSize: 32),
-            ),
-            heroTag: widget._tracker.name + '_addLogButton',
-            backgroundColor: logFromSameDayExists
-                ? Colors.blue[50]
-                : ThemeData().accentColor,
-          ),
-        ));
   }
 }
