@@ -5,7 +5,8 @@ import 'package:flutter/cupertino.dart';
 
 import '../../../providers/tracker_list.dart';
 import '../../../classes/tracker.dart';
-import '../../../statistics_utils/correlation.dart';
+import '../../../utils/statistics_utils/correlation.dart';
+import '../../../utils/general.dart';
 
 class BinaryTrackerCorrelations extends StatelessWidget {
   final String nameOfTrackerBeingAnalyzed;

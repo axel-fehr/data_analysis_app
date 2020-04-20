@@ -25,7 +25,6 @@ class TrackerListWithAddLogButtonListView extends StatelessWidget {
 
 class TrackerWithAddLogButton extends StatelessWidget {
   final Tracker _tracker;
-  final buttonSize = 35.0;
 
   TrackerWithAddLogButton(this._tracker);
 
@@ -38,7 +37,7 @@ class TrackerWithAddLogButton extends StatelessWidget {
         color: Colors.white,
         child: ListTile(
           title: TrackerName(tracker: _tracker),
-          trailing: AddLogButton(buttonSize: buttonSize, tracker: _tracker),
+          trailing: AddLogButton(tracker: _tracker),
         ),
       ),
       actions: <Widget>[], // shown when user swipes to the right
@@ -85,12 +84,11 @@ class TrackerName extends StatelessWidget {
 /// ensure that there cannot be multiple logs from the same day for the same
 /// tracker. If there is not, a log can be added.
 class AddLogButton extends StatefulWidget {
-  final double buttonSize;
+  final double buttonSize = 35.0;
   final Tracker _tracker;
 
   const AddLogButton({
     Key key,
-    @required this.buttonSize,
     @required Tracker tracker,
   })  : _tracker = tracker,
         super(key: key);
