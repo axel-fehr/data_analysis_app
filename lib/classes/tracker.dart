@@ -12,9 +12,13 @@ class Tracker {
   }
 
   Future<String> loadLogsFromDisk() async {
-    await _logDatabase.setUpDatabase();
+    await setUpLogDatabase();
     _logs = await _logDatabase.readLogs();
     return 'Data loaded.';
+  }
+
+  Future<void> setUpLogDatabase() async {
+    await _logDatabase.setUpDatabase();
   }
 
   Future<void> deleteLogDatabase() async {

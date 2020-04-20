@@ -34,7 +34,7 @@ class TrackerList with ChangeNotifier {
     _trackerNames.add(trackerName);
     notifyListeners();
     await _trackerDatabase.insertTracker(trackerToAdd);
-    await trackerToAdd.loadLogsFromDisk(); // TODO: does this even make sense? The logs don't have to be loaded when a new tracker is created, right?
+    await trackerToAdd.setUpLogDatabase();
     // TODO: does this really work as expected,, since the return type is not Future<void>? does the function really fully execute the last line?
     // TODO: IS THIS FUNCTION EVEN EXECUTED SYNCHRONOUSLY OR ASYNCHRONOUSLY? BECAUSE IT DOES NOT RETURN A FUTURE BUT USES THE ASYNC KEYWORD
   }
