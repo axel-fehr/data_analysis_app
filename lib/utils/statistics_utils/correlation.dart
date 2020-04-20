@@ -3,8 +3,9 @@
 
 import 'dart:math';
 
-import '../classes/tracker.dart';
-import '../classes/log.dart';
+import '../../classes/tracker.dart';
+import '../../classes/log.dart';
+import '../general.dart';
 
 /// Computes the correlation coefficient between the logs of the two given
 /// trackers.
@@ -76,13 +77,6 @@ List<List<int>> getIndicesOfLogsAddedOnTheSameDay(
   return [logs1MatchingIndices, logs2MatchingIndices];
 }
 
-DateTime convertTimeStampToDate(DateTime timeStamp) {
-  int year = timeStamp.year;
-  int month = timeStamp.month;
-  int day = timeStamp.day;
-  return DateTime(year, month, day);
-}
-
 double computeCorrelationWithListsOfNumbers(List<num> x, List<num> y) {
   // TODO: check with examples whether this function works
   if (x.length != y.length) {
@@ -124,10 +118,6 @@ double computeCorrelationWithListsOfNumbers(List<num> x, List<num> y) {
 
   double correlationCoefficient = numerator / denominator;
   return correlationCoefficient;
-}
-
-double sum(List<double> numbers) {
-  return numbers.reduce((value, element) => value + element);
 }
 
 /// Returns a map, with two key-value pairs where the keys are strings and the
