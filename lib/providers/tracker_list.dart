@@ -25,7 +25,7 @@ class TrackerList with ChangeNotifier {
   /// that are stored on disk but completing will complete other futures
   /// (e.g. setting up databases and initializing tracker names list) in the
   /// right order.
-  Future<List> getFuturesToCompleteBeforeAppStart() async {
+  Future<List> getFuturesToCompleteBeforeAppStart() {
     Future<List> loadLogsFutures =
         _trackerDatabase.initDatabase().then((onValueInitDataBase) {
       Future<List> innerLoadLogsFutures =
