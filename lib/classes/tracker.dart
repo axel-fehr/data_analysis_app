@@ -7,8 +7,12 @@ class Tracker {
   List<Log> _logs;
   LogDatabase _logDatabase;
 
-  Tracker(this._name, this._type) {
+  Tracker(this._name, this._type, {initializeWithEmptyLogList = false}) {
     _logDatabase = LogDatabase(_name);
+
+    if(initializeWithEmptyLogList) {
+      _logs = [];
+    }
   }
 
   Future<List<Log>> loadLogsFromDisk() async {

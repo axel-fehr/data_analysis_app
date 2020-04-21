@@ -47,8 +47,9 @@ class TrackerList with ChangeNotifier {
   }
 
   void addTracker(String trackerName) async {
-    Tracker trackerToAdd = Tracker(trackerName,
-        'Boolean'); // TODO: make tracker type a non-hard coded argument here
+    // TODO: make tracker type a non-hard coded argument here
+    Tracker trackerToAdd =
+        Tracker(trackerName, 'Boolean', initializeWithEmptyLogList: true);
     _trackers.add(trackerToAdd);
     _trackerNames.add(trackerName);
     notifyListeners();
