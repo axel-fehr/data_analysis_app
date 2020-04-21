@@ -10,24 +10,18 @@ void main() => runApp(MyApp());
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    TrackerList trackerList = TrackerList();
-    return MultiProvider(
-      providers: [
-        ChangeNotifierProvider(
-          create: (trackerListContext) => trackerList,
-        ),
-      ],
-      child: LoadingDataFromDiskScreen(),
-    );
+    print('building root');
+    return LoadingDataFromDiskScreen();
   }
 }
 
 class LoadingDataFromDiskScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    TrackerList trackerList = Provider.of<TrackerList>(context);
+    TrackerList trackerList = TrackerList();
     Future<List> futuresToCompleteBeforeAppStart =
         trackerList.getFuturesToCompleteBeforeAppStart();
+
     return FutureBuilder(
         future: futuresToCompleteBeforeAppStart,
         builder: (context, AsyncSnapshot snapshot) {
@@ -41,7 +35,16 @@ class LoadingDataFromDiskScreen extends StatelessWidget {
               textDirection: TextDirection.ltr,
             ));
           } else {
-            return MaterialApp(home: AppHome());
+            return MultiProvider(
+              providers: [
+                ChangeNotifierProvider(
+                  create: (trackerListContext) => trackerList,
+                ),
+              ],
+              child: MaterialApp(
+                home: AppHome(),
+              ),
+            );
           }
         });
   }
