@@ -36,8 +36,7 @@ class LogListAndStats extends StatelessWidget {
     return Column(
       children: <Widget>[
         Expanded(
-          child: LogListSection(
-              tracker: _tracker),
+          child: LogListSection(tracker: _tracker),
         ),
         Divider(
           color: Colors.black,
@@ -64,7 +63,9 @@ class LogListSection extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: <Widget>[
-        SectionHeadline(textToDisplay: 'Logs',),
+        SectionHeadline(
+          textToDisplay: 'Logs',
+        ),
         Expanded(
           child: LogValuesWithEditButtonsListView(_tracker),
         ),
@@ -187,11 +188,9 @@ class LogWithEditButton extends StatelessWidget {
 
 class LogStatsSection extends StatelessWidget {
   final String trackerName;
-  final TextStyle sectionHeadlineTextStyle;
 
   LogStatsSection({
     @required this.trackerName,
-    @required this.sectionHeadlineTextStyle,
   });
 
   @override
