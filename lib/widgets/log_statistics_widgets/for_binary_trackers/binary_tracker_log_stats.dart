@@ -8,11 +8,9 @@ import '../styling.dart';
 
 class LogStatsOfBinaryTracker extends StatelessWidget {
   final String trackerName;
-  final TextStyle sectionHeadlineTextStyle;
 
   LogStatsOfBinaryTracker({
     @required this.trackerName,
-    @required this.sectionHeadlineTextStyle,
   });
 
   @override
@@ -20,14 +18,12 @@ class LogStatsOfBinaryTracker extends StatelessWidget {
     return Container(
       child: Column(
         children: <Widget>[
-          LogStatsSectionHeadline(
-            textToDisplay: 'Overall Statistics:',
-            sectionHeadlineTextStyle: sectionHeadlineTextStyle,
+          SectionHeadline(
+            textToDisplay: 'Overall Statistics',
           ),
           BinaryTrackerOverallStats(trackerName: trackerName),
-          LogStatsSectionHeadline(
-            textToDisplay: 'Correlations:',
-            sectionHeadlineTextStyle: sectionHeadlineTextStyle,
+          SectionHeadline(
+            textToDisplay: 'Correlations',
           ),
           BinaryTrackerCorrelations(nameOfTrackerBeingAnalyzed: trackerName),
 //          BinaryTrackerStatsOverChosenPeriod(

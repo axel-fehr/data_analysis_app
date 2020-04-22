@@ -7,6 +7,7 @@ import '../providers/tracker_list.dart';
 import '../classes/tracker.dart';
 import '../classes/log.dart';
 import '../widgets/log_statistics_widgets/for_binary_trackers/binary_tracker_log_stats.dart';
+import '../widgets/log_statistics_widgets/styling.dart';
 
 class TrackerLogsAnalysisRoute extends StatelessWidget {
   // tracker whose logs are shown and summarized on the screen
@@ -27,10 +28,6 @@ class TrackerLogsAnalysisRoute extends StatelessWidget {
 
 class LogListAndStats extends StatelessWidget {
   final Tracker _tracker;
-  final TextStyle sectionHeadlineTextStyle = TextStyle(
-      fontSize: 16,
-      decoration: TextDecoration.underline,
-      fontWeight: FontWeight.bold);
 
   LogListAndStats(this._tracker);
 
@@ -40,14 +37,12 @@ class LogListAndStats extends StatelessWidget {
       children: <Widget>[
         Expanded(
           child: LogListSection(
-              sectionHeadlineTextStyle: sectionHeadlineTextStyle,
               tracker: _tracker),
         ),
         Divider(
           color: Colors.black,
         ),
         LogStatsSection(
-          sectionHeadlineTextStyle: sectionHeadlineTextStyle,
           trackerName: _tracker.name,
         )
       ],
@@ -60,25 +55,16 @@ class LogListSection extends StatelessWidget {
   const LogListSection({
     Key key,
     @required Tracker tracker,
-    @required TextStyle sectionHeadlineTextStyle,
   })  : _tracker = tracker,
-        _sectionHeadlineTextStyle = sectionHeadlineTextStyle,
         super(key: key);
 
   final Tracker _tracker;
-  final TextStyle _sectionHeadlineTextStyle;
 
   @override
   Widget build(BuildContext context) {
     return Column(
       children: <Widget>[
-        Padding(
-          child: Text(
-            'Logs:',
-            style: _sectionHeadlineTextStyle,
-          ),
-          padding: const EdgeInsets.only(top: 8.0, left: 8.0),
-        ),
+        SectionHeadline(textToDisplay: 'Logs',),
         Expanded(
           child: LogValuesWithEditButtonsListView(_tracker),
         ),
@@ -213,7 +199,6 @@ class LogStatsSection extends StatelessWidget {
     // TODO: return a different widget here depending on the tracker type
     return LogStatsOfBinaryTracker(
       trackerName: trackerName,
-      sectionHeadlineTextStyle: sectionHeadlineTextStyle,
     );
   }
 }

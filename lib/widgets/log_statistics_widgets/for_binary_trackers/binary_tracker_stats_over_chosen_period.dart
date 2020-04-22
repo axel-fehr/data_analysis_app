@@ -28,7 +28,7 @@ class _BinaryTrackerStatsOverChosenPeriodState
     return Row(
       children: <Widget>[
         Padding(
-          child: LogStatsSectionHeadline(
+          child: SectionHeadline(
             textToDisplay: 'Statistics by ',
             sectionHeadlineTextStyle: widget.sectionHeadlineTextStyle,
           ),

@@ -2,13 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter/cupertino.dart';
 
-class LogStatsSectionHeadline extends StatelessWidget {
-  final TextStyle sectionHeadlineTextStyle;
+class SectionHeadline extends StatelessWidget {
+  static const TextStyle sectionHeadlineTextStyle = TextStyle(
+      fontSize: 16,
+      decoration: TextDecoration.underline,
+      fontWeight: FontWeight.bold);
   final String textToDisplay;
 
-  LogStatsSectionHeadline({
+  SectionHeadline({
     @required this.textToDisplay,
-    @required this.sectionHeadlineTextStyle,
   });
 
   @override
@@ -19,7 +21,7 @@ class LogStatsSectionHeadline extends StatelessWidget {
           textToDisplay,
           style: sectionHeadlineTextStyle,
         ),
-        padding: EdgeInsets.only(left: 8.0),
+        padding: EdgeInsets.only(left: 8.0, top: 8.0),
       ),
       alignment: Alignment.center,
     );
