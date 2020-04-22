@@ -30,7 +30,6 @@ class _BinaryTrackerStatsOverChosenPeriodState
         Padding(
           child: SectionHeadline(
             textToDisplay: 'Statistics by ',
-            sectionHeadlineTextStyle: widget.sectionHeadlineTextStyle,
           ),
           padding: EdgeInsets.only(top: 8.0),
         ),
