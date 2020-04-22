@@ -64,8 +64,6 @@ class AddTrackerButton extends StatelessWidget {
   }
 
   Future<String> showAlertDialogToAddTracker(BuildContext context) {
-    TextEditingController customController = TextEditingController();
-
     return showDialog(
         context: context,
         builder: (context) {
