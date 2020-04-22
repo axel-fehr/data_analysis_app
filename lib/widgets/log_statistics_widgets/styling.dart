@@ -21,7 +21,7 @@ class LogStatsSectionHeadline extends StatelessWidget {
         ),
         padding: EdgeInsets.only(left: 8.0),
       ),
-      alignment: Alignment.centerLeft,
+      alignment: Alignment.center,
     );
   }
 }

@@ -20,19 +20,53 @@ class TrackerLogsAnalysisRoute extends StatelessWidget {
       appBar: AppBar(
         title: Text('Analysis'),
       ),
-      body: LogList(_tracker),
+      body: LogListAndStats(_tracker),
     );
   }
 }
 
-class LogList extends StatelessWidget {
+class LogListAndStats extends StatelessWidget {
   final Tracker _tracker;
   final TextStyle sectionHeadlineTextStyle = TextStyle(
       fontSize: 16,
       decoration: TextDecoration.underline,
       fontWeight: FontWeight.bold);
 
-  LogList(this._tracker);
+  LogListAndStats(this._tracker);
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: <Widget>[
+        Expanded(
+          child: LogListSection(
+              sectionHeadlineTextStyle: sectionHeadlineTextStyle,
+              tracker: _tracker),
+        ),
+        Divider(
+          color: Colors.black,
+        ),
+        LogStatsSection(
+          sectionHeadlineTextStyle: sectionHeadlineTextStyle,
+          trackerName: _tracker.name,
+        )
+      ],
+      crossAxisAlignment: CrossAxisAlignment.start,
+    );
+  }
+}
+
+class LogListSection extends StatelessWidget {
+  const LogListSection({
+    Key key,
+    @required Tracker tracker,
+    @required TextStyle sectionHeadlineTextStyle,
+  })  : _tracker = tracker,
+        _sectionHeadlineTextStyle = sectionHeadlineTextStyle,
+        super(key: key);
+
+  final Tracker _tracker;
+  final TextStyle _sectionHeadlineTextStyle;
 
   @override
   Widget build(BuildContext context) {
@@ -41,22 +75,14 @@ class LogList extends StatelessWidget {
         Padding(
           child: Text(
             'Logs:',
-            style: sectionHeadlineTextStyle,
+            style: _sectionHeadlineTextStyle,
           ),
           padding: const EdgeInsets.only(top: 8.0, left: 8.0),
         ),
         Expanded(
           child: LogValuesWithEditButtonsListView(_tracker),
         ),
-        Divider(
-          color: Colors.black,
-        ),
-        LogStats(
-          sectionHeadlineTextStyle: sectionHeadlineTextStyle,
-          trackerName: _tracker.name,
-        )
       ],
-      crossAxisAlignment: CrossAxisAlignment.start,
     );
   }
 }
@@ -173,11 +199,11 @@ class LogWithEditButton extends StatelessWidget {
   }
 }
 
-class LogStats extends StatelessWidget {
+class LogStatsSection extends StatelessWidget {
   final String trackerName;
   final TextStyle sectionHeadlineTextStyle;
 
-  LogStats({
+  LogStatsSection({
     @required this.trackerName,
     @required this.sectionHeadlineTextStyle,
   });
