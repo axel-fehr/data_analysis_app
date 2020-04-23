@@ -7,6 +7,7 @@ import 'package:flutter_slidable/flutter_slidable.dart';
 import '../providers/tracker_list.dart';
 import '../classes/tracker.dart';
 import '../routes/tracker_logs_analysis_route.dart';
+import '../classes/log.dart';
 import '../utils/general.dart';
 
 class TrackerListWithAddLogButtonListView extends StatelessWidget {
@@ -134,7 +135,7 @@ class _AddLogButtonState extends State<AddLogButton> {
     Widget falseButton = FlatButton(
       child: Text('False'),
       onPressed: () {
-        widget._tracker.addLog(false);
+        widget._tracker.addLog(Log(false));
         Navigator.of(context).pop();
         // triggers rebuild to disable functionality to add logs until the next day
         setState(() {});
@@ -144,7 +145,7 @@ class _AddLogButtonState extends State<AddLogButton> {
     Widget trueButton = FlatButton(
       child: Text('True'),
       onPressed: () {
-        widget._tracker.addLog(true);
+        widget._tracker.addLog(Log(true));
         Navigator.of(context).pop();
         // triggers rebuild to disable functionality to add logs until the next day
         setState(() {});

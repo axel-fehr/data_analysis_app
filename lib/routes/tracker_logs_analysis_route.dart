@@ -8,6 +8,8 @@ import '../classes/tracker.dart';
 import '../classes/log.dart';
 import '../widgets/log_statistics_widgets/for_binary_trackers/binary_tracker_log_stats.dart';
 import '../widgets/log_statistics_widgets/styling.dart';
+import '../widgets/select_date_calendar_view.dart';
+import '../widgets/add_log_with_chosen_date_alert_dialog.dart';
 
 class TrackerLogsAnalysisRoute extends StatelessWidget {
   // tracker whose logs are shown and summarized on the screen
@@ -69,8 +71,28 @@ class LogListSection extends StatelessWidget {
         Expanded(
           child: LogValuesWithEditButtonsListView(_tracker),
         ),
+        InkWell(
+          child: Text('Add log with specific date', style: TextStyle(color: Colors.blueAccent),),
+          onTap: () {
+            showAddLogWithSpecificDateAlertDialog(context).then((Log onValue) {
+              print('\nreturned selected Log: ${onValue.toString()}');
+              // TODO: add if condition here where log is only added if a log with the same date does not exist
+              // TODO: fix issue where app doesn't update immediately after log was added
+              // TODO: sort log list according to dates
+              _tracker.addLog(onValue);
+            });
+          },
+        ),
       ],
     );
+  }
+
+  Future<Log> showAddLogWithSpecificDateAlertDialog(BuildContext context) {
+    return showDialog(
+        context: context,
+        builder: (context) {
+          return AddLogWithChosenDateAlertDialog(); //SelectDateCalendarView();
+        });
   }
 }
 
@@ -87,6 +109,20 @@ class LogValuesWithEditButtonsListView extends StatefulWidget {
 
 class _LogValuesWithEditButtonsListViewState
     extends State<LogValuesWithEditButtonsListView> {
+  @override
+  Widget build(BuildContext context) {
+    List<LogWithEditButton> logValueList = [];
+
+    widget._trackerCorrespondingToLogs.logs.forEach((log) => logValueList.add(
+      LogWithEditButton(log, widget._trackerCorrespondingToLogs,
+          updateLogListOnLogDeletionCallback: updateLogListOnLogDeletion),
+    ));
+
+    return ListView(
+      children: logValueList,
+    );
+  }
+
   /// Triggers a rebuild of the list of logs after the deletion of a log.
   ///
   /// This function is workaround needed because using the notifying all
@@ -105,20 +141,6 @@ class _LogValuesWithEditButtonsListViewState
     // showLogEditAlertDialog of the widget LogWithEditButton.
     setState(() {});
   }
-
-  @override
-  Widget build(BuildContext context) {
-    List<LogWithEditButton> logValueList = [];
-
-    widget._trackerCorrespondingToLogs.logs.forEach((log) => logValueList.add(
-          LogWithEditButton(log, widget._trackerCorrespondingToLogs,
-              updateLogListOnLogDeletionCallback: updateLogListOnLogDeletion),
-        ));
-
-    return ListView(
-      children: logValueList,
-    );
-  }
 }
 
 class LogWithEditButton extends StatelessWidget {
@@ -128,6 +150,17 @@ class LogWithEditButton extends StatelessWidget {
 
   LogWithEditButton(this._log, this._trackerCorrespondingToLog,
       {@required this.updateLogListOnLogDeletionCallback});
+
+  @override
+  Widget build(BuildContext context) {
+    return ListTile(
+      title: Text(_log.value.toString()),
+      trailing: InkWell(
+        child: Icon(Icons.create),
+        onTap: () => showLogEditAlertDialog(context),
+      ),
+    );
+  }
 
   void showLogEditAlertDialog(BuildContext context) {
     // TODO: change the alert dialog depending on the type of the tracker (create one separate widget for each alert dialog (for each tracker type))
@@ -171,17 +204,6 @@ class LogWithEditButton extends StatelessWidget {
       builder: (BuildContext context) {
         return alert;
       },
-    );
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return ListTile(
-      title: Text(_log.value.toString()),
-      trailing: InkWell(
-        child: Icon(Icons.create),
-        onTap: () => showLogEditAlertDialog(context),
-      ),
     );
   }
 }

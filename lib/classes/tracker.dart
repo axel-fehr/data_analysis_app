@@ -33,11 +33,9 @@ class Tracker {
   String get name => _name;
   List<Log> get logs => _logs;
 
-  void addLog(bool logValue) {
-    print('adding log, value: $logValue');
-    Log addedLog = Log(logValue);
-    _logs.add(addedLog);
-    _logDatabase.insertLog(addedLog);
+  void addLog(Log logToAdd) {
+    _logs.add(logToAdd);
+    _logDatabase.insertLog(logToAdd);
   }
 
   /// Changes the value of a log and saves the changes to disk.

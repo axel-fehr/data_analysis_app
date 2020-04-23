@@ -24,6 +24,6 @@ class Log {
 
   @override
   String toString() {
-    return 'Tracker{timeStamp: ${_timeStamp.toIso8601String()}, value: $_value}';
+    return 'Log{timeStamp: ${_timeStamp.toIso8601String()}, value: $_value}';
   }
 }
