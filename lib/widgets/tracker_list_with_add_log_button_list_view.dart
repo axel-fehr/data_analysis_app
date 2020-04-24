@@ -132,10 +132,12 @@ class _AddLogButtonState extends State<AddLogButton> {
   }
 
   void showAddLogAlertDialog(BuildContext context) {
+    TrackerList listOfTrackers = Provider.of<TrackerList>(context);
+
     Widget falseButton = FlatButton(
       child: Text('False'),
       onPressed: () {
-        widget._tracker.addLog(Log(false));
+        listOfTrackers.addLog(widget._tracker, Log(false));
         Navigator.of(context).pop();
         // triggers rebuild to disable functionality to add logs until the next day
         setState(() {});
@@ -145,7 +147,7 @@ class _AddLogButtonState extends State<AddLogButton> {
     Widget trueButton = FlatButton(
       child: Text('True'),
       onPressed: () {
-        widget._tracker.addLog(Log(true));
+        listOfTrackers.addLog(widget._tracker, Log(true));
         Navigator.of(context).pop();
         // triggers rebuild to disable functionality to add logs until the next day
         setState(() {});

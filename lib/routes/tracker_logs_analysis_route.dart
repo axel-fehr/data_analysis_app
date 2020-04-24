@@ -76,10 +76,10 @@ class LogListSection extends StatelessWidget {
           onTap: () {
             showAddLogWithSpecificDateAlertDialog(context).then((Log onValue) {
               print('\nreturned selected Log: ${onValue.toString()}');
-              // TODO: add if condition here where log is only added if a log with the same date does not exist
-              // TODO: fix issue where app doesn't update immediately after log was added
+              TrackerList listOfTrackers = Provider.of<TrackerList>(context);
+              listOfTrackers.addLog(_tracker, onValue);
+//              add if condition here where log is only added if a log with the same date does not exist, show snackbar or something then
               // TODO: sort log list according to dates
-              _tracker.addLog(onValue);
             });
           },
         ),

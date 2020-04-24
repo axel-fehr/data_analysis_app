@@ -69,7 +69,7 @@ class TrackerList with ChangeNotifier {
     // TODO: IS THIS FUNCTION EVEN EXECUTED SYNCHRONOUSLY OR ASYNCHRONOUSLY? BECAUSE IT DOES NOT RETURN A FUTURE BUT USES THE ASYNC KEYWORD
   }
 
-  /// Changes the value of a log of a tracker with a given name, notifies all
+  /// Changes the value of a log of a given tracker, notifies all
   /// listeners and saves the changes to disk.
   ///
   /// Arguments:
@@ -83,7 +83,7 @@ class TrackerList with ChangeNotifier {
     notifyListeners();
   }
 
-  /// Deletes the log of a tracker with a given name, notifies all
+  /// Deletes the log of a given tracker, notifies all
   /// listeners and saves the changes to disk.
   ///
   /// Arguments:
@@ -92,6 +92,17 @@ class TrackerList with ChangeNotifier {
   ///                         deleted
   void deleteLog(Tracker tracker, DateTime timeStampOfLogToDelete) {
     tracker.deleteLog(timeStampOfLogToDelete);
+    notifyListeners();
+  }
+
+  /// Adds a log to the tracker with the given name, notifies all
+  /// listeners and saves the changes to disk.
+  ///
+  /// Arguments:
+  /// tracker: the tracker that the log will be added to
+  /// logToAdd: the log that will be added
+  void addLog(Tracker tracker, Log logToAdd) {
+    tracker.addLog(logToAdd);
     notifyListeners();
   }
 }
