@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:tracking_app/utils/general.dart';
 
 import '../providers/tracker_list.dart';
 import '../classes/tracker.dart';
@@ -72,14 +73,29 @@ class LogListSection extends StatelessWidget {
           child: LogValuesWithEditButtonsListView(_tracker),
         ),
         InkWell(
-          child: Text('Add log with specific date', style: TextStyle(color: Colors.blueAccent),),
+          child: Text(
+            'Add log with specific date',
+            style: TextStyle(color: Colors.blueAccent),
+          ),
           onTap: () {
             showAddLogWithSpecificDateAlertDialog(context).then((Log onValue) {
-              print('\nreturned selected Log: ${onValue.toString()}');
-              TrackerList listOfTrackers = Provider.of<TrackerList>(context);
-              listOfTrackers.addLog(_tracker, onValue);
-//              add if condition here where log is only added if a log with the same date does not exist, show snackbar or something then
-              // TODO: sort log list according to dates
+              if (onValue != null) {
+                DateTime dateOfCreatedLog =
+                    convertTimeStampToDate(onValue.timeStamp);
+                List<DateTime> datesOfLogs = List.generate(_tracker.logs.length,
+                    (i) => convertTimeStampToDate(_tracker.logs[i].timeStamp));
+
+                // only adds the created log if no other log with the
+                // same date exists.
+                if (datesOfLogs.contains(dateOfCreatedLog)) {
+                  notifyUserThatLogWithSameDateAlreadyExists(context);
+                } else {
+                  TrackerList listOfTrackers =
+                      Provider.of<TrackerList>(context);
+                  listOfTrackers.addLog(_tracker, onValue);
+                }
+                // TODO: sort log list according to dates
+              }
             });
           },
         ),
@@ -93,6 +109,17 @@ class LogListSection extends StatelessWidget {
         builder: (context) {
           return AddLogWithChosenDateAlertDialog(); //SelectDateCalendarView();
         });
+  }
+
+  void notifyUserThatLogWithSameDateAlreadyExists(BuildContext context) {
+    final snackBar = SnackBar(
+      content: Text(
+        'A log with the same date already exists.',
+        style: TextStyle(fontSize: 18.0),
+      ),
+      duration: Duration(seconds: 3),
+    );
+    Scaffold.of(context).showSnackBar(snackBar);
   }
 }
 
@@ -114,9 +141,9 @@ class _LogValuesWithEditButtonsListViewState
     List<LogWithEditButton> logValueList = [];
 
     widget._trackerCorrespondingToLogs.logs.forEach((log) => logValueList.add(
-      LogWithEditButton(log, widget._trackerCorrespondingToLogs,
-          updateLogListOnLogDeletionCallback: updateLogListOnLogDeletion),
-    ));
+          LogWithEditButton(log, widget._trackerCorrespondingToLogs,
+              updateLogListOnLogDeletionCallback: updateLogListOnLogDeletion),
+        ));
 
     return ListView(
       children: logValueList,
