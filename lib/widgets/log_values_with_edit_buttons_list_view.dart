@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:intl/intl.dart' show DateFormat;
 
 import '../providers/tracker_list.dart';
 import '../classes/tracker.dart';
@@ -25,9 +26,9 @@ class _LogValuesWithEditButtonsListViewState
     List<LogWithEditButton> logValueList = [];
 
     widget._trackerCorrespondingToLogs.logs.forEach((log) => logValueList.add(
-      LogWithEditButton(log, widget._trackerCorrespondingToLogs,
-          updateLogListOnLogDeletionCallback: updateLogListOnLogDeletion),
-    ));
+          LogWithEditButton(log, widget._trackerCorrespondingToLogs,
+              updateLogListOnLogDeletionCallback: updateLogListOnLogDeletion),
+        ));
 
     return ListView(
       children: logValueList,
@@ -65,7 +66,7 @@ class LogWithEditButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListTile(
-      title: Text(_log.value.toString()),
+      title: LogValueWithDate(_log),
       trailing: InkWell(
         child: Icon(Icons.create),
         onTap: () => showLogEditAlertDialog(context),
@@ -100,7 +101,6 @@ class LogWithEditButton extends StatelessWidget {
       },
     );
 
-    // set up the AlertDialog
     CupertinoAlertDialog alert = CupertinoAlertDialog(
       title: Text('Edit Log'),
       actions: [
@@ -109,12 +109,33 @@ class LogWithEditButton extends StatelessWidget {
       ],
     );
 
-    // show the dialog
     showDialog(
       context: context,
       builder: (BuildContext context) {
         return alert;
       },
+    );
+  }
+}
+
+class LogValueWithDate extends StatelessWidget {
+  final Log _log;
+
+  LogValueWithDate(this._log);
+
+  @override
+  Widget build(BuildContext context) {
+    return Stack(
+      children: <Widget>[
+        Text(_log.value.toString()),
+        Align(
+          alignment: Alignment.center,
+          child: Text(
+            DateFormat.MMMd().format(_log.timeStamp),
+            textAlign: TextAlign.center,
+          ),
+        ),
+      ],
     );
   }
 }
