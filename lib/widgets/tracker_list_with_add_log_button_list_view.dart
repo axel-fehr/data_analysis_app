@@ -103,10 +103,11 @@ class _AddLogButtonState extends State<AddLogButton> {
   Widget build(BuildContext context) {
     bool logFromSameDayExists;
     if (widget._tracker.logs.isNotEmpty) {
-      DateTime lastLogTimeStamp = widget._tracker.logs.last.timeStamp;
+      // logs with the most recent time stamp are first (list is ordered)
+      DateTime mostRecentLogTimeStamp = widget._tracker.logs.first.timeStamp;
       DateTime currentDate = convertTimeStampToDate(DateTime.now());
       logFromSameDayExists =
-          (convertTimeStampToDate(lastLogTimeStamp) == currentDate);
+          (convertTimeStampToDate(mostRecentLogTimeStamp) == currentDate);
     } else {
       logFromSameDayExists = false;
     }
