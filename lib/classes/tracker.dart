@@ -10,15 +10,29 @@ class Tracker {
   Tracker(this._name, this._type, {initializeWithEmptyLogList = false}) {
     _logDatabase = LogDatabase(_name);
 
-    if(initializeWithEmptyLogList) {
+    if (initializeWithEmptyLogList) {
       _logs = [];
     }
   }
 
   Future<List<Log>> loadLogsFromDisk() async {
     await setUpLogDatabase();
-    _logs = await _logDatabase.readLogs();
-    return _logs;
+    await _logDatabase.readLogs().then((List<Log> onValue) {
+      _logs = onValue;
+      sortLogsByDate();
+      return _logs;
+    });
+  }
+
+  /// Orders the log list of the tracker by date such that logs the most recent
+  /// time stamps dates are before logs with later time stamp dates.
+  void sortLogsByDate() {
+    /// Comparator for logs.
+    int compareLogTimeStamps(Log log1, Log log2) {
+      return log1.timeStamp.compareTo(log2.timeStamp) * (-1);
+    }
+
+    _logs.sort(compareLogTimeStamps);
   }
 
   Future<void> setUpLogDatabase() async {

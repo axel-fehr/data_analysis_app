@@ -103,6 +103,7 @@ class TrackerList with ChangeNotifier {
   /// logToAdd: the log that will be added
   void addLog(Tracker tracker, Log logToAdd) {
     tracker.addLog(logToAdd);
+    tracker.sortLogsByDate();
     notifyListeners();
   }
 }
