@@ -38,15 +38,15 @@ class LogListAndStats extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: <Widget>[
-        Expanded(
-          child: LogListSection(tracker: _tracker),
+        LogStatsSection(
+          trackerName: _tracker.name,
         ),
         Divider(
           color: Colors.black,
         ),
-        LogStatsSection(
-          trackerName: _tracker.name,
-        )
+        Expanded(
+          child: LogListSection(tracker: _tracker),
+        ),
       ],
       crossAxisAlignment: CrossAxisAlignment.start,
     );
@@ -95,13 +95,13 @@ class LogListSection extends StatelessWidget {
 
     return Column(
       children: <Widget>[
+        addLogWithSpecificDateButton,
         SectionHeadline(
           textToDisplay: 'Logs',
         ),
         Expanded(
           child: LogValuesWithEditButtonsListView(_tracker),
         ),
-        addLogWithSpecificDateButton,
       ],
     );
   }
