@@ -65,9 +65,12 @@ class LogListSection extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     InkWell addLogWithSpecificDateButton = InkWell(
-      child: Text(
-        'Add log with specific date',
-        style: TextStyle(color: Colors.blueAccent),
+      child: Container(
+        child: Text(
+          'Add log with specific date',
+          style: TextStyle(color: Colors.blueAccent),
+        ),
+        margin: EdgeInsets.all(8.0),
       ),
       onTap: () {
         showAddLogWithSpecificDateAlertDialog(context).then((Log onValue) {
