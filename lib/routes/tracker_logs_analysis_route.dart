@@ -64,6 +64,32 @@ class LogListSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    InkWell addLogWithSpecificDateButton = InkWell(
+      child: Text(
+        'Add log with specific date',
+        style: TextStyle(color: Colors.blueAccent),
+      ),
+      onTap: () {
+        showAddLogWithSpecificDateAlertDialog(context).then((Log onValue) {
+          if (onValue != null) {
+            DateTime dateOfCreatedLog =
+                convertTimeStampToDate(onValue.timeStamp);
+            List<DateTime> datesOfLogs = List.generate(_tracker.logs.length,
+                (i) => convertTimeStampToDate(_tracker.logs[i].timeStamp));
+
+            // only adds the created log if no other log with the
+            // same date exists.
+            if (datesOfLogs.contains(dateOfCreatedLog)) {
+              notifyUserThatLogWithSameDateAlreadyExists(context);
+            } else {
+              TrackerList listOfTrackers = Provider.of<TrackerList>(context);
+              listOfTrackers.addLog(_tracker, onValue);
+            }
+          }
+        });
+      },
+    );
+
     return Column(
       children: <Widget>[
         SectionHeadline(
@@ -72,32 +98,7 @@ class LogListSection extends StatelessWidget {
         Expanded(
           child: LogValuesWithEditButtonsListView(_tracker),
         ),
-        InkWell(
-          child: Text(
-            'Add log with specific date',
-            style: TextStyle(color: Colors.blueAccent),
-          ),
-          onTap: () {
-            showAddLogWithSpecificDateAlertDialog(context).then((Log onValue) {
-              if (onValue != null) {
-                DateTime dateOfCreatedLog =
-                    convertTimeStampToDate(onValue.timeStamp);
-                List<DateTime> datesOfLogs = List.generate(_tracker.logs.length,
-                    (i) => convertTimeStampToDate(_tracker.logs[i].timeStamp));
-
-                // only adds the created log if no other log with the
-                // same date exists.
-                if (datesOfLogs.contains(dateOfCreatedLog)) {
-                  notifyUserThatLogWithSameDateAlreadyExists(context);
-                } else {
-                  TrackerList listOfTrackers =
-                      Provider.of<TrackerList>(context);
-                  listOfTrackers.addLog(_tracker, onValue);
-                }
-              }
-            });
-          },
-        ),
+        addLogWithSpecificDateButton,
       ],
     );
   }
@@ -106,7 +107,7 @@ class LogListSection extends StatelessWidget {
     return showDialog(
         context: context,
         builder: (context) {
-          return AddLogWithChosenDateAlertDialog(); //SelectDateCalendarView();
+          return AddLogWithChosenDateAlertDialog();
         });
   }
 
