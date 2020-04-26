@@ -61,7 +61,7 @@ class _AddLogWithChosenDateAlertDialogState
                     onPressed: () {
                       print('add button pressed, date chosen: ${calendarView.userSelectedDate}');
                       if (calendarView.userSelectedDate) {
-                        Log createdLog = Log(selectLogValueSection.selectedValue,
+                        Log createdLog = Log(Log.yesOrNoToBool(selectLogValueSection.selectedValue),
                             timeStamp: calendarView.selectedDate);
                         print('chosen date: ${createdLog.toString()}');
                         Navigator.of(context).pop(createdLog);
@@ -78,9 +78,9 @@ class _AddLogWithChosenDateAlertDialogState
 
 // TODO: put this in a separate file
 class SelectLogValueSection extends StatefulWidget {
-  bool _selectedValue = true;
+  String _selectedValue = Log.boolToYesOrNo(true);
 
-  bool get selectedValue => _selectedValue;
+  String get selectedValue => _selectedValue;
 
   @override
   _SelectLogValueSectionState createState() => _SelectLogValueSectionState();
@@ -96,7 +96,7 @@ class _SelectLogValueSectionState extends State<SelectLogValueSection> {
           padding: EdgeInsets.only(top: 8.0),
         ),
         Container(
-          child: DropdownButton<bool>(
+          child: DropdownButton<String>(
             value: widget._selectedValue,
             icon: Icon(Icons.arrow_downward),
             iconSize: 20,
@@ -104,14 +104,14 @@ class _SelectLogValueSectionState extends State<SelectLogValueSection> {
               height: 1,
               color: Colors.black,
             ),
-            onChanged: (bool newValue) {
+            onChanged: (String newValue) {
               setState(() {
                 widget._selectedValue = newValue;
               });
             },
             items:
-                <bool>[true, false].map<DropdownMenuItem<bool>>((bool value) {
-              return DropdownMenuItem<bool>(
+                <String>[Log.boolToYesOrNo(true), Log.boolToYesOrNo(false)].map<DropdownMenuItem<String>>((String value) {
+              return DropdownMenuItem<String>(
                 value: value,
                 child: Text(value.toString()),
               );

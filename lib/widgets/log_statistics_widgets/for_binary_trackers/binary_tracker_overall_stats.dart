@@ -28,8 +28,8 @@ class BinaryTrackerOverallStats extends StatelessWidget {
       StatisticWithPadding('# logs: $totalNumLogs'),
     ];
 
-    String yesLogsStatistic = '# true: $numTrueLogs';
-    String noLogsStatistic = '# false: $numFalseLogs';
+    String yesLogsStatistic = '# Yes: $numTrueLogs';
+    String noLogsStatistic = '# No: $numFalseLogs';
 
     if (totalNumLogs != 0) {
       int percentageTrue = ((numTrueLogs / totalNumLogs) * 100).toInt();

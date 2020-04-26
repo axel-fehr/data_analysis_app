@@ -76,11 +76,11 @@ class LogWithEditButton extends StatelessWidget {
 
   void showLogEditAlertDialog(BuildContext context) {
     // TODO: change the alert dialog depending on the type of the tracker (create one separate widget for each alert dialog (for each tracker type))
-    bool oppositeValue = !_log.value;
     TrackerList listOfTrackers = Provider.of<TrackerList>(context);
 
+    bool oppositeValue = !_log.value;
     Widget changeLogButton = FlatButton(
-      child: Text("Change to '$oppositeValue'"),
+      child: Text("Change to '${Log.boolToYesOrNo(oppositeValue)}'"),
       onPressed: () {
         print('pressed change'); // TODO: remove this
         listOfTrackers.changeLogValue(
@@ -127,7 +127,7 @@ class LogValueWithDate extends StatelessWidget {
   Widget build(BuildContext context) {
     return Stack(
       children: <Widget>[
-        Text(_log.value.toString()),
+        Text(_log.valueAsYesOrNo),
         Align(
           alignment: Alignment.center,
           child: Text(
