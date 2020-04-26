@@ -38,9 +38,17 @@ class StatisticWithPadding extends StatelessWidget {
     return Container(
       child: Padding(
         child: Text(_textToDisplay, style: TextStyle(fontSize: 16),),
-        padding: const EdgeInsets.only(top: 8.0, left: 8.0),
+        padding: const EdgeInsets.only(top: 8.0, left: 16.0),
       ),
       alignment: Alignment.centerLeft,
     );
   }
 }
+
+class BulletPoint extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Text('•', style: TextStyle(fontSize: 30),);
+  }
+}
+
