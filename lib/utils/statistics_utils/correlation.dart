@@ -133,11 +133,23 @@ double computeCorrelationWithListsOfNumbers(List<num> x, List<num> y) {
 ///                 the same index in 'correlationsBetweenTrackers'
 Map<String, List> sortCorrelationsByMagnitudeAndSortTrackerNamesAccordingly(
     List<double> correlationsBetweenTrackers, List<String> trackerNames) {
-  int compareAbsoluteValue(int a, int b) {
+  /// Returns a negative integer if [a] comes before [b] in the list, a positive
+  /// integer if [b] comes before [a] and 0 if the order does not matter.
+  int compareAbsoluteValue(double a, double b) {
+    // handles nan values
+    if (a.isNaN || b.isNaN) {
+      if (a.isNaN && b.isNaN) {
+        return 0;
+      } else {
+        return a.isNaN ? 1 : -1;
+      }
+    }
+
+    // used for comparison when no nan values are present
     if (a.abs() > b.abs()) {
-      return 1;
-    } else if (a.abs() < b.abs()) {
       return -1;
+    } else if (a.abs() < b.abs()) {
+      return 1;
     } else {
       return 0;
     }
@@ -145,7 +157,7 @@ Map<String, List> sortCorrelationsByMagnitudeAndSortTrackerNamesAccordingly(
 
   List correlationsWithIndex = List.generate(correlationsBetweenTrackers.length,
       (index) => [correlationsBetweenTrackers[index], index]);
-  correlationsWithIndex.sort((a, b) => compareAbsoluteValue(a[1], b[1]));
+  correlationsWithIndex.sort((a, b) => compareAbsoluteValue(a[0], b[0]));
 
   List<String> sortedTrackerNames = List.generate(correlationsWithIndex.length,
       (index) => trackerNames[correlationsWithIndex[index][1]]);
