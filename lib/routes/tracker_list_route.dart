@@ -90,40 +90,39 @@ class _AddTrackerAlertDialogState extends State<AddTrackerAlertDialog> {
 
     return AlertDialog(
       title: Text('Tracker name'),
-      content: Container(
-        child: Column(
-          children: <Widget>[
-            TextField(
-              controller: customController,
-              onChanged: (String enteredText) {
-                if (trackerNames.contains(customController.text.toString())) {
-                  setState(() {
-                    showTrackerNameWarning = true;
-                  });
-                }
-                // removes the warning if entered text is not an existing name
-                else if (showTrackerNameWarning = true) {
-                  setState(() {
-                    showTrackerNameWarning = false;
-                  });
-                }
-              },
+      content: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: <Widget>[
+          TextField(
+            controller: customController,
+            maxLength: 50,
+            onChanged: (String enteredText) {
+              if (trackerNames.contains(customController.text.toString())) {
+                setState(() {
+                  showTrackerNameWarning = true;
+                });
+              }
+              // removes the warning if entered text is not an existing name
+              else if (showTrackerNameWarning = true) {
+                setState(() {
+                  showTrackerNameWarning = false;
+                });
+              }
+            },
+          ),
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Text(
+              showTrackerNameWarning ? 'Name already exists!' : '',
+              style: TextStyle(color: Colors.redAccent),
             ),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Text(
-                showTrackerNameWarning ? 'Name already exists!' : '',
-                style: TextStyle(color: Colors.redAccent),
-              ),
-            ),
-          ],
-        ),
-        height: 83,
+          ),
+        ],
       ),
       actions: <Widget>[
         MaterialButton(
           elevation: 5.0,
-          child: Text('Add'),
+          child: Text('Add', style: TextStyle(color: Colors.blueAccent),),
           onPressed: () {
             String enteredTrackerName = customController.text.toString();
             // if the tracker name does not already exist, add the tracker
