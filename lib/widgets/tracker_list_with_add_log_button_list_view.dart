@@ -157,7 +157,7 @@ class _AddLogButtonState extends State<AddLogButton> {
 
     CupertinoAlertDialog addLogAlertDialog = CupertinoAlertDialog(
       title: Text('Log'),
-      content: Text('Please enter the log value.'),
+      content: Text('Did "${widget._tracker.name}" happen today?'),
       actions: [
         trueButton,
         falseButton,
