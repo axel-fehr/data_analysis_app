@@ -202,7 +202,7 @@ class TrackerCorrelationListTile extends StatelessWidget {
     if (moreDataNeeded || correlation.isNaN) {
       displayedCorrelationValue = Text('More data needed');
     } else {
-      displayedCorrelationValue = Text(correlation.toString());
+      displayedCorrelationValue = Text(correlation.toStringAsFixed(2));
     }
 
     return ListTile(
