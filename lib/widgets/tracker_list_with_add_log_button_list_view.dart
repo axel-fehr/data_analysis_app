@@ -136,7 +136,7 @@ class _AddLogButtonState extends State<AddLogButton> {
     TrackerList listOfTrackers = Provider.of<TrackerList>(context);
 
     Widget falseButton = FlatButton(
-      child: Text('False'),
+      child: Text('No'),
       onPressed: () {
         listOfTrackers.addLog(widget._tracker, Log(false));
         Navigator.of(context).pop();
@@ -146,7 +146,7 @@ class _AddLogButtonState extends State<AddLogButton> {
     );
 
     Widget trueButton = FlatButton(
-      child: Text('True'),
+      child: Text('Yes'),
       onPressed: () {
         listOfTrackers.addLog(widget._tracker, Log(true));
         Navigator.of(context).pop();
@@ -159,8 +159,8 @@ class _AddLogButtonState extends State<AddLogButton> {
       title: Text('Log'),
       content: Text('Please enter the log value.'),
       actions: [
-        falseButton,
         trueButton,
+        falseButton,
       ],
     );
 
