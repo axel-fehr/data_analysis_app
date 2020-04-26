@@ -121,7 +121,7 @@ class _AddTrackerAlertDialogState extends State<AddTrackerAlertDialog> {
             ),
           ],
         ),
-        height: 90,
+        height: 64,
       ),
       actions: <Widget>[
         MaterialButton(
