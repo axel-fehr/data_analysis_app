@@ -111,17 +111,14 @@ class _AddTrackerAlertDialogState extends State<AddTrackerAlertDialog> {
             ),
             Padding(
               padding: const EdgeInsets.all(8.0),
-              child: Visibility(
-                child: Text(
-                  'Name already exists!',
-                  style: TextStyle(color: Colors.redAccent),
-                ),
-                visible: showTrackerNameWarning,
+              child: Text(
+                showTrackerNameWarning ? 'Name already exists!' : '',
+                style: TextStyle(color: Colors.redAccent),
               ),
             ),
           ],
         ),
-        height: 64,
+        height: 83,
       ),
       actions: <Widget>[
         MaterialButton(
