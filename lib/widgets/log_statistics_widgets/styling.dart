@@ -37,7 +37,7 @@ class StatisticWithPadding extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       child: Padding(
-        child: Text(_textToDisplay),
+        child: Text(_textToDisplay, style: TextStyle(fontSize: 16),),
         padding: const EdgeInsets.only(top: 8.0, left: 8.0),
       ),
       alignment: Alignment.centerLeft,
