@@ -63,7 +63,7 @@ class ListOfCorrelationsWithOtherTrackers extends StatelessWidget {
         sortedTrackerNamesAndCorrelations['trackerNames'];
 
     if (sortedCorrelations.length != sortedTrackerNames.length) {
-      throw ('Number of correlations and number of returned tracker names is'
+      throw ('Number of correlations and number of returned tracker names are'
           'not equal.');
     }
 
@@ -196,20 +196,25 @@ class TrackerCorrelationListTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Text displayedTrackerName = Text(trackerName + ': ');
-
-    Text displayedCorrelationValue;
+    String displayedCorrelationValue;
     if (moreDataNeeded || correlation.isNaN) {
-      displayedCorrelationValue = Text('More data needed');
+      displayedCorrelationValue = 'More data needed';
     } else {
-      displayedCorrelationValue = Text(correlation.toStringAsFixed(2));
+      displayedCorrelationValue = correlation.toStringAsFixed(2);
     }
+    String trackerNameWithCorrelation =
+        trackerName + ': ' + displayedCorrelationValue;
 
     return ListTile(
       title: Row(
         children: <Widget>[
-          displayedTrackerName,
-          displayedCorrelationValue,
+          // needed to make text wrap in case of long tracker names
+          Flexible(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[Text(trackerNameWithCorrelation)],
+            ),
+          )
         ],
       ),
     );
