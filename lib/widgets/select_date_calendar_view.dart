@@ -4,11 +4,14 @@ import 'package:flutter_calendar_carousel/flutter_calendar_carousel.dart';
 import 'package:flutter_calendar_carousel/classes/event.dart';
 
 class SelectDateCalendarView extends StatefulWidget {
-  DateTime selectedDate;
-  bool userSelectedDate; // indicates whether user already chose a date
+  DateTime _selectedDate;
+  bool _userSelectedDate = false; // indicates whether user already chose a date
   VoidCallback onDateSelected;
 
-  SelectDateCalendarView({this.selectedDate, this.userSelectedDate, this.onDateSelected});
+  SelectDateCalendarView({this.onDateSelected});
+
+  bool get userSelectedDate => _userSelectedDate;
+  DateTime get selectedDate => _selectedDate;
 
   @override
   _SelectDateCalendarViewState createState() => _SelectDateCalendarViewState();
@@ -23,7 +26,7 @@ class _SelectDateCalendarViewState extends State<SelectDateCalendarView> {
     _calendarCarouselNoHeader = CalendarCarousel<Event>(
       daysHaveCircularBorder: true,
       thisMonthDayBorderColor: Colors.grey,
-      selectedDateTime: widget.selectedDate,
+      selectedDateTime: widget._selectedDate,
       targetDateTime: _targetDateTime,
       minSelectedDate: DateTime(2000),
       onCalendarChanged: (DateTime date) {
@@ -32,8 +35,8 @@ class _SelectDateCalendarViewState extends State<SelectDateCalendarView> {
         });
       },
       onDayPressed: (DateTime date, List<Event> events) {
-        setState(() => widget.selectedDate = date);
-        widget.userSelectedDate = true;
+        setState(() => widget._selectedDate = date);
+        widget._userSelectedDate = true;
         if (widget.onDateSelected != null) {
           widget.onDateSelected();
         }
@@ -41,9 +44,7 @@ class _SelectDateCalendarViewState extends State<SelectDateCalendarView> {
     );
 
     return Scaffold(
-      body: Container(
-        child: _calendarCarouselNoHeader,
-      ), //Column(
+      body: _calendarCarouselNoHeader,
     );
   }
 }
