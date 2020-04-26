@@ -196,7 +196,7 @@ class TrackerCorrelationListTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Text displayedTrackerName = Text(trackerName + ':');
+    Text displayedTrackerName = Text(trackerName + ': ');
 
     Text displayedCorrelationValue;
     if (moreDataNeeded || correlation.isNaN) {
