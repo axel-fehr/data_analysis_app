@@ -1,5 +1,5 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.tracking_app">
+    package="com.zqkm4qesey7ycbn.tracking_app">
 
     <!-- io.flutter.app.FlutterApplication is an android.app.Application that
          calls FlutterMain.startInitialization(this); in its onCreate method.
@@ -8,7 +8,7 @@
          FlutterApplication and put your custom class here. -->
     <application
         android:name="io.flutter.app.FlutterApplication"
-        android:label="tracking_app"
+        android:label="Tracking App"
         android:icon="@mipmap/ic_launcher">
         <activity
             android:name=".MainActivity"

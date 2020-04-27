@@ -1,4 +1,4 @@
-package com.example.tracking_app;
+package com.zqkm4qesey7ycbn.tracking_app;
 
 import android.os.Bundle;
 import io.flutter.app.FlutterActivity;
