@@ -9,7 +9,7 @@ import '../styling.dart';
 class LogStatsOfBinaryTracker extends StatelessWidget {
   final String trackerName;
 
-  LogStatsOfBinaryTracker({
+  const LogStatsOfBinaryTracker({
     @required this.trackerName,
   });
 
@@ -18,11 +18,11 @@ class LogStatsOfBinaryTracker extends StatelessWidget {
     return Container(
       child: Column(
         children: <Widget>[
-          SectionHeadline(
+          const SectionHeadline(
             textToDisplay: 'Overall Statistics',
           ),
           BinaryTrackerOverallStats(trackerName: trackerName),
-          SectionHeadline(
+          const SectionHeadline(
             textToDisplay: 'Correlations',
           ),
           BinaryTrackerCorrelations(nameOfTrackerBeingAnalyzed: trackerName),

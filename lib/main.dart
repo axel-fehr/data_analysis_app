@@ -25,7 +25,7 @@ class LoadingDataFromDiskScreen extends StatelessWidget {
         future: futuresToCompleteBeforeAppStart,
         builder: (context, AsyncSnapshot snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return Center(child: CircularProgressIndicator());
+            return const Center(child: CircularProgressIndicator());
           } else if (snapshot.hasError) {
             // TODO: add something here that makes it easy to submit a bug report
             return Center(

@@ -27,12 +27,12 @@ class TrackerListWithAddLogButtonListView extends StatelessWidget {
 class TrackerWithAddLogButton extends StatelessWidget {
   final Tracker _tracker;
 
-  TrackerWithAddLogButton(this._tracker);
+  const TrackerWithAddLogButton(this._tracker);
 
   @override
   Widget build(BuildContext context) {
     return Slidable(
-      actionPane: SlidableDrawerActionPane(),
+      actionPane: const SlidableDrawerActionPane(),
       actionExtentRatio: 0.25,
       child: Container(
         color: Colors.white,
@@ -120,7 +120,7 @@ class _AddLogButtonState extends State<AddLogButton> {
             onPressed: () => logFromSameDayExists
                 ? showExplanationForDisabledButton(context)
                 : showAddLogAlertDialog(context),
-            child: Text(
+            child: const Text(
               '+',
               style: TextStyle(fontSize: 32),
             ),
@@ -136,7 +136,7 @@ class _AddLogButtonState extends State<AddLogButton> {
     TrackerList listOfTrackers = Provider.of<TrackerList>(context);
 
     Widget falseButton = FlatButton(
-      child: Text('No'),
+      child: const Text('No'),
       onPressed: () {
         listOfTrackers.addLog(widget._tracker, Log(false));
         Navigator.of(context).pop();
@@ -146,7 +146,7 @@ class _AddLogButtonState extends State<AddLogButton> {
     );
 
     Widget trueButton = FlatButton(
-      child: Text('Yes'),
+      child: const Text('Yes'),
       onPressed: () {
         listOfTrackers.addLog(widget._tracker, Log(true));
         Navigator.of(context).pop();
@@ -156,7 +156,7 @@ class _AddLogButtonState extends State<AddLogButton> {
     );
 
     CupertinoAlertDialog addLogAlertDialog = CupertinoAlertDialog(
-      title: Text('Log'),
+      title: const Text('Log'),
       content: Text('Did "${widget._tracker.name}" happen today?'),
       actions: [
         trueButton,
@@ -173,7 +173,7 @@ class _AddLogButtonState extends State<AddLogButton> {
   }
 
   void showExplanationForDisabledButton(BuildContext context) {
-    final snackBar = SnackBar(
+    const snackBar = SnackBar(
       content: Text(
         'You can only add one log per day. '
         'You can modify the log you added today by '

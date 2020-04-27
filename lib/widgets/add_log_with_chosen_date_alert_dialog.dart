@@ -7,7 +7,7 @@ import '../classes/log.dart';
 class AddLogWithChosenDateAlertDialog extends StatefulWidget {
   final Tracker _tracker;
 
-  AddLogWithChosenDateAlertDialog(this._tracker);
+  const AddLogWithChosenDateAlertDialog(this._tracker);
 
   @override
   _AddLogWithChosenDateAlertDialogState createState() =>
@@ -34,7 +34,7 @@ class _AddLogWithChosenDateAlertDialogState
     };
 
     return AlertDialog(
-        title: Text('Choose date and value'),
+        title: const Text('Choose date and value'),
         content: Column(
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -91,15 +91,15 @@ class _SelectLogValueSectionState extends State<SelectLogValueSection> {
       children: <Widget>[
         Padding(
           child: Text('Did "${widget._tracker.name}" happen on that day?'),
-          padding: EdgeInsets.only(top: 8.0),
+          padding: const EdgeInsets.only(top: 8.0),
         ),
         Row(
           children: <Widget>[
-            Icon(Icons.arrow_forward),
+            const Icon(Icons.arrow_forward),
             Container(
               child: DropdownButton<String>(
                 value: widget._selectedValue,
-                icon: Icon(Icons.arrow_downward),
+                icon: const Icon(Icons.arrow_downward),
                 iconSize: 20,
                 underline: Container(
                   height: 1,

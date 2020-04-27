@@ -12,7 +12,7 @@ class LogValuesWithEditButtonsListView extends StatefulWidget {
   // tracker whose logs are going to be shown as a list
   final Tracker _trackerCorrespondingToLogs;
 
-  LogValuesWithEditButtonsListView(this._trackerCorrespondingToLogs);
+  const LogValuesWithEditButtonsListView(this._trackerCorrespondingToLogs);
 
   @override
   _LogValuesWithEditButtonsListViewState createState() =>
@@ -68,7 +68,7 @@ class LogWithEditButton extends StatelessWidget {
     return ListTile(
       title: LogValueWithDate(_log),
       trailing: InkWell(
-        child: Icon(Icons.create),
+        child: const Icon(Icons.create),
         onTap: () => showLogEditAlertDialog(context),
       ),
     );
@@ -90,7 +90,7 @@ class LogWithEditButton extends StatelessWidget {
     );
 
     Widget deleteLogButton = FlatButton(
-      child: Icon(Icons.delete),
+      child: const Icon(Icons.delete),
       onPressed: () {
         print('pressed delete'); // TODO: delete this
         listOfTrackers.deleteLog(_trackerCorrespondingToLog, _log.timeStamp);
@@ -102,7 +102,7 @@ class LogWithEditButton extends StatelessWidget {
     );
 
     CupertinoAlertDialog alert = CupertinoAlertDialog(
-      title: Text('Edit Log'),
+      title: const Text('Edit Log'),
       actions: [
         changeLogButton,
         deleteLogButton,
@@ -121,7 +121,7 @@ class LogWithEditButton extends StatelessWidget {
 class LogValueWithDate extends StatelessWidget {
   final Log _log;
 
-  LogValueWithDate(this._log);
+  const LogValueWithDate(this._log);
 
   @override
   Widget build(BuildContext context) {

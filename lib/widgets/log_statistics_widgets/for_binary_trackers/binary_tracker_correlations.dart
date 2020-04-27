@@ -21,8 +21,8 @@ class BinaryTrackerCorrelations extends StatelessWidget {
 
     // TODO: check how this looks and style it accordingly
     if (listOfTrackers.length == 1) {
-      return Padding(
-        padding: const EdgeInsets.all(8.0),
+      return const Padding(
+        padding: EdgeInsets.all(8.0),
         child: Text('Cannot be computed because no other trackers exist.'),
       );
     } else {
@@ -36,8 +36,8 @@ class BinaryTrackerCorrelations extends StatelessWidget {
           ),
         );
       } else {
-        return Padding(
-          padding: const EdgeInsets.all(8.0),
+        return const Padding(
+          padding: EdgeInsets.all(8.0),
           child: Text('Correlations with other trackers will be displayed '
               'for you here when you have added enough logs.'),
         );

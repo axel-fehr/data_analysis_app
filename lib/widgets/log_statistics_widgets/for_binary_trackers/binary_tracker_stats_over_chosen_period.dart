@@ -27,7 +27,7 @@ class _BinaryTrackerStatsOverChosenPeriodState
   Widget build(BuildContext context) {
     return Row(
       children: <Widget>[
-        Padding(
+        const Padding(
           child: SectionHeadline(
             textToDisplay: 'Statistics by ',
           ),

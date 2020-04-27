@@ -14,7 +14,7 @@ class _TrackerListRouteState extends State<TrackerListRoute> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Trackers'),
+        title: const Text('Trackers'),
       ),
       body: Content(),
       floatingActionButton: AddTrackerButton(),
@@ -26,7 +26,7 @@ class Content extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     if (Provider.of<TrackerList>(context).trackers.isEmpty) {
-      return Center(
+      return const Center(
         child: Text(
           'You haven\'t created a tracker yet.'
           '\nGo ahead and create one!',
@@ -48,7 +48,7 @@ class AddTrackerButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return FloatingActionButton(
-      child: Text(
+      child: const Text(
         '+',
         style: TextStyle(fontWeight: FontWeight.bold, fontSize: 35),
       ),
@@ -89,7 +89,7 @@ class _AddTrackerAlertDialogState extends State<AddTrackerAlertDialog> {
     List<String> trackerNames = Provider.of<TrackerList>(context).trackerNames;
 
     return AlertDialog(
-      title: Text('Tracker name'),
+      title: const Text('Tracker name'),
       content: Column(
         mainAxisSize: MainAxisSize.min,
         children: <Widget>[
@@ -114,7 +114,7 @@ class _AddTrackerAlertDialogState extends State<AddTrackerAlertDialog> {
             padding: const EdgeInsets.all(8.0),
             child: Text(
               showTrackerNameWarning ? 'Name already exists!' : '',
-              style: TextStyle(color: Colors.redAccent),
+              style: const TextStyle(color: Colors.redAccent),
             ),
           ),
         ],
@@ -122,7 +122,7 @@ class _AddTrackerAlertDialogState extends State<AddTrackerAlertDialog> {
       actions: <Widget>[
         MaterialButton(
           elevation: 5.0,
-          child: Text('Add', style: TextStyle(color: Colors.blueAccent),),
+          child: const Text('Add', style: TextStyle(color: Colors.blueAccent),),
           onPressed: () {
             String enteredTrackerName = customController.text.toString();
             // if the tracker name does not already exist, add the tracker

@@ -22,7 +22,7 @@ class TrackerLogsAnalysisRoute extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Analysis'),
+        title: const Text('Analysis'),
       ),
       body: LogListAndStats(_tracker),
     );
@@ -41,7 +41,7 @@ class LogListAndStats extends StatelessWidget {
         LogStatsSection(
           trackerName: _tracker.name,
         ),
-        Divider(
+        const Divider(
           color: Colors.black,
         ),
         Expanded(
@@ -66,11 +66,11 @@ class LogListSection extends StatelessWidget {
   Widget build(BuildContext context) {
     InkWell addLogWithSpecificDateButton = InkWell(
       child: Container(
-        child: Text(
+        child: const Text(
           'Add log with specific date',
           style: TextStyle(color: Colors.blueAccent),
         ),
-        margin: EdgeInsets.all(8.0),
+        margin: const EdgeInsets.all(8.0),
       ),
       onTap: () {
         showAddLogWithSpecificDateAlertDialog(context).then((Log onValue) {
@@ -96,7 +96,7 @@ class LogListSection extends StatelessWidget {
     return Column(
       children: <Widget>[
         addLogWithSpecificDateButton,
-        SectionHeadline(
+        const SectionHeadline(
           textToDisplay: 'Logs',
         ),
         Expanded(
@@ -115,7 +115,7 @@ class LogListSection extends StatelessWidget {
   }
 
   void notifyUserThatLogWithSameDateAlreadyExists(BuildContext context) {
-    final snackBar = SnackBar(
+    const snackBar = SnackBar(
       content: Text(
         'A log with the same date already exists.',
         style: TextStyle(fontSize: 18.0),
@@ -129,7 +129,7 @@ class LogListSection extends StatelessWidget {
 class LogStatsSection extends StatelessWidget {
   final String trackerName;
 
-  LogStatsSection({
+  const LogStatsSection({
     @required this.trackerName,
   });
 

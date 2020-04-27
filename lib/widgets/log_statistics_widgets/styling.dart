@@ -9,7 +9,7 @@ class SectionHeadline extends StatelessWidget {
       fontWeight: FontWeight.bold);
   final String textToDisplay;
 
-  SectionHeadline({
+  const SectionHeadline({
     @required this.textToDisplay,
   });
 
