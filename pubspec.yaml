@@ -36,7 +36,14 @@ dev_dependencies:
     sdk: flutter
 
   pedantic: '>=1.8.0'
+  flutter_launcher_icons: ^0.7.5
 
+flutter_icons:
+  android: true
+  ios: true
+  image_path: 'images/app_icon.png'
+  adaptive_icon_foreground: 'images/app_icon_adaptive.png'
+  adaptive_icon_background: '#191919'
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
