@@ -89,7 +89,7 @@ class _AddTrackerAlertDialogState extends State<AddTrackerAlertDialog> {
     List<String> trackerNames = Provider.of<TrackerList>(context).trackerNames;
 
     return AlertDialog(
-      title: const Text('Tracker name'),
+      title: const Text('What do you want to track?'),
       content: Column(
         mainAxisSize: MainAxisSize.min,
         children: <Widget>[
