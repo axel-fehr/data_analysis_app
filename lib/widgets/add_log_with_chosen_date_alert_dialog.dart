@@ -76,24 +76,26 @@ class _AddLogWithChosenDateAlertDialogState
 
     return AlertDialog(
         title: const Text('Choose date and value'),
-        content: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          mainAxisSize: MainAxisSize.min,
-          children: <Widget>[
-            Container(
-              height: 330,
-              child: calendarView,
-            ),
-            selectLogValueSection,
-            Row(
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: <Widget>[
-                doNotChooseFutureDateWarning,
-                addLogWithChosenDateButton,
-              ],
-            )
-          ],
+        content: SingleChildScrollView(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisSize: MainAxisSize.min,
+            children: <Widget>[
+              Container(
+                height: 330,
+                child: calendarView,
+              ),
+              selectLogValueSection,
+              Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: <Widget>[
+                  doNotChooseFutureDateWarning,
+                  addLogWithChosenDateButton,
+                ],
+              )
+            ],
+          ),
         ));
   }
 }

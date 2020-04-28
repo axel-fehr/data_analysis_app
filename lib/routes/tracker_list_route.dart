@@ -90,34 +90,36 @@ class _AddTrackerAlertDialogState extends State<AddTrackerAlertDialog> {
 
     return AlertDialog(
       title: const Text('What do you want to track?'),
-      content: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: <Widget>[
-          TextField(
-            controller: customController,
-            maxLength: 50,
-            onChanged: (String enteredText) {
-              if (trackerNames.contains(customController.text.toString())) {
-                setState(() {
-                  showTrackerNameWarning = true;
-                });
-              }
-              // removes the warning if entered text is not an existing name
-              else if (showTrackerNameWarning = true) {
-                setState(() {
-                  showTrackerNameWarning = false;
-                });
-              }
-            },
-          ),
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Text(
-              showTrackerNameWarning ? 'Name already exists!' : '',
-              style: const TextStyle(color: Colors.redAccent),
+      content: SingleChildScrollView(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: <Widget>[
+            TextField(
+              controller: customController,
+              maxLength: 50,
+              onChanged: (String enteredText) {
+                if (trackerNames.contains(customController.text.toString())) {
+                  setState(() {
+                    showTrackerNameWarning = true;
+                  });
+                }
+                // removes the warning if entered text is not an existing name
+                else if (showTrackerNameWarning = true) {
+                  setState(() {
+                    showTrackerNameWarning = false;
+                  });
+                }
+              },
             ),
-          ),
-        ],
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Text(
+                showTrackerNameWarning ? 'Name already exists!' : '',
+                style: const TextStyle(color: Colors.redAccent),
+              ),
+            ),
+          ],
+        ),
       ),
       actions: <Widget>[
         MaterialButton(
