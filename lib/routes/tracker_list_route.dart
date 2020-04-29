@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:provider/provider.dart';
@@ -84,6 +85,18 @@ class _AddTrackerAlertDialogState extends State<AddTrackerAlertDialog> {
   // not add a tracker with a name that already exists
   bool showTrackerNameWarning = false;
 
+  final Text _trackerNameWarning = const Text(
+    'Name already exists!',
+    style: TextStyle(color: Colors.redAccent),
+  );
+
+  // A hint that tells the user what kind of tracker to enter, to make it
+  // clear that it has to be something answerable with yes or no.
+  final Text _inputHint = const Text(
+    "Must be answerable with 'yes' or 'no'",
+    style: TextStyle(color: Colors.black45),
+  );
+
   @override
   Widget build(BuildContext context) {
     List<String> trackerNames = Provider.of<TrackerList>(context).trackerNames;
@@ -112,11 +125,8 @@ class _AddTrackerAlertDialogState extends State<AddTrackerAlertDialog> {
               },
             ),
             Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Text(
-                showTrackerNameWarning ? 'Name already exists!' : '',
-                style: const TextStyle(color: Colors.redAccent),
-              ),
+              padding: const EdgeInsets.only(top: 8.0),
+              child: showTrackerNameWarning ? _trackerNameWarning : _inputHint,
             ),
           ],
         ),
@@ -124,7 +134,10 @@ class _AddTrackerAlertDialogState extends State<AddTrackerAlertDialog> {
       actions: <Widget>[
         MaterialButton(
           elevation: 5.0,
-          child: const Text('Add', style: TextStyle(color: Colors.blueAccent),),
+          child: const Text(
+            'Add',
+            style: TextStyle(color: Colors.blueAccent),
+          ),
           onPressed: () {
             String enteredTrackerName = customController.text.toString();
             // if the tracker name does not already exist, add the tracker
