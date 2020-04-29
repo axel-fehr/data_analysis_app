@@ -1,76 +1,43 @@
 import 'package:flutter/material.dart';
 import 'package:tracking_app/utils/general.dart';
+import 'package:flutter/cupertino.dart';
 
-import 'select_date_calendar_view.dart';
 import '../classes/tracker.dart';
 import '../classes/log.dart';
 
-class AddLogWithChosenDateAlertDialog extends StatefulWidget {
+class AddLogWithChosenDateAlertDialog extends StatelessWidget {
   final Tracker _tracker;
 
   const AddLogWithChosenDateAlertDialog(this._tracker);
 
   @override
-  _AddLogWithChosenDateAlertDialogState createState() =>
-      _AddLogWithChosenDateAlertDialogState();
-}
-
-class _AddLogWithChosenDateAlertDialogState
-    extends State<AddLogWithChosenDateAlertDialog> {
-  SelectLogValueSection selectLogValueSection;
-  SelectDateCalendarView calendarView = SelectDateCalendarView();
-  Color _addLogButtonFontColor = Colors.black45;
-  bool _userSelectedFutureDate = false;
-
-  @override
   Widget build(BuildContext context) {
-    // only builds the widget the first time the build method is called
-    selectLogValueSection ??= SelectLogValueSection(widget._tracker);
+    DateTime _selectedDate;
 
-    calendarView.onDateSelected ??= () {
-      // updates the font color of the 'Add' button to indicate the log can be
-      // added, now that the date has been selected
-      setState(() {
-        DateTime currentDate = convertTimeStampToDate(DateTime.now());
-        _userSelectedFutureDate =
-            calendarView.selectedDate.isAfter(currentDate) ? true : false;
+    SelectLogValueSection selectLogValueSection =
+        SelectLogValueSection(_tracker);
 
-        // changes the color of the button depending on whether the chosen
-        // date is valid or not and whether the log can be added as a signal to
-        // the user
-        _addLogButtonFontColor =
-            _userSelectedFutureDate ? Colors.black45 : Colors.blue;
-      });
-    };
-
-    // warning that will be shown when user selects future date because
-    // logs with future dates are not accepted
-    Widget doNotChooseFutureDateWarning = Visibility(
-        visible: _userSelectedFutureDate,
-        child: Flexible(
-          child: Column(
-            children: <Widget>[
-              const Text(
-                'Please do not choose a future date.',
-                style: TextStyle(color: Colors.redAccent),
-              ),
-            ],
-          ),
-        ));
+    DateTime currentDate = convertTimeStampToDate(DateTime.now());
+    CupertinoDatePicker datePicker = CupertinoDatePicker(
+      mode: CupertinoDatePickerMode.date,
+      initialDateTime: currentDate,
+      maximumDate: currentDate,
+      onDateTimeChanged: (DateTime chosenDate) {
+        _selectedDate = convertTimeStampToDate(chosenDate);
+      },
+    );
 
     FlatButton addLogWithChosenDateButton = FlatButton(
-      child: Text(
+      child: const Text(
         'Add',
-        style: TextStyle(color: _addLogButtonFontColor),
+        style: TextStyle(color: Colors.blue),
       ),
       onPressed: () {
-        if (calendarView.userSelectedDate && !_userSelectedFutureDate) {
-          Log createdLog = Log(
-              Log.yesOrNoToBool(selectLogValueSection.selectedValue),
-              timeStamp: calendarView.selectedDate);
-          print('chosen date: ${createdLog.toString()}');
-          Navigator.of(context).pop(createdLog);
-        }
+        Log createdLog = Log(
+            Log.yesOrNoToBool(selectLogValueSection.selectedValue),
+            timeStamp: _selectedDate);
+        print('created log: ${createdLog.toString()}');
+        Navigator.of(context).pop(createdLog);
       },
     );
 
@@ -83,17 +50,14 @@ class _AddLogWithChosenDateAlertDialogState
             mainAxisSize: MainAxisSize.min,
             children: <Widget>[
               Container(
-                height: 330,
-                child: calendarView,
+                height: 100,
+                child: datePicker,
               ),
               selectLogValueSection,
-              Row(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: <Widget>[
-                  doNotChooseFutureDateWarning,
-                  addLogWithChosenDateButton,
-                ],
-              )
+              Align(
+                child: addLogWithChosenDateButton,
+                alignment: Alignment.centerRight,
+              ),
             ],
           ),
         ));
