@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:provider/provider.dart';
+import 'package:flutter/services.dart';
 
 import 'routes/app_home_route.dart';
 import './providers/tracker_list.dart';
@@ -34,6 +35,14 @@ class LoadingDataFromDiskScreen extends StatelessWidget {
               textDirection: TextDirection.ltr,
             ));
           } else {
+            // prevents the app from changing in response to an orientation
+            // change of the device. Prevents issues caused when app is used
+            // in landscape mode.
+            SystemChrome.setPreferredOrientations([
+              DeviceOrientation.portraitUp,
+              DeviceOrientation.portraitDown,
+            ]);
+            
             return MultiProvider(
               providers: [
                 ChangeNotifierProvider(
