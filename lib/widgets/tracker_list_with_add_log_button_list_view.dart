@@ -176,11 +176,10 @@ class _AddLogButtonState extends State<AddLogButton> {
     const snackBar = SnackBar(
       content: Text(
         'You can only add one log per day. '
-        'You can modify the log you added today by '
-        'tapping on the tracker name.',
+        'If you want to change the log you added, tap the tracker name.',
         style: TextStyle(fontSize: 18.0),
       ),
-      duration: Duration(seconds: 6),
+      duration: Duration(seconds: 5),
     );
     Scaffold.of(context).showSnackBar(snackBar);
   }
