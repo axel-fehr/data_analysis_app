@@ -17,11 +17,23 @@ class SectionHeadline extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       child: Padding(
-        child: Text(
-          textToDisplay,
-          style: sectionHeadlineTextStyle,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            Flexible(
+              child: Column(
+                children: <Widget>[
+                  Text(
+                    textToDisplay,
+                    style: sectionHeadlineTextStyle,
+                    textAlign: TextAlign.center,
+                  ),
+                ],
+              ),
+            ),
+          ],
         ),
-        padding: EdgeInsets.only(left: 8.0, top: 8.0),
+        padding: EdgeInsets.only(top: 8.0),
       ),
       alignment: Alignment.center,
     );
