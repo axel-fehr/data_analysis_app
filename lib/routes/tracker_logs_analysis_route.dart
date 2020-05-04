@@ -96,8 +96,8 @@ class LogListSection extends StatelessWidget {
     return Column(
       children: <Widget>[
         addLogWithSpecificDateButton,
-        const SectionHeadline(
-          textToDisplay: 'Logs',
+        SectionHeadline(
+          textToDisplay: 'Logs of "${_tracker.name}"',
         ),
         Expanded(
           child: LogValuesWithEditButtonsListView(_tracker),
