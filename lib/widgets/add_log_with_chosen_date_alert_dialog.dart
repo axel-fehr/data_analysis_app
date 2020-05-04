@@ -4,6 +4,7 @@ import 'package:flutter/cupertino.dart';
 
 import '../classes/tracker.dart';
 import '../classes/log.dart';
+import 'alertDialogWithSetWidth.dart';
 
 class AddLogWithChosenDateAlertDialog extends StatelessWidget {
   final Tracker _tracker;
@@ -41,26 +42,45 @@ class AddLogWithChosenDateAlertDialog extends StatelessWidget {
       },
     );
 
-    return AlertDialog(
-        title: const Text('Choose date and value'),
-        content: SingleChildScrollView(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisSize: MainAxisSize.min,
-            children: <Widget>[
-              Container(
-                height: 100,
-                child: datePicker,
-              ),
-              selectLogValueSection,
-              Align(
-                child: addLogWithChosenDateButton,
-                alignment: Alignment.centerRight,
-              ),
-            ],
+    Widget alertDialogTitle = const Text('Choose date and value');
+    Widget alertDialogContent = SingleChildScrollView(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisSize: MainAxisSize.min,
+        children: <Widget>[
+          Container(
+            height: 100,
+            child: datePicker,
           ),
-        ));
+          selectLogValueSection,
+          Align(
+            child: addLogWithChosenDateButton,
+            alignment: Alignment.centerRight,
+          ),
+        ],
+      ),
+    );
+
+    double screenWidth = MediaQuery.of(context).size.width;
+
+    // When screens are narrow, the Cupertino date picker might not get rendered
+    // correctly because the width of the alert dialog is not enough because
+    // the standard alert dialog requires a minimum margin around the dialog.
+    // This is solved by using a custom dialog where the margin around the
+    // dialog can be narrower, if the screen width is below a chosen threshold.
+    if (screenWidth > 370) {
+      return AlertDialog(
+        title: alertDialogTitle,
+        content: alertDialogContent,
+      );
+    } else {
+      return AlertDialogWithSetWidth(
+        minWidth: screenWidth > 300 ? 300.0 : screenWidth,
+        title: alertDialogTitle,
+        content: alertDialogContent,
+      );
+    }
   }
 }
 
