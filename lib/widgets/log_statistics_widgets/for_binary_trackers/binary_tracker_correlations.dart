@@ -89,7 +89,8 @@ class ListOfCorrelationsWithOtherTrackers extends StatelessWidget {
     if (trackersWithNoCorrelationValuesExist) {
       for (int i = 0; i < listOfTrackers.length; i++) {
         // TODO: add comments to explain stuff or rename variables appropriately if possible
-        if (!sortedTrackerNames.contains(listOfTrackers[i].name)) {
+        if (!sortedTrackerNames.contains(listOfTrackers[i].name) &&
+            listOfTrackers[i].name != nameOfTrackerBeingAnalyzed) {
           correlationTableRows.add(TrackerCorrelationListTile(
             listOfTrackers[i].name,
             moreDataNeeded: true,
