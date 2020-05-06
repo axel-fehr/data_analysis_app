@@ -11,7 +11,7 @@ description: A new Flutter application used to track things about yourself and a
 # In iOS, build-name is used as CFBundleShortVersionString while build-number used as CFBundleVersion.
 # Read more about iOS versioning at
 # https://developer.apple.com/library/archive/documentation/General/Reference/InfoPlistKeyReference/Articles/CoreFoundationKeys.html
-version: 0.1.0+0
+version: 0.1.0+1
 
 environment:
   sdk: ">=2.3.0 <3.0.0"
@@ -29,7 +29,7 @@ dependencies:
   path: ^1.6.4
   path_provider: ^1.6.1
   flutter_slidable: ^0.5.4
-  flutter_calendar_carousel: ^1.4.12
+  intl: ^0.16.1
 
 dev_dependencies:
   flutter_test:
