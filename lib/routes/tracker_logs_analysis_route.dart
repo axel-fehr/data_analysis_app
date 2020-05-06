@@ -22,7 +22,7 @@ class TrackerLogsAnalysisRoute extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Analysis'),
+        title: Text(_tracker.name),
       ),
       body: LogListAndStats(_tracker),
     );
