@@ -4,6 +4,7 @@ import 'package:flutter/cupertino.dart';
 
 import 'binary_tracker_correlations.dart';
 import 'binary_tracker_overall_stats.dart';
+import '../../disclaimer_or_warning.dart';
 import '../styling.dart';
 
 class LogStatsOfBinaryTracker extends StatelessWidget {
@@ -18,12 +19,6 @@ class LogStatsOfBinaryTracker extends StatelessWidget {
     return Container(
       child: Column(
         children: <Widget>[
-          const Padding(
-            padding: EdgeInsets.only(top: 8.0),
-            child: DisclaimerOrWarning(
-              text: 'The information provided on this app is not health advice.',
-            ),
-          ),
           const SectionHeadline(
             textToDisplay: 'Overall Statistics',
           ),
@@ -45,37 +40,6 @@ class LogStatsOfBinaryTracker extends StatelessWidget {
         ],
       ),
       height: 300,
-    );
-  }
-}
-
-class DisclaimerOrWarning extends StatelessWidget {
-  final String text;
-
-  const DisclaimerOrWarning({@required this.text});
-
-  static const Color _color = Colors.black45;
-  static const double _size = 12;
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 0.0, horizontal: 8.0),
-      child: Wrap(
-        direction: Axis.horizontal,
-        alignment: WrapAlignment.center,
-        children: <Widget>[
-          const Icon(
-            Icons.warning,
-            size: _size,
-            color: _color,
-          ),
-          Text(
-            text,
-            style: const TextStyle(fontSize: _size, color: _color),
-          ),
-        ],
-      ),
     );
   }
 }
