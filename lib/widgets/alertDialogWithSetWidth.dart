@@ -319,6 +319,9 @@ class AlertDialogWithSetWidth extends StatelessWidget {
         case TargetPlatform.android:
         case TargetPlatform.fuchsia:
           label = semanticLabel ?? MaterialLocalizations.of(context)?.alertDialogLabel;
+          break;
+        default:
+          throw('Application is running on a platform it is not designed for.');
       }
     }
 
@@ -331,7 +334,7 @@ class AlertDialogWithSetWidth extends StatelessWidget {
             Padding(
               padding: titlePadding ?? EdgeInsets.fromLTRB(24.0, 24.0, 24.0, content == null ? 20.0 : 0.0),
               child: DefaultTextStyle(
-                style: titleTextStyle ?? dialogTheme.titleTextStyle ?? theme.textTheme.title,
+                style: titleTextStyle ?? dialogTheme.titleTextStyle ?? theme.textTheme.headline6,
                 child: Semantics(
                   child: title,
                   namesRoute: true,
@@ -344,7 +347,7 @@ class AlertDialogWithSetWidth extends StatelessWidget {
               child: Padding(
                 padding: contentPadding,
                 child: DefaultTextStyle(
-                  style: contentTextStyle ?? dialogTheme.contentTextStyle ?? theme.textTheme.subhead,
+                  style: contentTextStyle ?? dialogTheme.contentTextStyle ?? theme.textTheme.subtitle1,
                   child: content,
                 ),
               ),
