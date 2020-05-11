@@ -78,22 +78,19 @@ List<List<int>> getIndicesOfLogsAddedOnTheSameDay(
 }
 
 double computeCorrelationWithListsOfNumbers(List<num> x, List<num> y) {
-  // TODO: check with examples whether this function works
   if (x.length != y.length) {
-    throw ('Input lists must have the same length.');
+    throw ArgumentError('Input lists must have the same length.');
   }
   if (x.isEmpty || y.isEmpty) {
-    throw ('Lists must not be empty.');
+    throw ArgumentError('Lists must not be empty.');
   }
 
-  List<double> typeSafeX;
-  if (x is List<int>) {
-    typeSafeX = List.generate(x.length, (idx) => x[idx].toDouble());
-  }
-  List<double> typeSafeY;
-  if (y is List<int>) {
-    typeSafeY = List.generate(y.length, (idx) => y[idx].toDouble());
-  }
+  List<double> typeSafeX = x is List<double>
+      ? x
+      : List.generate(x.length, (idx) => x[idx].toDouble());
+  List<double> typeSafeY = x is List<double>
+      ? y
+      : List.generate(y.length, (idx) => y[idx].toDouble());
 
   double meanX = sum(typeSafeX) / x.length;
   double meanY = sum(typeSafeY) / y.length;
