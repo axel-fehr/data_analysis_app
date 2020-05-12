@@ -15,6 +15,9 @@ import '../general.dart';
 /// ignored.
 double computeCorrelationBetweenTwoTrackers(
     Tracker tracker1, Tracker tracker2) {
+  assert(tracker1.logs.isNotEmpty && tracker2.logs.isNotEmpty,
+      'Both trackers must have logs.');
+
   List<List<int>> sameDateLogsIndices =
       getIndicesOfLogsAddedOnTheSameDay(tracker1.logs, tracker2.logs);
   List<int> tracker1MatchingLogIndices = sameDateLogsIndices[0];
