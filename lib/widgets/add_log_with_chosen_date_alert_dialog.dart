@@ -42,7 +42,8 @@ class AddLogWithChosenDateAlertDialog extends StatelessWidget {
       },
     );
 
-    Widget alertDialogTitle = const Text('Choose date and value');
+    double screenWidth = MediaQuery.of(context).size.width;
+    const Widget alertDialogTitle = Text('Choose date and value');
     Widget alertDialogContent = SingleChildScrollView(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.start,
@@ -51,7 +52,7 @@ class AddLogWithChosenDateAlertDialog extends StatelessWidget {
         children: <Widget>[
           Container(
             height: 100,
-            width: 300,
+            width: screenWidth > 300 ? 300.0 : screenWidth,
             child: datePicker,
           ),
           selectLogValueSection,
@@ -62,8 +63,6 @@ class AddLogWithChosenDateAlertDialog extends StatelessWidget {
         ],
       ),
     );
-
-    double screenWidth = MediaQuery.of(context).size.width;
 
     // When screens are narrow, the Cupertino date picker might not get rendered
     // correctly because the width of the alert dialog is not enough because
