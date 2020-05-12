@@ -71,13 +71,11 @@ class AddLogWithChosenDateAlertDialog extends StatelessWidget {
     // This is solved by using a custom dialog where the margin around the
     // dialog can be narrower, if the screen width is below a chosen threshold.
     if (screenWidth > 370) {
-      print('screen is wide: $screenWidth');
       return AlertDialog(
         title: alertDialogTitle,
         content: alertDialogContent,
       );
     } else {
-      print('screen is narrow: $screenWidth');
       return AlertDialogWithSetWidth(
         minWidth: screenWidth > 300 ? 300.0 : screenWidth,
         title: alertDialogTitle,
