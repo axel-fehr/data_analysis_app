@@ -61,7 +61,7 @@ void main() {
     listOfLogs2 = [
       Log(true, timeStamp: DateTime(2020, 4, 20)),
       Log(false, timeStamp: DateTime(2020, 5, 21)),
-      Log(false, timeStamp: DateTime(2021, 5, 2)),
+      Log(false, timeStamp: DateTime(2021, 5, 22)),
     ];
 
     indicesList = getIndicesOfLogsAddedOnTheSameDay(listOfLogs1, listOfLogs2);
@@ -69,8 +69,8 @@ void main() {
         getIndicesOfLogsAddedOnTheSameDay(listOfLogs2, listOfLogs1);
 
     expectedResult = [
-      [0, 1],
-      [1, 2]
+      [1],
+      [1]
     ];
     expect(indicesList, expectedResult);
     expect(indicesListWithSwappedArguments, expectedResult.reversed.toList());
