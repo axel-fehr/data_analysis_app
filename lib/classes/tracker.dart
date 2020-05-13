@@ -7,11 +7,27 @@ class Tracker {
   List<Log> _logs;
   LogDatabase _logDatabase;
 
-  Tracker(this._name, this._type, {initializeWithEmptyLogList = false}) {
+  /// Creates a tracker object.
+  ///
+  /// Arguments:
+  /// name -- the name of the tracker
+  /// type -- the tracker type (e.g. Boolean)
+  /// logs -- a list of Logs the tracker has (must be null
+  ///         if [initializeWithEmptyLogList == true])
+  /// initializeWithEmptyLogList -- whether to initialize the object with an
+  ///                               empty list of logs (must be false if a list
+  ///                               of logs is given)
+  Tracker(this._name, this._type,
+      {List<Log> logs, bool initializeWithEmptyLogList = false}) {
     _logDatabase = LogDatabase(_name);
 
-    if (initializeWithEmptyLogList) {
+    if (initializeWithEmptyLogList && logs == null) {
       _logs = [];
+    } else if (logs != null && !initializeWithEmptyLogList) {
+      _logs = logs;
+    } else {
+      throw ArgumentError('Do not pass a list of logs to the constructor when '
+          '[initializeWithEmptyLogList] is true');
     }
   }
 
