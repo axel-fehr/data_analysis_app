@@ -25,7 +25,7 @@ class Tracker {
       _logs = [];
     } else if (logs != null && !initializeWithEmptyLogList) {
       _logs = logs;
-    } else {
+    } else if (logs != null && initializeWithEmptyLogList) {
       throw ArgumentError('Do not pass a list of logs to the constructor when '
           '[initializeWithEmptyLogList] is true');
     }
