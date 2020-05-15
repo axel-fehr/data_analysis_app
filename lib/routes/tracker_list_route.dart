@@ -120,23 +120,24 @@ class AddTrackerAlertDialog extends StatefulWidget {
 }
 
 class _AddTrackerAlertDialogState extends State<AddTrackerAlertDialog> {
-  TextEditingController customController = TextEditingController();
-
-  // determines whether a warning is shown that tells the user that he must
-  // not add a tracker with a name that already exists
-  bool showTrackerNameWarning = false;
-
-  final Text _trackerNameWarning = const Text(
+  // shown when a tracker with the entered name already exists
+  static const Text _trackerNameWarning = Text(
     'Name already exists!',
     style: TextStyle(color: Colors.redAccent),
   );
 
   // A hint that tells the user what kind of tracker to enter, to make it
   // clear that it has to be something answerable with yes or no.
-  final Text _inputHint = const Text(
+  static const Text _inputHint = Text(
     "Must be answerable with 'yes' or 'no'",
     style: TextStyle(color: Colors.black45),
   );
+
+  final TextEditingController customController = TextEditingController();
+
+  // determines whether a warning is shown that tells the user that he must
+  // not add a tracker with a name that already exists
+  bool showTrackerNameWarning = false;
 
   @override
   Widget build(BuildContext context) {

@@ -6,8 +6,8 @@ import 'package:sqflite/sqflite.dart';
 import './log.dart';
 
 class LogDatabase {
-  final String _trackerName;
-  final String _databaseNameInDoubleQuotationMarks;
+  String _trackerName;
+  String _tableNameInDoubleQuotationMarks;
   String _databasePath;
   Future<Database> _database;
 
@@ -16,10 +16,20 @@ class LogDatabase {
   /// Arguments:
   /// [_trackerName] : the name of the tracker whose logs are stored in
   ///                  the database.
-  // double quotation marks are used to handle names with spaces
-  LogDatabase(this._trackerName)
-      : _databaseNameInDoubleQuotationMarks =
-            '"' + _trackerName + '_logs' + '"';
+  LogDatabase(this._trackerName) {
+    // double quotation marks are used to handle names with spaces
+    _tableNameInDoubleQuotationMarks =
+        getTableNameInDoubleQuotationMarks(_trackerName);
+  }
+
+  /// Returns the name of the table that stores the logs of a tracker with the
+  /// given name. The name will be returned in double quotation marks.
+  ///
+  /// Double quotation marks are needed to handle tracker names with spaces in
+  /// them.
+  String getTableNameInDoubleQuotationMarks(String trackerName) {
+    return '"' + trackerName + '_logs' + '"';
+  }
 
   /// Initializes the member variable [_database].
   ///
@@ -28,18 +38,62 @@ class LogDatabase {
   /// function is essential but cannot be executed in the constructor because
   /// it is asynchronous.
   Future<void> setUpDatabase() async {
+    _database = createNewDatabase(_trackerName).then((Database db) {
+      _databasePath = db.path;
+      return db;
+    });
+  }
+
+  Future<Database> createNewDatabase(String trackerName) async {
     WidgetsFlutterBinding.ensureInitialized();
-    _databasePath =
-        join(await getDatabasesPath(), _trackerName + '_log_database.db');
-    _database = openDatabase(
-      _databasePath,
+    String databasePath =
+        join(await getDatabasesPath(), trackerName + '_log_database.db');
+    String tableNameInDoubleQuotationMarks =
+        getTableNameInDoubleQuotationMarks(trackerName);
+    Future<Database> database = openDatabase(
+      databasePath,
       onCreate: (db, version) {
-        // TODO: adjust the type used to store values based on the type of tracker
         String command =
-            'CREATE TABLE IF NOT EXISTS $_databaseNameInDoubleQuotationMarks(timeStamp DATETIME PRIMARY KEY, value INTEGER)';
+            'CREATE TABLE IF NOT EXISTS $tableNameInDoubleQuotationMarks('
+            'timeStamp DATETIME PRIMARY KEY, '
+            'value INTEGER)';
         return db.execute(command);
       },
       version: 1,
+    );
+    return database;
+  }
+
+  /// Updates the name of the tracker the database belongs to (only the
+  /// instance variable in this class, not the name of tracker object) and
+  /// changes the name of the database accordingly.
+  ///
+  /// This is needed because the name of the database includes the tracker name.
+  /// So when the tracker name is changed, the name of the log database has to
+  /// be changed to.
+  void updateTrackerName(String newTrackerName) async {
+    // create new DB with table
+    Future<Database> newDBFuture = createNewDatabase(newTrackerName);
+    Database newDB = await newDBFuture;
+
+    // copy data from old DB
+    String oldDatabaseAlias = 'old_database';
+    await newDB.rawQuery('ATTACH DATABASE "${_databasePath}" '
+        'AS $oldDatabaseAlias');
+    String newTableName = getTableNameInDoubleQuotationMarks(newTrackerName);
+    String copyLogTableCommand = 'INSERT INTO $newTableName '
+        'SELECT * FROM '
+        '$oldDatabaseAlias.$_tableNameInDoubleQuotationMarks';
+    await newDB.execute(copyLogTableCommand).then(
+      (value) async {
+        await deleteDatabase(_databasePath); // delete old DB
+
+        // update all fields
+        _databasePath = newDB.path;
+        _tableNameInDoubleQuotationMarks = newTableName;
+        _trackerName = newTrackerName;
+        _database = newDBFuture;
+      },
     );
   }
 
@@ -53,7 +107,7 @@ class LogDatabase {
     final Database db = await _database;
 
     await db.insert(
-      _databaseNameInDoubleQuotationMarks,
+      _tableNameInDoubleQuotationMarks,
       log.toMap(),
       conflictAlgorithm: ConflictAlgorithm.ignore,
     );
@@ -63,7 +117,7 @@ class LogDatabase {
     final Database db = await _database;
 
     await db.update(
-      _databaseNameInDoubleQuotationMarks,
+      _tableNameInDoubleQuotationMarks,
       log.toMap(),
       where: 'timeStamp = ?',
       whereArgs: [log.timeStamp.toIso8601String()],
@@ -79,7 +133,7 @@ class LogDatabase {
     final Database db = await _database;
 
     await db.delete(
-      _databaseNameInDoubleQuotationMarks,
+      _tableNameInDoubleQuotationMarks,
       where: 'timeStamp = ?',
       whereArgs: [timeStampOfLogToDelete.toIso8601String()],
     );
@@ -90,7 +144,7 @@ class LogDatabase {
     final Database db = await _database;
 
     final List<Map<String, dynamic>> maps =
-        await db.query(_databaseNameInDoubleQuotationMarks);
+        await db.query(_tableNameInDoubleQuotationMarks);
 
     // Convert the List<Map<String, dynamic> into a List<Log>.
     return List.generate(maps.length, (i) {

@@ -2,7 +2,7 @@ import './log.dart';
 import './log_database.dart';
 
 class Tracker {
-  final String _name;
+  String _name;
   final String _type;
   List<Log> _logs;
   LogDatabase _logDatabase;
@@ -30,6 +30,10 @@ class Tracker {
           '[initializeWithEmptyLogList] is true');
     }
   }
+
+  String get type => _type;
+  String get name => _name;
+  List<Log> get logs => _logs;
 
   Future<List<Log>> loadLogsFromDisk() async {
     await setUpLogDatabase();
@@ -59,10 +63,6 @@ class Tracker {
     await _logDatabase.deleteDatabaseFromDisk();
   }
 
-  String get type => _type;
-  String get name => _name;
-  List<Log> get logs => _logs;
-
   void addLog(Log logToAdd) {
     _logs.add(logToAdd);
     _logDatabase.insertLog(logToAdd);
@@ -86,11 +86,16 @@ class Tracker {
   /// Deletes a log and saves the changes to disk.
   ///
   /// Arguments:
-  /// timeStampOfLogToDelete: unique time stamp of the log that is going
-  ///                         to be deleted
+  /// timeStampOfLogToDelete -- unique time stamp of the log that is going
+  ///                           to be deleted
   void deleteLog(DateTime timeStampOfLogToDelete) {
     _logs.removeWhere((log) => log.timeStamp == timeStampOfLogToDelete);
     _logDatabase.deleteLog((timeStampOfLogToDelete));
+  }
+
+  void rename(String newName) {
+    _name = newName;
+    _logDatabase.updateTrackerName(newName);
   }
 
   Map<String, dynamic> toMap() {

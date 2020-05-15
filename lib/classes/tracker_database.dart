@@ -23,7 +23,11 @@ class TrackerDatabase {
     _database = openDatabase(
       join(await getDatabasesPath(), 'tracker_database.db'),
       onCreate: (db, version) {
-        String command = 'CREATE TABLE IF NOT EXISTS $_databaseName(name VARCHAR(128) PRIMARY KEY, type VARCHAR(128))';
+        // integer is used as primary key so that renaming is possible
+        String command = 'CREATE TABLE IF NOT EXISTS '
+            '$_databaseName(id INTEGER PRIMARY KEY AUTOINCREMENT, '
+            'name VARCHAR(128) UNIQUE, '
+            'type VARCHAR(128))';
         return db.execute(command);
       },
       version: 1,
@@ -41,14 +45,14 @@ class TrackerDatabase {
     );
   }
 
-  Future<void> updateTracker(Tracker tracker) async {
+  Future<void> updateTrackerName(
+      String oldTrackerName, String newTrackerName) async {
     final Database db = await _database;
-
     await db.update(
       _databaseName,
-      tracker.toMap(),
+      Tracker(newTrackerName, 'Boolean').toMap(),
       where: 'name = ?',
-      whereArgs: [tracker.name],
+      whereArgs: [oldTrackerName],
     );
   }
 

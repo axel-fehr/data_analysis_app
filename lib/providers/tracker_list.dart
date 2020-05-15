@@ -1,4 +1,7 @@
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
+import 'package:sqflite/sqflite.dart';
 
 import '../classes/tracker.dart';
 import '../classes/tracker_database.dart';
@@ -57,6 +60,26 @@ class TrackerList with ChangeNotifier {
     await trackerToAdd.setUpLogDatabase();
     // TODO: does this really work as expected,, since the return type is not Future<void>? does the function really fully execute the last line?
     // TODO: IS THIS FUNCTION EVEN EXECUTED SYNCHRONOUSLY OR ASYNCHRONOUSLY? BECAUSE IT DOES NOT RETURN A FUTURE BUT USES THE ASYNC KEYWORD
+  }
+
+  /// Renames a tracker and updates the database accordingly.
+  ///
+  /// Arguments:
+  /// trackerName -- name of the tracker that is being renamed
+  /// newTrackerName -- new name of the tracker
+  void renameTracker(String trackerName, String newTrackerName) async {
+    int indexOfTracker =
+        _trackers.indexWhere((element) => element.name == trackerName);
+    assert(_trackerNames[indexOfTracker] == _trackers[indexOfTracker].name,
+        'Names in the tracker names list and the tracker list do not match.');
+
+    Tracker trackerToRename = _trackers[indexOfTracker];
+    _trackerNames
+        .replaceRange(indexOfTracker, indexOfTracker + 1, [newTrackerName]);
+    await _trackerDatabase.updateTrackerName(
+        trackerToRename.name, newTrackerName);
+    trackerToRename.rename(newTrackerName);
+    notifyListeners();
   }
 
   void removeTracker(Tracker trackerToRemove) async {
