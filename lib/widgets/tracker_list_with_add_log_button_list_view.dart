@@ -49,8 +49,7 @@ class TrackerWithAddLogButton extends StatelessWidget {
           color: Colors.red,
           icon: Icons.delete,
           onTap: () =>
-              // TODO: SHOW ALERT DIALOG HERE TO LET USER CONFIRM
-              Provider.of<TrackerList>(context).removeTracker(_tracker),
+              letUserConfirmTrackerDeletion(context, trackerToDelete: _tracker),
         ),
         IconSlideAction(
           caption: 'Rename',
@@ -60,6 +59,39 @@ class TrackerWithAddLogButton extends StatelessWidget {
               rename_tracker_utils.letUserRenameTracker(context, _tracker.name),
         ),
       ],
+    );
+  }
+
+  void letUserConfirmTrackerDeletion(BuildContext context,
+      {@required Tracker trackerToDelete}) {
+    Widget noButton = FlatButton(
+      child: const Text('No'),
+      onPressed: () {
+        Navigator.of(context).pop();
+      },
+    );
+
+    Widget yesButton = FlatButton(
+      child: const Text('Yes'),
+      onPressed: () {
+        Provider.of<TrackerList>(context).removeTracker(_tracker);
+        Navigator.of(context).pop();
+      },
+    );
+
+    CupertinoAlertDialog addLogAlertDialog = CupertinoAlertDialog(
+      title: const Text('Are you sure?'),
+      actions: [
+        yesButton,
+        noButton,
+      ],
+    );
+
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return addLogAlertDialog;
+      },
     );
   }
 }
