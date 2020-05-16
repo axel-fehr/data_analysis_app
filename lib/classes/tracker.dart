@@ -37,11 +37,14 @@ class Tracker {
 
   Future<List<Log>> loadLogsFromDisk() async {
     await setUpLogDatabase();
-    await _logDatabase.readLogs().then((List<Log> onValue) {
-      _logs = onValue;
-      sortLogsByDate();
-      return _logs;
-    });
+    List<Log> loadedLogs = await _logDatabase.readLogs().then(
+      (List<Log> onValue) {
+        _logs = onValue;
+        sortLogsByDate();
+        return _logs;
+      },
+    );
+    return loadedLogs;
   }
 
   /// Orders the log list of the tracker by date such that logs the most recent
