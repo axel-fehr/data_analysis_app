@@ -11,16 +11,34 @@ import '../classes/log.dart';
 import '../utils/general.dart';
 import '../utils/rename_tracker_utils.dart' as rename_tracker_utils;
 
-class TrackerListWithAddLogButtonListView extends StatelessWidget {
+class TrackerListWithAddLogButtonListView extends StatefulWidget {
+  @override
+  _TrackerListWithAddLogButtonListViewState createState() =>
+      _TrackerListWithAddLogButtonListViewState();
+}
+
+class _TrackerListWithAddLogButtonListViewState
+    extends State<TrackerListWithAddLogButtonListView> {
   @override
   Widget build(BuildContext context) {
     List<Tracker> listOfTrackers = Provider.of<TrackerList>(context).trackers;
     List<TrackerWithAddLogButton> trackerWithAddLogButtonList = [];
-    listOfTrackers.forEach((tracker) =>
-        trackerWithAddLogButtonList.add(TrackerWithAddLogButton(tracker)));
+    listOfTrackers.forEach(
+      (tracker) => trackerWithAddLogButtonList.add(
+        TrackerWithAddLogButton(
+          tracker: tracker,
+          key: UniqueKey(),
+        ),
+      ),
+    );
 
-    return ListView(
+    TrackerList trackerList = Provider.of<TrackerList>(context);
+    return ReorderableListView(
       children: trackerWithAddLogButtonList,
+      onReorder: (int oldIndex, int newIndex) {
+        trackerList.changePositionOfTracker(
+            indexOfTracker: oldIndex, desiredIndexOfTracker: newIndex);
+      },
     );
   }
 }
@@ -28,7 +46,13 @@ class TrackerListWithAddLogButtonListView extends StatelessWidget {
 class TrackerWithAddLogButton extends StatelessWidget {
   final Tracker _tracker;
 
-  const TrackerWithAddLogButton(this._tracker);
+  Tracker get tracker => _tracker;
+
+  const TrackerWithAddLogButton({
+    Key key,
+    @required Tracker tracker,
+  })  : _tracker = tracker,
+        super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -74,7 +98,7 @@ class TrackerWithAddLogButton extends StatelessWidget {
     Widget yesButton = FlatButton(
       child: const Text('Yes'),
       onPressed: () {
-        Provider.of<TrackerList>(context).removeTracker(_tracker);
+        Provider.of<TrackerList>(context).deleteTracker(_tracker);
         Navigator.of(context).pop();
       },
     );

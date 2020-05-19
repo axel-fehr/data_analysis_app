@@ -1,7 +1,4 @@
-import 'dart:ui';
-
 import 'package:flutter/material.dart';
-import 'package:sqflite/sqflite.dart';
 
 import '../classes/tracker.dart';
 import '../classes/tracker_database.dart';
@@ -9,7 +6,6 @@ import '../classes/log.dart';
 
 class TrackerList with ChangeNotifier {
   List<Tracker> _trackers;
-  List<String> _trackerNames;
   final TrackerDatabase _trackerDatabase = TrackerDatabase();
 
   List<Tracker> get trackers {
@@ -17,7 +13,7 @@ class TrackerList with ChangeNotifier {
   }
 
   List<String> get trackerNames {
-    return [..._trackerNames];
+    return List.generate(_trackers.length, (index) => _trackers[index].name);
   }
 
   /// Initializes the list of trackers with the ones saved to disk.
@@ -34,8 +30,6 @@ class TrackerList with ChangeNotifier {
       Future<List> innerLoadLogsFutures =
           _trackerDatabase.readTrackers().then((onValueLoadTrackers) {
         _trackers = onValueLoadTrackers;
-        _trackerNames =
-            List.generate(_trackers.length, (i) => _trackers[i].name);
 
         List<Future> loadLogsFutureList = [];
         _trackers.forEach((tracker) {
@@ -54,12 +48,14 @@ class TrackerList with ChangeNotifier {
     Tracker trackerToAdd =
         Tracker(trackerName, 'Boolean', initializeWithEmptyLogList: true);
     _trackers.add(trackerToAdd);
-    _trackerNames.add(trackerName);
     notifyListeners();
-    await _trackerDatabase.insertTracker(trackerToAdd);
+
+    // 1 is subtracted from the length to take into account that the tracker
+    // was already added to [_trackers] above
+    int listIndexOfAddedTracker = _trackers.length - 1;
+    await _trackerDatabase.insertTracker(trackerToAdd,
+        listIndex: listIndexOfAddedTracker);
     await trackerToAdd.setUpLogDatabase();
-    // TODO: does this really work as expected,, since the return type is not Future<void>? does the function really fully execute the last line?
-    // TODO: IS THIS FUNCTION EVEN EXECUTED SYNCHRONOUSLY OR ASYNCHRONOUSLY? BECAUSE IT DOES NOT RETURN A FUTURE BUT USES THE ASYNC KEYWORD
   }
 
   /// Renames a tracker and updates the database accordingly.
@@ -70,26 +66,21 @@ class TrackerList with ChangeNotifier {
   void renameTracker(String trackerName, String newTrackerName) async {
     int indexOfTracker =
         _trackers.indexWhere((element) => element.name == trackerName);
-    assert(_trackerNames[indexOfTracker] == _trackers[indexOfTracker].name,
-        'Names in the tracker names list and the tracker list do not match.');
 
     Tracker trackerToRename = _trackers[indexOfTracker];
-    _trackerNames
-        .replaceRange(indexOfTracker, indexOfTracker + 1, [newTrackerName]);
     await _trackerDatabase.updateTrackerName(
         trackerToRename.name, newTrackerName);
     trackerToRename.rename(newTrackerName);
     notifyListeners();
   }
 
-  void removeTracker(Tracker trackerToRemove) async {
-    _trackerNames.remove(trackerToRemove.name);
+  void deleteTracker(Tracker trackerToRemove) async {
+    int indexOfTrackerToRemove = _trackers.indexOf(trackerToRemove);
     _trackers.remove(trackerToRemove);
     notifyListeners();
-    await _trackerDatabase.deleteTracker(trackerToRemove);
+    await _trackerDatabase.deleteTracker(trackerToRemove,
+        listIndexOfTracker: indexOfTrackerToRemove);
     await trackerToRemove.deleteLogDatabase();
-    // TODO: does this really work as expected,, since the return type is not Future<void>? does the function really fully execute the last line?
-    // TODO: IS THIS FUNCTION EVEN EXECUTED SYNCHRONOUSLY OR ASYNCHRONOUSLY? BECAUSE IT DOES NOT RETURN A FUTURE BUT USES THE ASYNC KEYWORD
   }
 
   /// Changes the value of a log of a given tracker, notifies all
@@ -110,9 +101,9 @@ class TrackerList with ChangeNotifier {
   /// listeners and saves the changes to disk.
   ///
   /// Arguments:
-  /// tracker: the tracker the log that is going to be deleted belongs to
-  /// timeStampOfLogToDelete: unique time stamp of the log that is going to be
-  ///                         deleted
+  /// tracker -- the tracker the log that is going to be deleted belongs to
+  /// timeStampOfLogToDelete -- unique time stamp of the log that is going to be
+  ///                           deleted
   void deleteLog(Tracker tracker, DateTime timeStampOfLogToDelete) {
     tracker.deleteLog(timeStampOfLogToDelete);
     notifyListeners();
@@ -122,11 +113,32 @@ class TrackerList with ChangeNotifier {
   /// listeners and saves the changes to disk.
   ///
   /// Arguments:
-  /// tracker: the tracker that the log will be added to
-  /// logToAdd: the log that will be added
+  /// tracker -- the tracker that the log will be added to
+  /// logToAdd -- the log that will be added
   void addLog(Tracker tracker, Log logToAdd) {
     tracker.addLog(logToAdd);
     tracker.sortLogsByDate();
     notifyListeners();
+  }
+
+  /// Changes the position of a tracker in the tracker list and database.
+  ///
+  /// Arguments:
+  /// indexOfTracker -- index of the tracker in the tracker list whose position
+  ///                   in the tracker list is going to be changed
+  /// desiredIndexOfTracker -- index that the tracker should have in the tracker
+  ///                          list
+  void changePositionOfTracker(
+      {@required int indexOfTracker, @required int desiredIndexOfTracker}) {
+    if (desiredIndexOfTracker > indexOfTracker) {
+      desiredIndexOfTracker -= 1;
+    }
+    final Tracker trackerToReposition = _trackers.removeAt(indexOfTracker);
+    _trackers.insert(desiredIndexOfTracker, trackerToReposition);
+    notifyListeners();
+
+    _trackerDatabase.changePositionOfTracker(
+        indexOfTracker: indexOfTracker,
+        desiredIndexOfTracker: desiredIndexOfTracker);
   }
 }
