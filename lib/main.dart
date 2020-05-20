@@ -27,13 +27,6 @@ class LoadingDataFromDiskScreen extends StatelessWidget {
         builder: (context, AsyncSnapshot snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return const Center(child: CircularProgressIndicator());
-          } else if (snapshot.hasError) {
-            // TODO: add something here that makes it easy to submit a bug report
-            return Center(
-                child: Text(
-              '${snapshot.error}',
-              textDirection: TextDirection.ltr,
-            ));
           } else {
             // prevents the app from changing in response to an orientation
             // change of the device. Prevents issues caused when app is used
@@ -42,7 +35,7 @@ class LoadingDataFromDiskScreen extends StatelessWidget {
               DeviceOrientation.portraitUp,
               DeviceOrientation.portraitDown,
             ]);
-            
+
             return MultiProvider(
               providers: [
                 ChangeNotifierProvider(
