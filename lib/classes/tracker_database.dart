@@ -25,7 +25,8 @@ class TrackerDatabase {
     'ALTER TABLE table_copy RENAME TO $_tableName',
 
     // the following two queries are used to add a list index column to a table
-    // and fill it with 0..(n-1), where n is the number of trackers
+    // and fill it with 0..(n-1), where n is the number of trackers. This is
+    // done to be able to store the order of the trackers chosen by the user.
     // Note: the default value of 0 is chosen because a non-null constant value
     // is needed to avoid causing an exception.
     'ALTER TABLE $_tableName ADD list_index INTEGER NOT NULL DEFAULT 0',
