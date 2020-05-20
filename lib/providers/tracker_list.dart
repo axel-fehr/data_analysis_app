@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:sqflite/sqflite.dart';
 
 import '../classes/tracker.dart';
 import '../classes/tracker_database.dart';
@@ -26,9 +27,10 @@ class TrackerList with ChangeNotifier {
   /// right order.
   Future<List> getFuturesToCompleteBeforeAppStart() {
     Future<List> loadLogsFutures =
-        _trackerDatabase.initDatabase().then((onValueInitDataBase) {
-      Future<List> innerLoadLogsFutures =
-          _trackerDatabase.readTrackers().then((onValueLoadTrackers) {
+        _trackerDatabase.initDatabase().then((Database onValueInitDataBase) {
+      Future<List> innerLoadLogsFutures = _trackerDatabase
+          .readTrackers()
+          .then((List<Tracker> onValueLoadTrackers) {
         _trackers = onValueLoadTrackers;
 
         List<Future> loadLogsFutureList = [];
