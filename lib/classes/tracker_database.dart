@@ -81,11 +81,6 @@ class TrackerDatabase {
   Future<void> insertTracker(Tracker tracker, {@required int listIndex}) async {
     final Database db = await _database;
 
-//    await db.insert(
-//      _tableName,
-//      tracker.toMap(),
-//      conflictAlgorithm: ConflictAlgorithm.ignore,
-//    );
     assert(listIndex == await readTrackers().then((value) => value.length));
 
     return db.rawInsert('INSERT INTO $_tableName(name, type, list_index) '
@@ -130,7 +125,6 @@ class TrackerDatabase {
       // to return the trackers in the order determined by the way the user
       // ordered the tracker list on the main screen
       Map trackerMap = maps.singleWhere((map) => map['list_index'] == i);
-      print('list index: ${trackerMap['list_index']}');
       return Tracker(
         trackerMap['name'],
         trackerMap['type'],
