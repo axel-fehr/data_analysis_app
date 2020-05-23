@@ -2,6 +2,7 @@ import 'dart:async';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
+import 'package:tracking_app/global_variables.dart' as globals;
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
 import 'tracker.dart';
@@ -92,7 +93,7 @@ class TrackerDatabase {
     final Database db = await _database;
     await db.update(
       _tableName,
-      Tracker(newTrackerName, 'Boolean').toMap(),
+      Tracker(newTrackerName, globals.yesNoTrackerType).toMap(),
       where: 'name = ?',
       whereArgs: [oldTrackerName],
     );

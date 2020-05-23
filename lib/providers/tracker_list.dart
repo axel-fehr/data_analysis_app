@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:sqflite/sqflite.dart';
 
+import 'package:tracking_app/global_variables.dart' as globals;
 import '../classes/tracker.dart';
 import '../classes/tracker_database.dart';
 import '../classes/log.dart';
@@ -48,7 +49,7 @@ class TrackerList with ChangeNotifier {
   void addTracker(String trackerName) async {
     // TODO: make tracker type a non-hard coded argument here
     Tracker trackerToAdd =
-        Tracker(trackerName, 'Boolean', initializeWithEmptyLogList: true);
+        Tracker(trackerName, globals.yesNoTrackerType, initializeWithEmptyLogList: true);
     _trackers.add(trackerToAdd);
     notifyListeners();
 
