@@ -36,19 +36,17 @@ class TrackerDatabase {
         'WHERE $_tableName.id > tableCopy.id)',
   ];
 
-  /// Initializes the member variable '_database'.
+  /// Initializes the member variable [_database].
   ///
-  /// This function has to be called with 'await databaseObject.initDatabase()'
-  /// before any other member functions are called! This is because this
-  /// function is essential but cannot be executed in the constructor because
-  /// it is asynchronous.
-  // TODO: rename to setUpDatabase
+  /// The future this function returns has to be completed before any other
+  /// member functions are called! This is because this function is essential
+  /// but cannot be executed in the constructor because it is asynchronous.
   Future<Database> initDatabase() async {
     WidgetsFlutterBinding.ensureInitialized();
     _database = openDatabase(
       join(await getDatabasesPath(), 'tracker_database.db'),
       onCreate: (db, version) async {
-        /// Database columns:
+        /// Table columns:
         /// id -- used as primary key (using name as primary key makes renaming
         ///       difficult
         /// name -- name of the tracker
