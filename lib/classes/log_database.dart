@@ -33,10 +33,9 @@ class LogDatabase {
 
   /// Initializes the member variable [_database].
   ///
-  /// This function has to be called with 'await databaseObject.setUpDatabase()'
-  /// before any other member functions are called! This is because this
-  /// function is essential but cannot be executed in the constructor because
-  /// it is asynchronous.
+  /// The future this function returns has to be completed before any other
+  /// member functions are called! This is because this function is essential
+  /// but cannot be executed in the constructor because it is asynchronous.
   Future<void> setUpDatabase() async {
     _database = createNewDatabase(_trackerName).then((Database db) {
       _databasePath = db.path;
