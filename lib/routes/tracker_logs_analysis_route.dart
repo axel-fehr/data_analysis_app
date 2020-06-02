@@ -11,6 +11,7 @@ import '../widgets/log_values_with_edit_buttons_list_view.dart';
 import '../widgets/log_statistics_widgets/for_binary_trackers/binary_tracker_log_stats.dart';
 import '../widgets/log_statistics_widgets/styling.dart';
 import '../widgets/add_log_with_chosen_date_alert_dialog.dart';
+import '../utils/rename_tracker_utils.dart' as rename_tracker_utils;
 
 class TrackerLogsAnalysisRoute extends StatelessWidget {
   // tracker whose logs are shown and summarized on the screen
@@ -20,11 +21,70 @@ class TrackerLogsAnalysisRoute extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    void handlePopUpMenuTap(String value) {
+      switch (value) {
+        case 'Rename':
+          print('rename');
+          rename_tracker_utils.letUserRenameTracker(context, _tracker.name);
+          break;
+        case 'Delete':
+          letUserConfirmTrackerDeletion(context, trackerToDelete: _tracker);
+          break;
+      }
+    }
+
     return Scaffold(
       appBar: AppBar(
         title: Text(_tracker.name),
+        actions: <Widget>[
+          PopupMenuButton<String>(
+            onSelected: handlePopUpMenuTap,
+            itemBuilder: (BuildContext context) {
+              return {'Rename', 'Delete'}.map((String choice) {
+                return PopupMenuItem<String>(
+                  value: choice,
+                  child: Text(choice),
+                );
+              }).toList();
+            },
+          ),
+        ],
       ),
       body: LogListAndStats(_tracker),
+    );
+  }
+
+  void letUserConfirmTrackerDeletion(BuildContext context,
+      {@required Tracker trackerToDelete}) {
+    Widget noButton = FlatButton(
+      child: const Text('No'),
+      onPressed: () {
+        Navigator.of(context).pop();
+      },
+    );
+
+    Widget yesButton = FlatButton(
+      child: const Text('Yes'),
+      onPressed: () {
+        Provider.of<TrackerList>(context).deleteTracker(_tracker);
+        // back to the home screen
+        Navigator.popUntil(context, ModalRoute.withName('/'));
+      },
+    );
+
+    CupertinoAlertDialog addLogAlertDialog = CupertinoAlertDialog(
+      title: const Text('Are you sure?'),
+      actions: [
+        yesButton,
+        noButton,
+      ],
+    );
+
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return addLogAlertDialog;
+      },
     );
   }
 }
