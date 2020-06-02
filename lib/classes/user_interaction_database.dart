@@ -20,7 +20,6 @@ class UserInteractionDatabase {
   /// member functions are called! This is because this function is essential
   /// but cannot be executed in the constructor because it is asynchronous.
   Future<Database> initDatabase() async {
-    print('\nin initDB');
     WidgetsFlutterBinding.ensureInitialized();
     _database = openDatabase(
       join(await getDatabasesPath(), 'user_interactions.db'),
