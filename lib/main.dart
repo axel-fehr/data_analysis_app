@@ -17,36 +17,31 @@ class MyApp extends StatelessWidget {
   }
 }
 
-class LoadingDataFromDiskScreen extends StatelessWidget {
-  final TrackerList _trackerList;
-  final UserInteractionDatabase _userInteractionDatabase;
+class LoadingDataFromDiskScreen extends StatefulWidget {
+  @override
+  _LoadingDataFromDiskScreenState createState() =>
+      _LoadingDataFromDiskScreenState();
+}
 
-  LoadingDataFromDiskScreen()
-      : _trackerList = TrackerList(),
-        _userInteractionDatabase = UserInteractionDatabase();
+class _LoadingDataFromDiskScreenState extends State<LoadingDataFromDiskScreen> {
+  final TrackerList _trackerList = TrackerList();
+  final UserInteractionDatabase _userInteractionDatabase =
+      UserInteractionDatabase();
+  List<Future> _futuresToCompleteBeforeAppStart;
 
-  List<Future> getFuturesToCompleteBeforeAppStart() {
-    List<Future> futuresToCompleteBeforeAppStart = [];
-
-    Future<List> trackerDataLoadedFromDisk =
-        _trackerList.getFuturesToCompleteBeforeAppStart();
-    futuresToCompleteBeforeAppStart.add(trackerDataLoadedFromDisk);
-
-    Future<Database> userInteractionDatabase =
-        _userInteractionDatabase.initDatabase();
-    futuresToCompleteBeforeAppStart.add(userInteractionDatabase);
-
-    Future<Map<String,int>> loadedDatabaseContent = userInteractionDatabase
-        .then((value) => _userInteractionDatabase.initializeDatabaseContent());
-    futuresToCompleteBeforeAppStart.add(loadedDatabaseContent);
-
-    return futuresToCompleteBeforeAppStart;
+  @override
+  void initState() {
+    // this is done to get the futures only once (when  the state is
+    // initialized) to prevent the data from getting loaded from disk again if
+    // the widget rebuilds, which happened before.
+    _futuresToCompleteBeforeAppStart = getFuturesToCompleteBeforeAppStart();
+    super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(
-        future: Future.wait(getFuturesToCompleteBeforeAppStart()),
+        future: Future.wait(_futuresToCompleteBeforeAppStart),
         builder: (context, AsyncSnapshot snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return const Center(child: CircularProgressIndicator());
@@ -74,5 +69,23 @@ class LoadingDataFromDiskScreen extends StatelessWidget {
             );
           }
         });
+  }
+
+  List<Future> getFuturesToCompleteBeforeAppStart() {
+    List<Future> futuresToCompleteBeforeAppStart = [];
+
+    Future<List> trackerDataLoadedFromDisk =
+        _trackerList.getFuturesToCompleteBeforeAppStart();
+    futuresToCompleteBeforeAppStart.add(trackerDataLoadedFromDisk);
+
+    Future<Database> userInteractionDatabase =
+        _userInteractionDatabase.initDatabase();
+    futuresToCompleteBeforeAppStart.add(userInteractionDatabase);
+
+    Future<Map<String, int>> loadedDatabaseContent = userInteractionDatabase
+        .then((value) => _userInteractionDatabase.initializeDatabaseContent());
+    futuresToCompleteBeforeAppStart.add(loadedDatabaseContent);
+
+    return futuresToCompleteBeforeAppStart;
   }
 }
