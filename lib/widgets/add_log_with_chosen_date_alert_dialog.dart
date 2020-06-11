@@ -34,7 +34,7 @@ class AddLogWithChosenDateAlertDialog extends StatelessWidget {
         style: TextStyle(color: Colors.blue),
       ),
       onPressed: () {
-        Log createdLog = Log(
+        Log createdLog = Log<bool>(
             Log.yesOrNoToBool(selectLogValueSection.selectedValue),
             timeStamp: _selectedDate);
         print('created log: ${createdLog.toString()}');

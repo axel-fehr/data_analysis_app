@@ -9,22 +9,22 @@ import 'package:tracking_app/utils/statistics_utils/correlation.dart'
 void main() {
   test('Throw argument error when trackers have no logs from the same day',
       () async {
-    Tracker tracker1 = Tracker(
+    Tracker tracker1 = Tracker<bool>(
       'tracker1',
       'Boolean',
       logs: [
-        Log(true, timeStamp: DateTime(2020, 4, 15)),
-        Log(false, timeStamp: DateTime(2020, 4, 16)),
-        Log(false, timeStamp: DateTime(2020, 4, 18)),
+        Log<bool>(true, timeStamp: DateTime(2020, 4, 15)),
+        Log<bool>(false, timeStamp: DateTime(2020, 4, 16)),
+        Log<bool>(false, timeStamp: DateTime(2020, 4, 18)),
       ],
     );
-    Tracker tracker2 = Tracker(
+    Tracker tracker2 = Tracker<bool>(
       'tracker2',
       'Boolean',
       logs: [
-        Log(true, timeStamp: DateTime(2019, 4, 16)),
-        Log(true, timeStamp: DateTime(2020, 4, 17)),
-        Log(true, timeStamp: DateTime(2020, 5, 18)),
+        Log<bool>(true, timeStamp: DateTime(2019, 4, 16)),
+        Log<bool>(true, timeStamp: DateTime(2020, 4, 17)),
+        Log<bool>(true, timeStamp: DateTime(2020, 5, 18)),
       ],
     );
 
@@ -36,20 +36,20 @@ void main() {
 
   test('Correlation is NaN if there is only one pair of logs from the same day',
       () async {
-    Tracker tracker1 = Tracker(
+    Tracker tracker1 = Tracker<bool>(
       'tracker1',
       'Boolean',
       logs: [
-        Log(true, timeStamp: DateTime(2020, 4, 15)),
-        Log(false, timeStamp: DateTime(2020, 4, 16)),
+        Log<bool>(true, timeStamp: DateTime(2020, 4, 15)),
+        Log<bool>(false, timeStamp: DateTime(2020, 4, 16)),
       ],
     );
-    Tracker tracker2 = Tracker(
+    Tracker tracker2 = Tracker<bool>(
       'tracker2',
       'Boolean',
       logs: [
-        Log(true, timeStamp: DateTime(2020, 4, 15)),
-        Log(true, timeStamp: DateTime(2020, 4, 18)),
+        Log<bool>(true, timeStamp: DateTime(2020, 4, 15)),
+        Log<bool>(true, timeStamp: DateTime(2020, 4, 18)),
       ],
     );
 
@@ -67,22 +67,22 @@ void main() {
       'that are used to compute the correlation all have the same value '
       '(because of division by zero)', () async {
     // Test 1
-    Tracker tracker1 = Tracker(
+    Tracker tracker1 = Tracker<bool>(
       'tracker1',
       'Boolean',
       logs: [
-        Log(true, timeStamp: DateTime(2020, 1, 28)),
-        Log(false, timeStamp: DateTime(2020, 1, 30)),
-        Log(false, timeStamp: DateTime(2020, 1, 31)),
+        Log<bool>(true, timeStamp: DateTime(2020, 1, 28)),
+        Log<bool>(false, timeStamp: DateTime(2020, 1, 30)),
+        Log<bool>(false, timeStamp: DateTime(2020, 1, 31)),
       ],
     );
-    Tracker tracker2 = Tracker(
+    Tracker tracker2 = Tracker<bool>(
       'tracker2',
       'Boolean',
       logs: [
-        Log(true, timeStamp: DateTime(2020, 1, 29)),
-        Log(true, timeStamp: DateTime(2020, 1, 30)),
-        Log(false, timeStamp: DateTime(2020, 1, 31)),
+        Log<bool>(true, timeStamp: DateTime(2020, 1, 29)),
+        Log<bool>(true, timeStamp: DateTime(2020, 1, 30)),
+        Log<bool>(false, timeStamp: DateTime(2020, 1, 31)),
       ],
     );
 
@@ -95,21 +95,21 @@ void main() {
     expect(correlationWithReversedInput.isNaN, true);
 
     // Test 2
-    tracker1 = Tracker(
+    tracker1 = Tracker<bool>(
       'tracker1',
       'Boolean',
       logs: [
-        Log(false, timeStamp: DateTime(2020, 1, 1)),
-        Log(true, timeStamp: DateTime(2020, 1, 2)),
+        Log<bool>(false, timeStamp: DateTime(2020, 1, 1)),
+        Log<bool>(true, timeStamp: DateTime(2020, 1, 2)),
       ],
     );
-    tracker2 = Tracker(
+    tracker2 = Tracker<bool>(
       'tracker2',
       'Boolean',
       logs: [
-        Log(false, timeStamp: DateTime(2019, 12, 31)),
-        Log(true, timeStamp: DateTime(2020, 1, 1)),
-        Log(true, timeStamp: DateTime(2020, 1, 2)),
+        Log<bool>(false, timeStamp: DateTime(2019, 12, 31)),
+        Log<bool>(true, timeStamp: DateTime(2020, 1, 1)),
+        Log<bool>(true, timeStamp: DateTime(2020, 1, 2)),
       ],
     );
 
@@ -121,20 +121,20 @@ void main() {
     expect(correlationWithReversedInput.isNaN, true);
 
     // Test 3
-    tracker1 = Tracker(
+    tracker1 = Tracker<bool>(
       'tracker1',
       'Boolean',
       logs: [
-        Log(true, timeStamp: DateTime(2019, 12, 31)),
-        Log(true, timeStamp: DateTime(2020, 1, 1)),
+        Log<bool>(true, timeStamp: DateTime(2019, 12, 31)),
+        Log<bool>(true, timeStamp: DateTime(2020, 1, 1)),
       ],
     );
-    tracker2 = Tracker(
+    tracker2 = Tracker<bool>(
       'tracker2',
       'Boolean',
       logs: [
-        Log(true, timeStamp: DateTime(2019, 12, 31)),
-        Log(true, timeStamp: DateTime(2020, 1, 1)),
+        Log<bool>(true, timeStamp: DateTime(2019, 12, 31)),
+        Log<bool>(true, timeStamp: DateTime(2020, 1, 1)),
       ],
     );
 
@@ -151,22 +151,22 @@ void main() {
       'when there are enough log pairs and where the log value mean is not '
       'equal to all the log values)', () async {
     // Test 1
-    Tracker tracker1 = Tracker(
+    Tracker tracker1 = Tracker<bool>(
       'tracker1',
       'Boolean',
       logs: [
-        Log(true, timeStamp: DateTime(2020, 1, 29)),
-        Log(false, timeStamp: DateTime(2020, 1, 30)),
-        Log(true, timeStamp: DateTime(2020, 1, 31)),
+        Log<bool>(true, timeStamp: DateTime(2020, 1, 29)),
+        Log<bool>(false, timeStamp: DateTime(2020, 1, 30)),
+        Log<bool>(true, timeStamp: DateTime(2020, 1, 31)),
       ],
     );
-    Tracker tracker2 = Tracker(
+    Tracker tracker2 = Tracker<bool>(
       'tracker2',
       'Boolean',
       logs: [
-        Log(true, timeStamp: DateTime(2020, 1, 28)),
-        Log(true, timeStamp: DateTime(2020, 1, 30)),
-        Log(false, timeStamp: DateTime(2020, 1, 31)),
+        Log<bool>(true, timeStamp: DateTime(2020, 1, 28)),
+        Log<bool>(true, timeStamp: DateTime(2020, 1, 30)),
+        Log<bool>(false, timeStamp: DateTime(2020, 1, 31)),
       ],
     );
 
@@ -179,23 +179,23 @@ void main() {
     expect(correlationWithReversedInput, -1.0);
 
     // Test 2
-    tracker1 = Tracker(
+    tracker1 = Tracker<bool>(
       'tracker1',
       'Boolean',
       logs: [
-        Log(true, timeStamp: DateTime(2019, 12, 31)),
-        Log(false, timeStamp: DateTime(2020, 1, 1)),
-        Log(false, timeStamp: DateTime(2020, 1, 2)),
+        Log<bool>(true, timeStamp: DateTime(2019, 12, 31)),
+        Log<bool>(false, timeStamp: DateTime(2020, 1, 1)),
+        Log<bool>(false, timeStamp: DateTime(2020, 1, 2)),
       ],
     );
-    tracker2 = Tracker(
+    tracker2 = Tracker<bool>(
       'tracker2',
       'Boolean',
       logs: [
-        Log(true, timeStamp: DateTime(2019, 12, 31)),
-        Log(false, timeStamp: DateTime(2020, 1, 1)),
-        Log(true, timeStamp: DateTime(2020, 1, 2)),
-        Log(false, timeStamp: DateTime(2020, 1, 3)),
+        Log<bool>(true, timeStamp: DateTime(2019, 12, 31)),
+        Log<bool>(false, timeStamp: DateTime(2020, 1, 1)),
+        Log<bool>(true, timeStamp: DateTime(2020, 1, 2)),
+        Log<bool>(false, timeStamp: DateTime(2020, 1, 3)),
       ],
     );
 
@@ -207,25 +207,25 @@ void main() {
     expect(correlationWithReversedInput, 0.5);
 
     // Test 3
-    tracker1 = Tracker(
+    tracker1 = Tracker<bool>(
       'tracker1',
       'Boolean',
       logs: [
-        Log(false, timeStamp: DateTime(2021, 10, 3)),
-        Log(true, timeStamp: DateTime(2021, 10, 4)),
-        Log(false, timeStamp: DateTime(2021, 10, 5)),
-        Log(false, timeStamp: DateTime(2021, 10, 18)),
-        Log(true, timeStamp: DateTime(2021, 11, 2)),
+        Log<bool>(false, timeStamp: DateTime(2021, 10, 3)),
+        Log<bool>(true, timeStamp: DateTime(2021, 10, 4)),
+        Log<bool>(false, timeStamp: DateTime(2021, 10, 5)),
+        Log<bool>(false, timeStamp: DateTime(2021, 10, 18)),
+        Log<bool>(true, timeStamp: DateTime(2021, 11, 2)),
       ],
     );
-    tracker2 = Tracker(
+    tracker2 = Tracker<bool>(
       'tracker2',
       'Boolean',
       logs: [
-        Log(true, timeStamp: DateTime(2021, 10, 3)),
-        Log(false, timeStamp: DateTime(2021, 10, 5)),
-        Log(true, timeStamp: DateTime(2021, 10, 18)),
-        Log(false, timeStamp: DateTime(2021, 11, 2)),
+        Log<bool>(true, timeStamp: DateTime(2021, 10, 3)),
+        Log<bool>(false, timeStamp: DateTime(2021, 10, 5)),
+        Log<bool>(true, timeStamp: DateTime(2021, 10, 18)),
+        Log<bool>(false, timeStamp: DateTime(2021, 11, 2)),
       ],
     );
 

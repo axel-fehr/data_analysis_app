@@ -23,10 +23,10 @@ double computeCorrelationBetweenTwoTrackers(
   List<int> tracker1MatchingLogIndices = sameDateLogsIndices[0];
   List<int> tracker2MatchingLogIndices = sameDateLogsIndices[1];
 
-  List<Log> tracker1MatchingLogs = List.generate(
+  List<Log<bool>> tracker1MatchingLogs = List.generate(
       tracker1MatchingLogIndices.length,
       (index) => tracker1.logs[tracker1MatchingLogIndices[index]]);
-  List<Log> tracker2MatchingLogs = List.generate(
+  List<Log<bool>> tracker2MatchingLogs = List.generate(
       tracker2MatchingLogIndices.length,
       (index) => tracker2.logs[tracker2MatchingLogIndices[index]]);
 
@@ -43,7 +43,7 @@ double computeCorrelationBetweenTwoTrackers(
 
 /// Converts the Boolean log values in the given list of binary logs to a list
 /// of integers, where 'true' -> 1 and 'false' -> 0.
-List<int> convertBooleanLogValuesToInt(List<Log> logs) {
+List<int> convertBooleanLogValuesToInt(List<Log<bool>> logs) {
   List<int> logValuesAsInt = [];
   logs.forEach((log) => logValuesAsInt.add(mapBoolToInt(log.value)));
   return logValuesAsInt;

@@ -139,7 +139,7 @@ class LogDatabase {
   }
 
   /// Retrieves all the logs from the tracker table.
-  Future<List<Log>> readLogs() async {
+  Future<List<Log<bool>>> readLogs() async {
     final Database db = await _database;
 
     final List<Map<String, dynamic>> maps =
@@ -147,7 +147,7 @@ class LogDatabase {
 
     // Convert the List<Map<String, dynamic> into a List<Log>.
     return List.generate(maps.length, (i) {
-      return Log(
+      return Log<bool>(
         mapIntLogValueFromDatabaseToBool(maps[i]['value']),
         timeStamp: DateTime.parse(maps[i]['timeStamp']),
       );

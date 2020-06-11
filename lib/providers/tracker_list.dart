@@ -46,10 +46,7 @@ class TrackerList with ChangeNotifier {
     return loadLogsFutures;
   }
 
-  void addTracker(String trackerName) async {
-    // TODO: make tracker type a non-hard coded argument here
-    Tracker trackerToAdd =
-        Tracker(trackerName, globals.yesNoTrackerType, initializeWithEmptyLogList: true);
+  void addTracker(Tracker trackerToAdd) async {
     _trackers.add(trackerToAdd);
     notifyListeners();
 
@@ -119,7 +116,7 @@ class TrackerList with ChangeNotifier {
   /// tracker -- the tracker that the log will be added to
   /// logToAdd -- the log that will be added
   void addLog(Tracker tracker, Log logToAdd) {
-    tracker.addLog(logToAdd);
+    tracker.addLog(Log.castDynamicTypeLogToSpecificType(logToAdd));
     tracker.sortLogsByDate();
     notifyListeners();
   }

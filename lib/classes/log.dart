@@ -1,18 +1,30 @@
-class Log {
-  bool _value;
+/// Log class with a generic type that is a placeholder for the log type (e.g.
+/// bool, int or float).
+class Log<T> {
+  T _value;
   DateTime _timeStamp;
 
-  Log(bool value, {DateTime timeStamp}) {
+  Log(T value, {DateTime timeStamp}) {
     _value = value;
     _timeStamp = timeStamp ?? DateTime.now();
   }
 
-  bool get value => _value;
+  T get value => _value;
   DateTime get timeStamp => _timeStamp;
-  String get valueAsYesOrNo => _value ? 'Yes' : 'No';
 
-  set value(bool value) {
+  set value(T value) {
     _value = value;
+  }
+
+  /// Meant to be used to cast Log<dynamic> to Log<T>, where T is the runtime
+  /// type of the log's value (e.g. bool, int or float).
+  static Log castDynamicTypeLogToSpecificType(Log log) {
+    switch (log.value.runtimeType) {
+      case bool:
+        return Log<bool>(log.value, timeStamp: log.timeStamp);
+      default:
+        throw ArgumentError('Unexpected log type: ${log.value.runtimeType}');
+    }
   }
 
   static String boolToYesOrNo(bool value) {
@@ -20,21 +32,20 @@ class Log {
   }
 
   static bool yesOrNoToBool(String value) {
-    if(value == 'Yes' || value == 'yes') {
+    if (value == 'Yes' || value == 'yes') {
       return true;
-    }
-    else if (value == 'No' || value == 'no') {
+    } else if (value == 'No' || value == 'no') {
       return false;
-    }
-    else {
-      throw('Given string cannot be converted to a Boolean log value');
+    } else {
+      throw ArgumentError(
+          'Given string cannot be converted to a Boolean log value');
     }
   }
 
   Map<String, dynamic> toMap() {
     return {
-      'timeStamp' : _timeStamp.toIso8601String(),
-      'value' : _value,
+      'timeStamp': _timeStamp.toIso8601String(),
+      'value': _value,
     };
   }
 

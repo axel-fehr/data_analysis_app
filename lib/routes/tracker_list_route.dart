@@ -5,6 +5,7 @@ import 'package:provider/provider.dart';
 
 import '../utils/general.dart' as utils;
 import '../providers/tracker_list.dart';
+import '../classes/tracker.dart';
 import '../widgets/tracker_list_with_add_log_button_list_view.dart';
 import '../widgets/disclaimer_or_warning.dart';
 import '../widgets/add_tracker_alert_dialog.dart';
@@ -135,17 +136,19 @@ class AddTrackerButton extends StatelessWidget {
         style: TextStyle(fontWeight: FontWeight.bold, fontSize: 35),
       ),
       onPressed: () {
-        showAlertDialogToAddTracker(context).then((onValue) {
-          if (onValue != null && onValue != '') {
-            final trackerListObject = Provider.of<TrackerList>(context);
-            trackerListObject.addTracker(onValue);
+        letUserCreateTracker(context).then((Tracker createdTracker) {
+          if (createdTracker != null) {
+            if (createdTracker.name != '' && createdTracker.name != null) {
+              final trackerListObject = Provider.of<TrackerList>(context);
+              trackerListObject.addTracker(createdTracker);
+            }
           }
         });
       },
     );
   }
 
-  Future<String> showAlertDialogToAddTracker(BuildContext context) {
+  Future<Tracker> letUserCreateTracker(BuildContext context) {
     return showDialog(
         context: context,
         builder: (context) {

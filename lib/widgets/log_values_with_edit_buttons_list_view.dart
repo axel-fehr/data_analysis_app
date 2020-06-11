@@ -127,7 +127,7 @@ class LogValueWithDate extends StatelessWidget {
   Widget build(BuildContext context) {
     return Stack(
       children: <Widget>[
-        Text(_log.valueAsYesOrNo),
+        Text(Log.boolToYesOrNo(_log.value)),
         Align(
           alignment: Alignment.center,
           child: Text(
