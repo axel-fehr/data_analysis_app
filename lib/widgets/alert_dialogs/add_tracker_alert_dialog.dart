@@ -5,8 +5,10 @@ import 'package:provider/provider.dart';
 import 'package:tracking_app/enumerations/user_interaction.dart';
 
 import '../providers/tracker_list.dart';
+import '../classes/tracker.dart';
 import '../classes/user_interaction_database.dart';
 import '../widgets/bulleted_list.dart';
+import '../enumerations/tracker_type.dart';
 
 class AddTrackerAlertDialog extends StatefulWidget {
   @override
@@ -18,13 +20,6 @@ class _AddTrackerAlertDialogState extends State<AddTrackerAlertDialog> {
   static const Text _trackerNameWarning = Text(
     'Name already exists!',
     style: TextStyle(color: Colors.redAccent),
-  );
-
-  // A hint that tells the user what kind of tracker to enter, to make it
-  // clear that it has to be something answerable with yes or no.
-  static const Text _inputHint = Text(
-    "Must be answerable with 'yes' or 'no'",
-    style: TextStyle(color: Colors.black45),
   );
 
   final TextEditingController _customController = TextEditingController();
@@ -40,6 +35,9 @@ class _AddTrackerAlertDialogState extends State<AddTrackerAlertDialog> {
     TextField enterTrackerNameTextField = TextField(
       controller: _customController,
       maxLength: 50,
+      decoration: InputDecoration.collapsed(
+          hintText: 'Example: "number of hours I slept"',
+          border: UnderlineInputBorder()),
       onChanged: (String enteredText) {
         if (trackerNames.contains(_customController.text.toString())) {
           setState(() {
@@ -55,16 +53,46 @@ class _AddTrackerAlertDialogState extends State<AddTrackerAlertDialog> {
       },
     );
 
+    TrackerTypeChoiceList trackerTypeChoiceList = TrackerTypeChoiceList();
+    const double defaultContentPaddingValue = 20.0;
+
     return AlertDialog(
       title: const Text('What do you want to track?'),
+
+      // no horizontal padding for all elements because the list tiles already
+      // have horizontal padding, so horizontal padding is added to all widgets
+      // except the list tiles
+      contentPadding:
+          EdgeInsets.symmetric(vertical: defaultContentPaddingValue),
+
       content: SingleChildScrollView(
         child: Column(
           mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
-            enterTrackerNameTextField,
             Padding(
-              padding: const EdgeInsets.only(top: 8.0),
-              child: showTrackerNameWarning ? _trackerNameWarning : _inputHint,
+              padding: const EdgeInsets.symmetric(
+                  horizontal: defaultContentPaddingValue),
+              child: enterTrackerNameTextField,
+            ),
+            Align(
+              alignment: Alignment.topCenter,
+              child: Padding(
+                padding: const EdgeInsets.only(bottom: 8.0),
+                child: showTrackerNameWarning ? _trackerNameWarning : Text(''),
+              ),
+            ),
+            Container(
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  trackerTypeChoiceList,
+                ],
+              ),
+              // TODO: figure out a way to adjust the size and width to the content without having to set a specific height and width
+              height: 200,
+              width: 300,
             ),
           ],
         ),
@@ -80,6 +108,7 @@ class _AddTrackerAlertDialogState extends State<AddTrackerAlertDialog> {
             String enteredTrackerName = _customController.text.toString();
             // if the tracker name does not already exist, add the tracker
             if (!trackerNames.contains(enteredTrackerName)) {
+              // check if the tracker is the first very first one created
               bool userCreatedHisFirstTracker = false;
               UserInteractionDatabase userInteractionDatabase =
                   Provider.of<UserInteractionDatabase>(context);
@@ -89,7 +118,25 @@ class _AddTrackerAlertDialogState extends State<AddTrackerAlertDialog> {
                 userInteractionDatabase
                     .recordUserInteraction(UserInteraction.createdTracker);
               }
-              Navigator.of(context).pop(enteredTrackerName);
+
+              Tracker trackerToAdd;
+              switch (trackerTypeChoiceList.chosenTrackerType) {
+                case TrackerType.yesNo:
+                  trackerToAdd = Tracker<bool>(enteredTrackerName,
+                      initializeWithEmptyLogList: true);
+                  break;
+                case TrackerType.integer:
+                  trackerToAdd = Tracker<int>(enteredTrackerName,
+                      initializeWithEmptyLogList: true);
+                  break;
+                case TrackerType.decimal:
+                  trackerToAdd = Tracker<double>(enteredTrackerName,
+                      initializeWithEmptyLogList: true);
+                  break;
+                default:
+                  throw('Unexpected tracker type: ${trackerTypeChoiceList.chosenTrackerType}');
+              }
+              Navigator.of(context).pop(trackerToAdd);
 
               if (userCreatedHisFirstTracker) {
                 showAppExplanation(context);
@@ -146,6 +193,55 @@ class ExplainAppBasicsAlertDialog extends StatelessWidget {
           ],
         ),
       ),
+    );
+  }
+}
+
+class TrackerTypeChoiceList extends StatefulWidget {
+  TrackerType _chosenTrackerType = TrackerType.yesNo;
+  TrackerType get chosenTrackerType => _chosenTrackerType;
+
+  @override
+  _TrackerTypeChoiceListState createState() => _TrackerTypeChoiceListState();
+}
+
+class _TrackerTypeChoiceListState extends State<TrackerTypeChoiceList> {
+  @override
+  Widget build(BuildContext context) {
+    void setChosenTrackerType(TrackerType type) {
+      setState(() {
+        widget._chosenTrackerType = type;
+      });
+    }
+
+    return ListView(
+      shrinkWrap: true,
+      children: <Widget>[
+        RadioListTile(
+          title: Text('Yes/No'),
+          subtitle: Text('Example: whether you exercised or not'),
+          value: TrackerType.yesNo,
+          groupValue: widget._chosenTrackerType,
+          onChanged: (TrackerType value) => setChosenTrackerType(value),
+        ),
+        RadioListTile(
+          title: Text('Whole numbers'),
+          subtitle: Text(
+              'Examples: 1, 2, 3 etc. (e.g. how many cups of coffee you drank)'),
+          value: TrackerType.integer,
+          groupValue: widget._chosenTrackerType,
+          onChanged: (TrackerType value) => setChosenTrackerType(value),
+        ),
+        RadioListTile(
+          title: Text('Decimal numbers'),
+          subtitle: Text(
+              'Examples: 0.2, 82.7, 7.5 etc. (e.g. how many hours you slept)'),
+          value: TrackerType.decimal,
+          groupValue: widget._chosenTrackerType,
+          onChanged: (TrackerType value) => setChosenTrackerType(value),
+        ),
+      ],
+      physics: const NeverScrollableScrollPhysics(),
     );
   }
 }
