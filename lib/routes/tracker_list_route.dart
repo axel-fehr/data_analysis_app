@@ -8,7 +8,8 @@ import '../providers/tracker_list.dart';
 import '../classes/tracker.dart';
 import '../widgets/tracker_list_with_add_log_button_list_view.dart';
 import '../widgets/disclaimer_or_warning.dart';
-import '../widgets/add_tracker_alert_dialog.dart';
+import '../widgets/alert_dialogs/add_tracker_alert_dialog.dart'
+    show AddTrackerAlertDialog;
 
 class TrackerListRoute extends StatefulWidget {
   @override

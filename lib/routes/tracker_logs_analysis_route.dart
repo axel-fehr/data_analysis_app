@@ -10,7 +10,7 @@ import '../classes/log.dart';
 import '../widgets/log_values_with_edit_buttons_list_view.dart';
 import '../widgets/log_statistics_widgets/for_binary_trackers/binary_tracker_log_stats.dart';
 import '../widgets/log_statistics_widgets/styling.dart';
-import '../widgets/add_log_with_chosen_date_alert_dialog.dart';
+import '../widgets/alert_dialogs/add_log_with_chosen_date_alert_dialog.dart';
 import '../utils/rename_tracker_utils.dart' as rename_tracker_utils;
 
 class TrackerLogsAnalysisRoute extends StatelessWidget {

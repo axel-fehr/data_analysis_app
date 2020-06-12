@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:tracking_app/utils/general.dart';
 import 'package:flutter/cupertino.dart';
 
-import '../classes/tracker.dart';
-import '../classes/log.dart';
+import '../../classes/tracker.dart';
+import '../../classes/log.dart';
 import 'alertDialogWithSetWidth.dart';
 
 class AddLogWithChosenDateAlertDialog extends StatelessWidget {

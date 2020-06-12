@@ -4,11 +4,11 @@ import 'package:flutter/widgets.dart';
 import 'package:provider/provider.dart';
 import 'package:tracking_app/enumerations/user_interaction.dart';
 
-import '../providers/tracker_list.dart';
-import '../classes/tracker.dart';
-import '../classes/user_interaction_database.dart';
-import '../widgets/bulleted_list.dart';
-import '../enumerations/tracker_type.dart';
+import '../../providers/tracker_list.dart';
+import '../../classes/tracker.dart';
+import '../../classes/user_interaction_database.dart';
+import '../bulleted_list.dart';
+import '../../enumerations/tracker_type.dart';
 
 class AddTrackerAlertDialog extends StatefulWidget {
   @override
