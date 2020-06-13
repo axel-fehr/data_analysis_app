@@ -5,7 +5,9 @@ import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
 import './log.dart';
 
-class LogDatabase {
+/// A log database that stores logs of the given type T (T is a generic type and
+/// must be specified).
+class LogDatabase<T> {
   String _trackerName;
   String _tableNameInDoubleQuotationMarks;
   String _databasePath;
@@ -17,9 +19,12 @@ class LogDatabase {
   /// [_trackerName] : the name of the tracker whose logs are stored in
   ///                  the database.
   LogDatabase(this._trackerName) {
+    assert(T != dynamic,
+        'The generic type of a log database must not be dynamic.');
+
     // double quotation marks are used to handle names with spaces
     _tableNameInDoubleQuotationMarks =
-        getTableNameInDoubleQuotationMarks(_trackerName);
+        _getTableNameInDoubleQuotationMarks(_trackerName);
   }
 
   /// Returns the name of the table that stores the logs of a tracker with the
@@ -27,7 +32,7 @@ class LogDatabase {
   ///
   /// Double quotation marks are needed to handle tracker names with spaces in
   /// them.
-  String getTableNameInDoubleQuotationMarks(String trackerName) {
+  String _getTableNameInDoubleQuotationMarks(String trackerName) {
     return '"' + trackerName + '_logs' + '"';
   }
 
@@ -37,21 +42,22 @@ class LogDatabase {
   /// member functions are called! This is because this function is essential
   /// but cannot be executed in the constructor because it is asynchronous.
   Future<void> setUpDatabase() async {
-    _database = createNewDatabase(_trackerName).then((Database db) {
+    _database = _createNewDatabase(_trackerName).then((Database db) {
       _databasePath = db.path;
       return db;
     });
   }
 
-  Future<Database> createNewDatabase(String trackerName) async {
+  Future<Database> _createNewDatabase(String trackerName) async {
     WidgetsFlutterBinding.ensureInitialized();
     String databasePath =
         join(await getDatabasesPath(), trackerName + '_log_database.db');
     String tableNameInDoubleQuotationMarks =
-        getTableNameInDoubleQuotationMarks(trackerName);
+        _getTableNameInDoubleQuotationMarks(trackerName);
     Future<Database> database = openDatabase(
       databasePath,
       onCreate: (db, version) {
+        // TODO: change this depending on T
         String command =
             'CREATE TABLE IF NOT EXISTS $tableNameInDoubleQuotationMarks('
             'timeStamp DATETIME PRIMARY KEY, '
@@ -72,14 +78,14 @@ class LogDatabase {
   /// be changed to.
   void updateTrackerName(String newTrackerName) async {
     // create new DB with table
-    Future<Database> newDBFuture = createNewDatabase(newTrackerName);
+    Future<Database> newDBFuture = _createNewDatabase(newTrackerName);
     Database newDB = await newDBFuture;
 
     // copy data from old DB
     String oldDatabaseAlias = 'old_database';
     await newDB.rawQuery('ATTACH DATABASE "${_databasePath}" '
         'AS $oldDatabaseAlias');
-    String newTableName = getTableNameInDoubleQuotationMarks(newTrackerName);
+    String newTableName = _getTableNameInDoubleQuotationMarks(newTrackerName);
     String copyLogTableCommand = 'INSERT INTO $newTableName '
         'SELECT * FROM '
         '$oldDatabaseAlias.$_tableNameInDoubleQuotationMarks';
@@ -102,7 +108,7 @@ class LogDatabase {
   }
 
   /// Inserts a log object into the database
-  Future<void> insertLog(Log log) async {
+  Future<void> insertLog(Log<T> log) async {
     final Database db = await _database;
 
     await db.insert(
@@ -112,7 +118,7 @@ class LogDatabase {
     );
   }
 
-  Future<void> updateLog(Log log) async {
+  Future<void> updateLog(Log<T> log) async {
     final Database db = await _database;
 
     await db.update(
@@ -139,7 +145,7 @@ class LogDatabase {
   }
 
   /// Retrieves all the logs from the tracker table.
-  Future<List<Log<bool>>> readLogs() async {
+  Future<List<Log<T>>> readLogs() async {
     final Database db = await _database;
 
     final List<Map<String, dynamic>> maps =
@@ -147,14 +153,24 @@ class LogDatabase {
 
     // Convert the List<Map<String, dynamic> into a List<Log>.
     return List.generate(maps.length, (i) {
-      return Log<bool>(
-        mapIntLogValueFromDatabaseToBool(maps[i]['value']),
+      var logValue;
+
+      if (T == bool) {
+        logValue = _mapIntLogValueFromDatabaseToBool(maps[i]['value']);
+      } else if (T == int || T == double) {
+        logValue = maps[i]['value'];
+      } else {
+        throw ('Unexpected value for the generic type: $T');
+      }
+
+      return Log<T>(
+        logValue,
         timeStamp: DateTime.parse(maps[i]['timeStamp']),
       );
     });
   }
 
-  bool mapIntLogValueFromDatabaseToBool(int logValueFromDatabase) {
+  bool _mapIntLogValueFromDatabaseToBool(int logValueFromDatabase) {
     if (logValueFromDatabase == 0) {
       return false;
     } else if (logValueFromDatabase == 1) {
