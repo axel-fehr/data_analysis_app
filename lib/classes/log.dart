@@ -1,10 +1,12 @@
-/// Log class with a generic type that is a placeholder for the log type (e.g.
-/// bool, int or float).
+/// Log class with a generic type T that is a placeholder for the log type (e.g.
+/// bool, int or float). T must be specified.
 class Log<T> {
   T _value;
   DateTime _timeStamp;
 
   Log(T value, {DateTime timeStamp}) {
+    assert(T != dynamic, 'The generic type of a log must not be dynamic.');
+
     _value = value;
     _timeStamp = timeStamp ?? DateTime.now();
   }
@@ -22,6 +24,10 @@ class Log<T> {
     switch (log.value.runtimeType) {
       case bool:
         return Log<bool>(log.value, timeStamp: log.timeStamp);
+      case int:
+        return Log<int>(log.value, timeStamp: log.timeStamp);
+      case double:
+        return Log<double>(log.value, timeStamp: log.timeStamp);
       default:
         throw ArgumentError('Unexpected log type: ${log.value.runtimeType}');
     }
