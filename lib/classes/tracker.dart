@@ -1,25 +1,29 @@
 import './log.dart';
 import './log_database.dart';
+import '../enumerations/tracker_type.dart';
 
-class Tracker {
+/// Stores a list of logs of the given type T (T is a generic type and must be
+/// specified) and provides an interface to manipulate them.
+class Tracker<T> {
   String _name;
-  final String _type;
-  List<Log> _logs;
+  final Type _logType = T;
+  List<Log<T>> _logs;
   LogDatabase _logDatabase;
 
   /// Creates a tracker object.
   ///
   /// Arguments:
   /// name -- the name of the tracker
-  /// type -- the tracker type (e.g. Boolean)
   /// logs -- a list of Logs the tracker has (must be null
   ///         if [initializeWithEmptyLogList == true])
   /// initializeWithEmptyLogList -- whether to initialize the object with an
   ///                               empty list of logs (must be false if a list
   ///                               of logs is given)
-  Tracker(this._name, this._type,
-      {List<Log> logs, bool initializeWithEmptyLogList = false}) {
-    _logDatabase = LogDatabase(_name);
+  Tracker(this._name,
+      {List<Log<T>> logs, bool initializeWithEmptyLogList = false}) {
+    _logDatabase = LogDatabase<T>(_name);
+
+    assert(T != dynamic, 'The generic type of a tracker must not be dynamic.');
 
     if (initializeWithEmptyLogList && logs == null) {
       _logs = [];
@@ -31,13 +35,13 @@ class Tracker {
     }
   }
 
-  String get type => _type;
+  Type get logType => _logType;
   String get name => _name;
-  List<Log> get logs => _logs;
+  List<Log<T>> get logs => _logs;
 
-  Future<List<Log>> loadLogsFromDisk() async {
+  Future<List<Log<T>>> loadLogsFromDisk() async {
     await setUpLogDatabase();
-    List<Log> loadedLogs = await _logDatabase.readLogs().then(
+    List<Log<T>> loadedLogs = await _logDatabase.readLogs().then(
       (List<Log> onValue) {
         _logs = onValue;
         sortLogsByDate();
@@ -51,7 +55,7 @@ class Tracker {
   /// time stamps dates are before logs with later time stamp dates.
   void sortLogsByDate() {
     /// Comparator for logs.
-    int compareLogTimeStamps(Log log1, Log log2) {
+    int compareLogTimeStamps(Log<T> log1, Log<T> log2) {
       return log1.timeStamp.compareTo(log2.timeStamp) * (-1);
     }
 
@@ -66,7 +70,7 @@ class Tracker {
     await _logDatabase.deleteDatabaseFromDisk();
   }
 
-  void addLog(Log logToAdd) {
+  void addLog(Log<T> logToAdd) {
     _logs.add(logToAdd);
     _logDatabase.insertLog(logToAdd);
   }
@@ -77,8 +81,8 @@ class Tracker {
   /// timeStampOfLogToChange: unique time stamp of the log whose value is going
   ///                         to be changed
   /// newLogValue: value that the log will have after the change
-  void changeLogValue(DateTime timeStampOfLogToChange, bool newLogValue) {
-    Log matchingLog = _logs.singleWhere(
+  void changeLogValue(DateTime timeStampOfLogToChange, T newLogValue) {
+    Log<T> matchingLog = _logs.singleWhere(
         (log) => log.timeStamp == timeStampOfLogToChange,
         orElse: () =>
             throw ('No log found that matches the given time stamp.'));
@@ -101,15 +105,8 @@ class Tracker {
     _logDatabase.updateTrackerName(newName);
   }
 
-  Map<String, dynamic> toMap() {
-    return {
-      'name': _name,
-      'type': _type,
-    };
-  }
-
   @override
   String toString() {
-    return 'Tracker{name: $_name, type: $_type}';
+    return 'Tracker{name: $_name, log type: $_logType}';
   }
 }

@@ -3,6 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import 'package:tracking_app/global_variables.dart' as globals;
+import '../enumerations/tracker_type.dart';
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
 import 'tracker.dart';
@@ -82,19 +83,35 @@ class TrackerDatabase {
 
     assert(listIndex == await readTrackers().then((value) => value.length));
 
+    String trackerTypeAsString = getTrackerTypeAsString(tracker);
     return db.rawInsert('INSERT INTO $_tableName(name, type, list_index) '
-        'VALUES("${tracker.name}", "${tracker.type}", $listIndex)');
+        'VALUES("${tracker.name}", "$trackerTypeAsString", $listIndex)');
+  }
+
+  /// Returns a string designating the type of the given tracker.
+  ///
+  /// The tracker type is inferred based on the log type of the given tracker.
+  String getTrackerTypeAsString(Tracker tracker) {
+    switch (tracker.logType) {
+      case bool:
+        return globals.yesNoTrackerType;
+      case int:
+        return globals.intTrackerType;
+      case double:
+        return globals.decimalTrackerType;
+      default:
+        throw ArgumentError('Unexpected log type "${tracker.logType}" could '
+            'not be mapped to a known tracker type');
+    }
   }
 
   Future<void> updateTrackerName(
       String oldTrackerName, String newTrackerName) async {
     final Database db = await _database;
-    await db.update(
-      _tableName,
-      Tracker(newTrackerName, globals.yesNoTrackerType).toMap(),
-      where: 'name = ?',
-      whereArgs: [oldTrackerName],
-    );
+
+    await db.rawUpdate('UPDATE $_tableName '
+        'SET name = "$newTrackerName" '
+        'WHERE name = "$oldTrackerName"');
   }
 
   Future<void> deleteTracker(Tracker trackerToDelete,
@@ -124,11 +141,51 @@ class TrackerDatabase {
       // to return the trackers in the order determined by the way the user
       // ordered the tracker list on the main screen
       Map trackerMap = maps.singleWhere((map) => map['list_index'] == i);
-      return Tracker(
-        trackerMap['name'],
-        trackerMap['type'],
-      );
+
+      Type logType = mapTrackerTypeAsStringToLogType(trackerMap['type']);
+      switch (logType) {
+        case bool:
+          return Tracker<bool>(trackerMap['name']);
+        case int:
+          return Tracker<int>(trackerMap['name']);
+        case double:
+          return Tracker<double>(trackerMap['name']);
+        default:
+          throw ('Unexpected log type: "$logType".');
+      }
     });
+  }
+
+  /// Maps a given String that is expected to designate a tracker type to a
+  /// concrete type that the logs of the tracker with the given type have.
+  ///
+  /// This method throws an ArgumentError if the given string does not contain
+  /// known keywords that can be mapped to a concrete type.
+  ///
+  /// This method is used to ensure that the strings that designate the tracker
+  /// types can still be mapped to log types even if these strings change over
+  /// the course of development of were different in the past.
+  Type mapTrackerTypeAsStringToLogType(String trackerTypeAsString) {
+    // lowercase used to make the following check case insensitive
+    trackerTypeAsString = trackerTypeAsString.toLowerCase();
+
+    if (trackerTypeAsString.contains('binary') ||
+        trackerTypeAsString.contains('boolean')) {
+      return bool;
+    } else if (trackerTypeAsString.contains('int') ||
+        trackerTypeAsString.contains('integer')) {
+      return int;
+    } else if (trackerTypeAsString.contains('decimal') ||
+        trackerTypeAsString.contains('double') ||
+        trackerTypeAsString.contains('float')) {
+      return double;
+    } else if (trackerTypeAsString.contains('yes') &&
+        trackerTypeAsString.contains('no')) {
+      return bool;
+    } else {
+      throw ArgumentError(
+          'Unexpected tracker type as string: "$trackerTypeAsString"');
+    }
   }
 
   void changePositionOfTracker(
