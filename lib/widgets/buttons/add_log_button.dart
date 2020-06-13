@@ -4,7 +4,7 @@ import 'package:flutter/widgets.dart';
 
 import '../../classes/tracker.dart';
 import '../../utils/general.dart';
-import '../alert_dialogs/add_log_alert_dialog.dart';
+import '../alert_dialogs/add_log_alert_dialog.dart' show AddLogAlertDialog;
 
 /// A button that can be used to add logs.
 ///
