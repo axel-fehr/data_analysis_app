@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:sqflite/sqflite.dart';
 
-import 'package:tracking_app/global_variables.dart' as globals;
 import '../classes/tracker.dart';
 import '../classes/tracker_database.dart';
 import '../classes/log.dart';
