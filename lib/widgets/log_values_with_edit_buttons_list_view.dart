@@ -125,9 +125,20 @@ class LogValueWithDate extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    String logValueAsString;
+    Type logType = _log.value.runtimeType;
+
+    if (logType == bool) {
+      logValueAsString = Log.boolToYesOrNo(_log.value);
+    } else if (logType == int || logType == double) {
+      logValueAsString = _log.value.toString();
+    } else {
+      throw ('Unexpected runtime type of log value: $logType');
+    }
+
     return Stack(
       children: <Widget>[
-        Text(Log.boolToYesOrNo(_log.value)),
+        Text(logValueAsString),
         Align(
           alignment: Alignment.center,
           child: Text(
