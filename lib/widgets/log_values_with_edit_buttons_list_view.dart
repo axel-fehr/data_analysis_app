@@ -37,13 +37,13 @@ class _LogValuesWithEditButtonsListViewState
 
   /// Triggers a rebuild of the list of logs after the deletion of a log.
   ///
-  /// This function is workaround needed because using the notifying all
-  /// listeners after deleting a log of a tracker does not immediately trigger
-  /// a rebuild of the list such that the log that was deleted does not
-  /// disappear in the list. The reason for this is not entirely understood but
-  /// could be because the context of the log that is being deleted is still
-  /// there when the listeners are notified and the associated row in the list
-  /// is therefore still rebuilt.
+  /// This function is a workaround needed because using [notifyListeners()]
+  /// in the tracker list object after deleting a log of a tracker does not
+  /// immediately trigger a rebuild of the list so the log that was
+  /// deleted does not disappear in the list. The reason for this is not
+  /// entirely understood but could be because the context of the log that is
+  /// being deleted is still there when the listeners are notified and the
+  /// associated row in the list is therefore still rebuilt.
   /// Calling this function when a log is deleted in the LogWithEditButton
   /// widget ensures the list is immediately updated and the deleted log
   /// disappears as the user would expect.
