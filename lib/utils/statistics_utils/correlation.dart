@@ -23,37 +23,72 @@ double computeCorrelationBetweenTwoTrackers(
   List<int> tracker1MatchingLogIndices = sameDateLogsIndices[0];
   List<int> tracker2MatchingLogIndices = sameDateLogsIndices[1];
 
-  List<Log<bool>> tracker1MatchingLogs = List.generate(
+  List<Log> tracker1MatchingLogs = List.generate(
       tracker1MatchingLogIndices.length,
       (index) => tracker1.logs[tracker1MatchingLogIndices[index]]);
-  List<Log<bool>> tracker2MatchingLogs = List.generate(
+  List<Log> tracker2MatchingLogs = List.generate(
       tracker2MatchingLogIndices.length,
       (index) => tracker2.logs[tracker2MatchingLogIndices[index]]);
 
-  List<int> tracker1MatchingLogValuesAsInt =
-      convertBooleanLogValuesToInt(tracker1MatchingLogs);
-  List<int> tracker2MatchingLogValuesAsInt =
-      convertBooleanLogValuesToInt(tracker2MatchingLogs);
-
   double correlation = computeCorrelationWithListsOfNumbers(
-      tracker1MatchingLogValuesAsInt, tracker2MatchingLogValuesAsInt);
+    getLogValuesAsDoubles(tracker1MatchingLogs),
+    getLogValuesAsDoubles(tracker2MatchingLogs),
+  );
 
   return correlation;
 }
 
-/// Converts the Boolean log values in the given list of binary logs to a list
-/// of integers, where 'true' -> 1 and 'false' -> 0.
-List<int> convertBooleanLogValuesToInt(List<Log<bool>> logs) {
-  List<int> logValuesAsInt = [];
-  logs.forEach((log) => logValuesAsInt.add(mapBoolToInt(log.value)));
-  return logValuesAsInt;
+/// Returns the values of logs in the given list of logs as a list of doubles.
+///
+/// If the log values are Boolean, [true] is converted to [1.0] and [false] is
+/// converted to [0.0].
+/// An error is thrown if the logs in the given list are not all of the same
+/// type.
+List<double> getLogValuesAsDoubles(List<Log> logs) {
+  assert(logsAreAllOfTheSameType(logs),
+      'The logs in the given list are not all of the same type');
+
+  Type logTypeOfAllLogsInList = logs[0].value.runtimeType;
+
+  if (logTypeOfAllLogsInList == double) {
+    return List.generate(logs.length, (index) => logs[index].value);
+  } else if (logTypeOfAllLogsInList == int) {
+    return List.generate(logs.length, (index) => logs[index].value.toDouble());
+  } else if (logTypeOfAllLogsInList == bool) {
+    List<Log<bool>> typeSafeLogs =
+        List.generate(logs.length, (index) => logs[index]);
+    return convertBooleanLogValuesToNumbers(typeSafeLogs);
+  } else {
+    throw ArgumentError(
+        'Unexpected log type encountered: $logTypeOfAllLogsInList');
+  }
 }
 
-int mapBoolToInt(bool booleanValue) {
+/// Returns a Boolean value that indicates if the logs in the given list are all
+/// of the same type.
+bool logsAreAllOfTheSameType(List<Log> logs) {
+  Type logTypeOfFirstLog = logs[0].value.runtimeType;
+  for (int i = 1; i < logs.length; i++) {
+    if (logs[i].value.runtimeType != logTypeOfFirstLog) {
+      return false;
+    }
+  }
+  return true;
+}
+
+/// Converts the Boolean log values in the given list of logs to a list
+/// of doubles, where 'true' -> 1.0 and 'false' -> 0.0
+List<double> convertBooleanLogValuesToNumbers(List<Log<bool>> logs) {
+  List<double> logValuesAsNumbers = [];
+  logs.forEach((log) => logValuesAsNumbers.add(mapBoolToDouble(log.value)));
+  return logValuesAsNumbers;
+}
+
+double mapBoolToDouble(bool booleanValue) {
   if (booleanValue == true) {
-    return 1;
+    return 1.0;
   } else {
-    return 0;
+    return 0.0;
   }
 }
 
@@ -80,7 +115,7 @@ List<List<int>> getIndicesOfLogsAddedOnTheSameDay(
   return [logs1MatchingIndices, logs2MatchingIndices];
 }
 
-double computeCorrelationWithListsOfNumbers(List<num> x, List<num> y) {
+double computeCorrelationWithListsOfNumbers(List<double> x, List<double> y) {
   if (x.length != y.length) {
     throw ArgumentError('Input lists must have the same length.');
   }
@@ -88,20 +123,13 @@ double computeCorrelationWithListsOfNumbers(List<num> x, List<num> y) {
     throw ArgumentError('Lists must not be empty.');
   }
 
-  List<double> typeSafeX = x is List<double>
-      ? x
-      : List.generate(x.length, (idx) => x[idx].toDouble());
-  List<double> typeSafeY = x is List<double>
-      ? y
-      : List.generate(y.length, (idx) => y[idx].toDouble());
-
-  double meanX = sum(typeSafeX) / x.length;
-  double meanY = sum(typeSafeY) / y.length;
+  double meanX = sum(x) / x.length;
+  double meanY = sum(y) / y.length;
 
   List<double> xValuesMinusMean =
-      typeSafeX.map((value) => value - meanX).toList();
+      x.map((value) => value - meanX).toList();
   List<double> yValuesMinusMean =
-      typeSafeY.map((value) => value - meanY).toList();
+      y.map((value) => value - meanY).toList();
 
   double sumOfProducts = 0;
   for (int i = 0; i < xValuesMinusMean.length; i++) {
