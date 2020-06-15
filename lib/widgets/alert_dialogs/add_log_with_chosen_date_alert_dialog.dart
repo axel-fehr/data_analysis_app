@@ -1,22 +1,40 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:tracking_app/utils/general.dart';
 import 'package:flutter/cupertino.dart';
 
 import '../../classes/tracker.dart';
 import '../../classes/log.dart';
 import 'alertDialogWithSetWidth.dart';
+import '../select_log_value_sections.dart';
 
-class AddLogWithChosenDateAlertDialog extends StatelessWidget {
-  final Tracker _tracker;
+class AddLogWithChosenDateAlertDialog extends StatelessWidget with ChangeNotifier {
+  final Tracker _trackerToWhichToAddLog;
+  ChooseBooleanLogValueSection _chooseBooleanLogValueSection;
+  ChooseIntegerLogValueSection _chooseIntegerLogValueSection;
 
-  const AddLogWithChosenDateAlertDialog(this._tracker);
+  /// used as a placeholder for the widget that is used to choose the log value
+  Widget _chooseLogValueSection;
+
+  AddLogWithChosenDateAlertDialog(this._trackerToWhichToAddLog) {
+    // only initialize the object that is needed
+    if (_trackerToWhichToAddLog.logType == bool) {
+      _chooseBooleanLogValueSection = ChooseBooleanLogValueSection(_trackerToWhichToAddLog);
+      _chooseLogValueSection = _chooseBooleanLogValueSection;
+    }
+    else if (_trackerToWhichToAddLog.logType == int) {
+      _chooseIntegerLogValueSection = ChooseIntegerLogValueSection(_trackerToWhichToAddLog);
+      _chooseLogValueSection = _chooseIntegerLogValueSection;
+    }
+    // TODO: implement log value section for double logs
+    else {
+      throw('There is no widget for the selection of the given log type "${_trackerToWhichToAddLog.logType}"');
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     DateTime _selectedDate;
-
-    SelectLogValueSection selectLogValueSection =
-        SelectLogValueSection(_tracker);
 
     DateTime currentDate = convertTimeStampToDate(DateTime.now());
     CupertinoDatePicker datePicker = CupertinoDatePicker(
@@ -28,18 +46,44 @@ class AddLogWithChosenDateAlertDialog extends StatelessWidget {
       },
     );
 
+    /// Adds a log with the selected date and value to the tracker
+    ///
+    /// This function handles all log types.
+    void popWithLogWithChosenDateAndValue() {
+      Log createdLog;
+      switch(_trackerToWhichToAddLog.logType) {
+        case bool:
+          createdLog = Log<bool>(
+              Log.yesOrNoToBool(_chooseBooleanLogValueSection.chosenValue),
+              timeStamp: _selectedDate);
+          Navigator.of(context).pop(createdLog);
+          break;
+        case int:
+          int enteredLogValue;
+          bool enteredTextForLogValueIsParsable;
+          try {
+            enteredLogValue = int.parse(_chooseIntegerLogValueSection.chosenValueAsString);
+            enteredTextForLogValueIsParsable = true;
+          } on FormatException {
+            // nothing is done when the entered value cannot be parsed (a
+            // warning is shown to the user in another widget)
+            enteredTextForLogValueIsParsable = false;
+          }
+          if (enteredTextForLogValueIsParsable) {
+            Log<int> createdLog = Log<int>(
+                enteredLogValue, timeStamp: _selectedDate);
+            Navigator.of(context).pop(createdLog);
+          }
+          break;
+      }
+    }
+
     FlatButton addLogWithChosenDateButton = FlatButton(
       child: const Text(
         'Add',
         style: TextStyle(color: Colors.blue),
       ),
-      onPressed: () {
-        Log createdLog = Log<bool>(
-            Log.yesOrNoToBool(selectLogValueSection.selectedValue),
-            timeStamp: _selectedDate);
-        print('created log: ${createdLog.toString()}');
-        Navigator.of(context).pop(createdLog);
-      },
+      onPressed: () => popWithLogWithChosenDateAndValue(),
     );
 
     double screenWidth = MediaQuery.of(context).size.width;
@@ -55,7 +99,8 @@ class AddLogWithChosenDateAlertDialog extends StatelessWidget {
             width: screenWidth > 300 ? 300.0 : screenWidth,
             child: datePicker,
           ),
-          selectLogValueSection,
+          ChangeNotifierProvider(create: (context) => ChangeNotifier(),
+              child: _chooseLogValueSection),
           Align(
             child: addLogWithChosenDateButton,
             alignment: Alignment.centerRight,
@@ -81,64 +126,5 @@ class AddLogWithChosenDateAlertDialog extends StatelessWidget {
         content: alertDialogContent,
       );
     }
-  }
-}
-
-// TODO: put this in a separate file
-class SelectLogValueSection extends StatefulWidget {
-  final Tracker _tracker;
-
-  SelectLogValueSection(this._tracker);
-
-  String _selectedValue = Log.boolToYesOrNo(true);
-
-  String get selectedValue => _selectedValue;
-
-  @override
-  _SelectLogValueSectionState createState() => _SelectLogValueSectionState();
-}
-
-class _SelectLogValueSectionState extends State<SelectLogValueSection> {
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: <Widget>[
-        Padding(
-          child: Text('Did "${widget._tracker.name}" happen on that day?'),
-          padding: const EdgeInsets.only(top: 8.0),
-        ),
-        Row(
-          children: <Widget>[
-            const Icon(Icons.arrow_forward),
-            Container(
-              child: DropdownButton<String>(
-                value: widget._selectedValue,
-                icon: const Icon(Icons.arrow_downward),
-                iconSize: 20,
-                underline: Container(
-                  height: 1,
-                  color: Colors.black,
-                ),
-                onChanged: (String newValue) {
-                  setState(() {
-                    widget._selectedValue = newValue;
-                  });
-                },
-                items: <String>[
-                  Log.boolToYesOrNo(true),
-                  Log.boolToYesOrNo(false)
-                ].map<DropdownMenuItem<String>>((String value) {
-                  return DropdownMenuItem<String>(
-                    value: value,
-                    child: Text(value),
-                  );
-                }).toList(),
-              ),
-            ),
-          ],
-        ),
-      ],
-    );
   }
 }
