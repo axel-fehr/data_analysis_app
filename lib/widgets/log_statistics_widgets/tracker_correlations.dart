@@ -3,10 +3,10 @@ import 'package:flutter/widgets.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter/cupertino.dart';
 
-import '../../../providers/tracker_list.dart';
-import '../../../classes/tracker.dart';
-import '../../../utils/statistics_utils/correlation.dart';
-import '../../../utils/general.dart';
+import '../../providers/tracker_list.dart';
+import '../../classes/tracker.dart';
+import '../../utils/statistics_utils/correlation.dart';
+import '../../utils/general.dart';
 
 class BinaryTrackerCorrelations extends StatelessWidget {
   final String nameOfTrackerBeingAnalyzed;
@@ -136,6 +136,7 @@ class ListOfCorrelationsWithOtherTrackers extends StatelessWidget {
       if (trackerLogsOverlap(trackerCorrespondingToLogs, otherTracker)) {
         double correlation = computeCorrelationBetweenTwoTrackers(
             trackerCorrespondingToLogs, otherTracker);
+        print('\ncorrelation: ${correlation.toStringAsFixed(3)}');
         correlationsWithOtherTrackers.add(correlation);
         namesOfOtherTrackers.add(otherTracker.name);
       }

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter/cupertino.dart';
 
-import 'binary_tracker_correlations.dart';
+import '../tracker_correlations.dart';
 import 'binary_tracker_overall_stats.dart';
 import '../../disclaimer_or_warning.dart';
 import '../styling.dart';

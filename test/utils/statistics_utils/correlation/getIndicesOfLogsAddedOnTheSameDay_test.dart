@@ -10,11 +10,11 @@ void main() {
       'different amounts of logs', () {
     // Test 1
     List<Log> listOfLogs1 = [
-      Log(true, timeStamp: DateTime(2020, 4, 15)),
-      Log(false, timeStamp: DateTime(2020, 4, 16))
+      Log<bool>(true, timeStamp: DateTime(2020, 4, 15)),
+      Log<bool>(false, timeStamp: DateTime(2020, 4, 16))
     ];
     List<Log> listOfLogs2 = [
-      Log(true, timeStamp: DateTime(2020, 4, 15)),
+      Log<bool>(true, timeStamp: DateTime(2020, 4, 15)),
     ];
 
     List<List<int>> indicesList =
@@ -31,14 +31,14 @@ void main() {
 
     // Test 2
     listOfLogs1 = [
-      Log(true, timeStamp: DateTime(2020, 3, 5)),
-      Log(false, timeStamp: DateTime(2020, 3, 7)),
-      Log(false, timeStamp: DateTime(2020, 3, 9)),
+      Log<bool>(true, timeStamp: DateTime(2020, 3, 5)),
+      Log<bool>(false, timeStamp: DateTime(2020, 3, 7)),
+      Log<bool>(false, timeStamp: DateTime(2020, 3, 9)),
     ];
     listOfLogs2 = [
-      Log(true, timeStamp: DateTime(2020, 3, 7)),
-      Log(true, timeStamp: DateTime(2020, 3, 8)),
-      Log(true, timeStamp: DateTime(2020, 3, 9)),
+      Log<bool>(true, timeStamp: DateTime(2020, 3, 7)),
+      Log<bool>(true, timeStamp: DateTime(2020, 3, 8)),
+      Log<bool>(true, timeStamp: DateTime(2020, 3, 9)),
     ];
 
     indicesList = getIndicesOfLogsAddedOnTheSameDay(listOfLogs1, listOfLogs2);
@@ -54,14 +54,14 @@ void main() {
 
     // Test 3
     listOfLogs1 = [
-      Log(true, timeStamp: DateTime(2020, 5, 20)),
-      Log(false, timeStamp: DateTime(2020, 5, 21)),
-      Log(false, timeStamp: DateTime(2020, 5, 22)),
+      Log<bool>(true, timeStamp: DateTime(2020, 5, 20)),
+      Log<bool>(false, timeStamp: DateTime(2020, 5, 21)),
+      Log<bool>(false, timeStamp: DateTime(2020, 5, 22)),
     ];
     listOfLogs2 = [
-      Log(true, timeStamp: DateTime(2020, 4, 20)),
-      Log(false, timeStamp: DateTime(2020, 5, 21)),
-      Log(false, timeStamp: DateTime(2021, 5, 22)),
+      Log<bool>(true, timeStamp: DateTime(2020, 4, 20)),
+      Log<bool>(false, timeStamp: DateTime(2020, 5, 21)),
+      Log<bool>(false, timeStamp: DateTime(2021, 5, 22)),
     ];
 
     indicesList = getIndicesOfLogsAddedOnTheSameDay(listOfLogs1, listOfLogs2);
@@ -79,11 +79,11 @@ void main() {
   test('Lists in lists of indices must be empty when there is no overlap', () {
     // Test 1
     List<Log> listOfLogs1 = [
-      Log(true, timeStamp: DateTime(2020, 4, 15)),
-      Log(false, timeStamp: DateTime(2020, 4, 16))
+      Log<bool>(true, timeStamp: DateTime(2020, 4, 15)),
+      Log<bool>(false, timeStamp: DateTime(2020, 4, 16))
     ];
     List<Log> listOfLogs2 = [
-      Log(true, timeStamp: DateTime(2020, 4, 17)),
+      Log<bool>(true, timeStamp: DateTime(2020, 4, 17)),
     ];
 
     List<List<int>> indicesList =
@@ -97,14 +97,14 @@ void main() {
 
     // Test 2
     listOfLogs1 = [
-      Log(true, timeStamp: DateTime(2020, 3, 5)),
-      Log(false, timeStamp: DateTime(2020, 3, 6)),
-      Log(false, timeStamp: DateTime(2020, 3, 7)),
+      Log<bool>(true, timeStamp: DateTime(2020, 3, 5)),
+      Log<bool>(false, timeStamp: DateTime(2020, 3, 6)),
+      Log<bool>(false, timeStamp: DateTime(2020, 3, 7)),
     ];
     listOfLogs2 = [
-      Log(true, timeStamp: DateTime(2019, 3, 5)),
-      Log(true, timeStamp: DateTime(2020, 4, 6)),
-      Log(true, timeStamp: DateTime(2020, 4, 7)),
+      Log<bool>(true, timeStamp: DateTime(2019, 3, 5)),
+      Log<bool>(true, timeStamp: DateTime(2020, 4, 6)),
+      Log<bool>(true, timeStamp: DateTime(2020, 4, 7)),
     ];
 
     indicesList = getIndicesOfLogsAddedOnTheSameDay(listOfLogs1, listOfLogs2);
@@ -120,7 +120,7 @@ void main() {
       () {
     List<Log> listOfLogs1 = [];
     List<Log> listOfLogs2 = [
-      Log(true, timeStamp: DateTime(2020, 4, 17)),
+      Log<bool>(true, timeStamp: DateTime(2020, 4, 17)),
     ];
 
     List<List<int>> indicesList =

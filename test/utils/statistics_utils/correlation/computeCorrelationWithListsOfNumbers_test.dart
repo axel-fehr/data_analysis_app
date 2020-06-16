@@ -21,9 +21,9 @@ void main() {
     expect(correlationCoefficient.toStringAsFixed(4), '-0.9738');
   });
 
-  test('Correlation must be computed correctly with List<int>', () {
-    List<int> listOfNumbers1 = [2, -1];
-    List<int> listOfNumbers2 = [-4, 5];
+  test('Correlation must be computed correctly with List<double>', () {
+    List<double> listOfNumbers1 = [2, -1];
+    List<double> listOfNumbers2 = [-4, 5];
 
     double correlationCoefficient =
         computeCorrelationWithListsOfNumbers(listOfNumbers1, listOfNumbers2);
@@ -42,8 +42,8 @@ void main() {
   test(
       'Correlation coefficient should be nan if if only one number pair is given',
       () {
-    List<int> listOfInts1 = [2];
-    List<int> listOfInts2 = [-4];
+    List<double> listOfInts1 = [2];
+    List<double> listOfInts2 = [-4];
 
     double correlationCoefficient =
         computeCorrelationWithListsOfNumbers(listOfInts1, listOfInts2);
@@ -60,16 +60,16 @@ void main() {
   });
 
   test('Should throw error if input lists are not of the same length', () {
-    List<int> listOfInts1 = [2, 4];
-    List<int> listOfInts2 = [-4];
+    List<double> listOfInts1 = [2, 4];
+    List<double> listOfInts2 = [-4];
 
     expect(() => computeCorrelationWithListsOfNumbers(listOfInts1, listOfInts2),
         throwsArgumentError);
   });
 
   test('Should throw error if at least one of the input lists is empty', () {
-    List<int> listOfInts1 = [];
-    List<int> listOfInts2 = [-4];
+    List<double> listOfInts1 = [];
+    List<double> listOfInts2 = [-4];
 
     expect(() => computeCorrelationWithListsOfNumbers(listOfInts1, listOfInts2),
         throwsArgumentError);
