@@ -195,7 +195,6 @@ class LogStatsSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // TODO: return a different widget here depending on the tracker type
     return LogStatsOfTracker(
       trackerName: trackerName,
     );
