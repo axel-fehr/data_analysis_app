@@ -99,7 +99,7 @@ class LogListAndStats extends StatelessWidget {
     return Column(
       children: <Widget>[
         LogStatsSection(
-          trackerName: _tracker.name,
+          trackerToComputeStatsWith: _tracker,
         ),
         const Divider(
           color: Colors.black,
@@ -187,16 +187,16 @@ class LogListSection extends StatelessWidget {
 }
 
 class LogStatsSection extends StatelessWidget {
-  final String trackerName;
+  final Tracker trackerToComputeStatsWith;
 
   const LogStatsSection({
-    @required this.trackerName,
+    @required this.trackerToComputeStatsWith,
   });
 
   @override
   Widget build(BuildContext context) {
     return LogStatsOfTracker(
-      trackerName: trackerName,
+      trackerToComputeStatsWith: trackerToComputeStatsWith,
     );
   }
 }

@@ -9,17 +9,17 @@ import 'styling.dart';
 
 /// Displays the statistics of all logs belonging to the tracker.
 class TrackerOverallStats extends StatelessWidget {
-  final String trackerName;
+  final Tracker trackerToComputeStatsWith;
 
   TrackerOverallStats({
-    @required this.trackerName,
+    @required this.trackerToComputeStatsWith,
   });
 
   @override
   Widget build(BuildContext context) {
     TrackerList listOfTrackers = Provider.of<TrackerList>(context);
-    Tracker tracker = listOfTrackers.trackers
-        .singleWhere((tracker) => tracker.name == trackerName);
+    Tracker tracker = listOfTrackers.trackers.singleWhere(
+        (tracker) => tracker.name == trackerToComputeStatsWith.name);
     int totalNumLogs = tracker.logs.length;
     int numTrueLogs = tracker.logs.where((log) => log.value == true).length;
     int numFalseLogs = totalNumLogs - numTrueLogs;
@@ -28,6 +28,7 @@ class TrackerOverallStats extends StatelessWidget {
       StatisticWithPadding('# logs: $totalNumLogs'),
     ];
 
+//    ADD different things to list based on tracker type
     String yesLogsStatistic = '# Yes: $numTrueLogs';
     String noLogsStatistic = '# No: $numFalseLogs';
 
