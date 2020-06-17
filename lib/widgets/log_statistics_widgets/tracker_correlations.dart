@@ -8,10 +8,10 @@ import '../../classes/tracker.dart';
 import '../../utils/statistics_utils/correlation.dart';
 import '../../utils/general.dart';
 
-class BinaryTrackerCorrelations extends StatelessWidget {
+class TrackerCorrelations extends StatelessWidget {
   final String nameOfTrackerBeingAnalyzed;
 
-  BinaryTrackerCorrelations({
+  TrackerCorrelations({
     @required this.nameOfTrackerBeingAnalyzed,
   });
 
@@ -19,7 +19,6 @@ class BinaryTrackerCorrelations extends StatelessWidget {
   Widget build(BuildContext context) {
     List<Tracker> listOfTrackers = Provider.of<TrackerList>(context).trackers;
 
-    // TODO: check how this looks and style it accordingly
     if (listOfTrackers.length == 1) {
       return const Padding(
         padding: EdgeInsets.all(8.0),

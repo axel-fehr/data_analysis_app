@@ -8,7 +8,7 @@ import '../providers/tracker_list.dart';
 import '../classes/tracker.dart';
 import '../classes/log.dart';
 import '../widgets/log_values_with_edit_buttons_list_view.dart';
-import '../widgets/log_statistics_widgets/for_binary_trackers/binary_tracker_log_stats.dart';
+import '../widgets/log_statistics_widgets/tracker_log_stats.dart';
 import '../widgets/log_statistics_widgets/styling.dart';
 import '../widgets/alert_dialogs/add_log_with_chosen_date_alert_dialog.dart';
 import '../utils/rename_tracker_utils.dart' as rename_tracker_utils;
@@ -196,7 +196,7 @@ class LogStatsSection extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // TODO: return a different widget here depending on the tracker type
-    return LogStatsOfBinaryTracker(
+    return LogStatsOfTracker(
       trackerName: trackerName,
     );
   }
