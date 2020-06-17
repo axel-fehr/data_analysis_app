@@ -6,6 +6,7 @@ import 'dart:math';
 import '../../classes/tracker.dart';
 import '../../classes/log.dart';
 import '../general.dart';
+import '../math_utils.dart';
 
 /// Computes the correlation coefficient between the logs of the two given
 /// trackers.

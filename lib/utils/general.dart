@@ -7,7 +7,3 @@ DateTime convertTimeStampToDate(DateTime timeStamp) {
   int day = timeStamp.day;
   return DateTime(year, month, day);
 }
-
-double sum(List<double> numbers) {
-  return numbers.reduce((value, element) => value + element);
-}
