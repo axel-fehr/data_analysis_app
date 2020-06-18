@@ -25,9 +25,6 @@ class AddLogAlertDialog extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    ///    use different widgets here depending on the tracker type
-    ///    start by putting the dialog for boolean trackers in a separate widget
-
     switch (_trackerToWhichToAddLog.logType) {
       case bool:
         return AddBooleanLogAlertDialog(
