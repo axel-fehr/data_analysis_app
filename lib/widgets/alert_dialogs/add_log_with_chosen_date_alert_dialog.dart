@@ -118,9 +118,7 @@ class AddLogWithChosenDateAlertDialog extends StatelessWidget
             child: datePicker,
           ),
           textAboveSelectLogValueSection,
-          ChangeNotifierProvider(
-              create: (context) => ChangeNotifier(),
-              child: _chooseLogValueSection),
+          _chooseLogValueSection,
           Align(
             child: addLogWithChosenDateButton,
             alignment: Alignment.centerRight,
