@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:provider/provider.dart';
 import 'package:tracking_app/utils/math_utils.dart';
 
+import '../../providers/tracker_list.dart';
 import '../../classes/tracker.dart';
 import '../../classes/log.dart';
 import 'styling.dart';
@@ -17,7 +19,13 @@ class TrackerOverallStats extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    int totalNumLogs = trackerToComputeStatsWith.logs.length;
+    // a copy of the tracker the tracker list is needed here so that the
+    // statistics update when [notifyListeners()] is called in the tracker list
+    // object after something (e.g. a log value) changed
+    TrackerList listOfTrackers = Provider.of<TrackerList>(context);
+    Tracker trackerCopy = listOfTrackers.trackers.singleWhere(
+        (tracker) => tracker.name == trackerToComputeStatsWith.name);
+    int totalNumLogs = trackerCopy.logs.length;
 
     List<Widget> statsToDisplay = [
       StatisticWithPadding('# logs: $totalNumLogs'),
