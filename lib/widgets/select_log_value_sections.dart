@@ -9,10 +9,9 @@ import '../classes/tracker.dart';
 import '../classes/log.dart';
 
 class ChooseBooleanLogValueSection extends StatefulWidget {
-  final Tracker _trackerToWhichToAddLog;
   String _chosenValue = Log.boolToYesOrNo(true);
 
-  ChooseBooleanLogValueSection(this._trackerToWhichToAddLog);
+  ChooseBooleanLogValueSection();
 
   String get chosenValue => _chosenValue;
 
@@ -29,8 +28,8 @@ class _ChooseBooleanLogValueSectionState
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
         Row(
+          mainAxisSize: MainAxisSize.min,
           children: <Widget>[
-            const Icon(Icons.arrow_forward),
             Container(
               child: DropdownButton<String>(
                 value: widget._chosenValue,
@@ -66,13 +65,12 @@ class _ChooseBooleanLogValueSectionState
 }
 
 class ChooseIntegerLogValueSection extends StatefulWidget {
-  final Tracker _trackerToWhichToAddLog;
   final TextEditingController _logValueTextFieldController =
       TextEditingController();
 
   String get chosenValueAsString => _logValueTextFieldController.text;
 
-  ChooseIntegerLogValueSection(this._trackerToWhichToAddLog);
+  ChooseIntegerLogValueSection();
 
   @override
   _ChooseIntegerLogValueSectionState createState() =>

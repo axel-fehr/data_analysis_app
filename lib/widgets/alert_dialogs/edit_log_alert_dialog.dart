@@ -87,7 +87,7 @@ class _EditIntegerLogAlertDialogState extends State<EditIntegerLogAlertDialog> {
   @override
   Widget build(BuildContext context) {
     ChooseIntegerLogValueSection _chooseIntegerLogValueSection =
-        ChooseIntegerLogValueSection(widget._trackerCorrespondingToLog);
+        ChooseIntegerLogValueSection();
 
     return AlertDialog(
       title: Center(child: Text('Edit Log')),

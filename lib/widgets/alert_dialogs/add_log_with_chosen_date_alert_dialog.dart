@@ -24,17 +24,15 @@ class AddLogWithChosenDateAlertDialog extends StatelessWidget
   AddLogWithChosenDateAlertDialog(this._trackerToWhichToAddLog) {
     // only initialize the object that is needed
     if (_trackerToWhichToAddLog.logType == bool) {
-      _chooseBooleanLogValueSection =
-          ChooseBooleanLogValueSection(_trackerToWhichToAddLog);
+      _chooseBooleanLogValueSection = ChooseBooleanLogValueSection();
       _chooseLogValueSection = _chooseBooleanLogValueSection;
       textAboveSelectLogValueSection = Padding(
         child:
             Text('Did "${_trackerToWhichToAddLog.name}" happen on that day?'),
-        padding: const EdgeInsets.only(top: 8.0),
+        padding: const EdgeInsets.only(top: 16.0),
       );
     } else if (_trackerToWhichToAddLog.logType == int) {
-      _chooseIntegerLogValueSection =
-          ChooseIntegerLogValueSection(_trackerToWhichToAddLog);
+      _chooseIntegerLogValueSection = ChooseIntegerLogValueSection();
       _chooseLogValueSection = _chooseIntegerLogValueSection;
       textAboveSelectLogValueSection = Padding(
         padding: const EdgeInsets.symmetric(vertical: 8.0),
@@ -109,7 +107,7 @@ class AddLogWithChosenDateAlertDialog extends StatelessWidget
     Widget alertDialogContent = SingleChildScrollView(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.start,
-        crossAxisAlignment: CrossAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.center,
         mainAxisSize: MainAxisSize.min,
         children: <Widget>[
           Container(
