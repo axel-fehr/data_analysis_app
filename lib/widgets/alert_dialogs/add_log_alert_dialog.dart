@@ -274,11 +274,12 @@ class _AddIntegerLogAlertDialogState extends State<AddIntegerLogAlertDialog> {
               incrementValueButton,
             ],
           ),
-          Padding(
-            padding: const EdgeInsets.only(top: 8.0),
-            child: showInputNotParsableWarning
-                ? inputNotParsableWarning
-                : Text(''),
+          Visibility(
+            child: Padding(
+              padding: const EdgeInsets.only(top: 8.0),
+              child: inputNotParsableWarning,
+            ),
+            visible: showInputNotParsableWarning,
           ),
         ],
       ),

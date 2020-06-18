@@ -213,10 +213,12 @@ class _ChooseIntegerLogValueSectionState
             incrementValueButton,
           ],
         ),
-        Padding(
-          padding: const EdgeInsets.only(top: 8.0),
-          child:
-              _showInputNotParsableWarning ? inputNotParsableWarning : Text(''),
+        Visibility(
+          child: Padding(
+            padding: const EdgeInsets.only(top: 8.0),
+            child: inputNotParsableWarning,
+          ),
+          visible: _showInputNotParsableWarning,
         ),
       ],
     );
