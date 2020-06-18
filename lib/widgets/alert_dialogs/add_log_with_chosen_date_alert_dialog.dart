@@ -8,7 +8,8 @@ import '../../classes/log.dart';
 import 'alertDialogWithSetWidth.dart';
 import '../select_log_value_sections.dart';
 
-class AddLogWithChosenDateAlertDialog extends StatelessWidget with ChangeNotifier {
+class AddLogWithChosenDateAlertDialog extends StatelessWidget
+    with ChangeNotifier {
   final Tracker _trackerToWhichToAddLog;
   ChooseBooleanLogValueSection _chooseBooleanLogValueSection;
   ChooseIntegerLogValueSection _chooseIntegerLogValueSection;
@@ -16,19 +17,35 @@ class AddLogWithChosenDateAlertDialog extends StatelessWidget with ChangeNotifie
   /// used as a placeholder for the widget that is used to choose the log value
   Widget _chooseLogValueSection;
 
+  /// Text that serves as a hint to the user that the below section is for
+  /// choosing the log value of the log on the selected date
+  Widget textAboveSelectLogValueSection;
+
   AddLogWithChosenDateAlertDialog(this._trackerToWhichToAddLog) {
     // only initialize the object that is needed
     if (_trackerToWhichToAddLog.logType == bool) {
-      _chooseBooleanLogValueSection = ChooseBooleanLogValueSection(_trackerToWhichToAddLog);
+      _chooseBooleanLogValueSection =
+          ChooseBooleanLogValueSection(_trackerToWhichToAddLog);
       _chooseLogValueSection = _chooseBooleanLogValueSection;
-    }
-    else if (_trackerToWhichToAddLog.logType == int) {
-      _chooseIntegerLogValueSection = ChooseIntegerLogValueSection(_trackerToWhichToAddLog);
+      textAboveSelectLogValueSection = Padding(
+        child:
+            Text('Did "${_trackerToWhichToAddLog.name}" happen on that day?'),
+        padding: const EdgeInsets.only(top: 8.0),
+      );
+    } else if (_trackerToWhichToAddLog.logType == int) {
+      _chooseIntegerLogValueSection =
+          ChooseIntegerLogValueSection(_trackerToWhichToAddLog);
       _chooseLogValueSection = _chooseIntegerLogValueSection;
+      textAboveSelectLogValueSection = Padding(
+        padding: const EdgeInsets.symmetric(vertical: 8.0),
+        child: Text(
+            'Value of "${_trackerToWhichToAddLog.name}" on the chosen date:'),
+      );
     }
     // TODO: implement log value section for double logs
     else {
-      throw('There is no widget for the selection of the given log type "${_trackerToWhichToAddLog.logType}"');
+      throw ('There is no widget for the selection of the given log type '
+          '"${_trackerToWhichToAddLog.logType}"');
     }
   }
 
@@ -51,7 +68,7 @@ class AddLogWithChosenDateAlertDialog extends StatelessWidget with ChangeNotifie
     /// This function handles all log types.
     void popWithLogWithChosenDateAndValue() {
       Log createdLog;
-      switch(_trackerToWhichToAddLog.logType) {
+      switch (_trackerToWhichToAddLog.logType) {
         case bool:
           createdLog = Log<bool>(
               Log.yesOrNoToBool(_chooseBooleanLogValueSection.chosenValue),
@@ -62,7 +79,8 @@ class AddLogWithChosenDateAlertDialog extends StatelessWidget with ChangeNotifie
           int enteredLogValue;
           bool enteredTextForLogValueIsParsable;
           try {
-            enteredLogValue = int.parse(_chooseIntegerLogValueSection.chosenValueAsString);
+            enteredLogValue =
+                int.parse(_chooseIntegerLogValueSection.chosenValueAsString);
             enteredTextForLogValueIsParsable = true;
           } on FormatException {
             // nothing is done when the entered value cannot be parsed (a
@@ -70,8 +88,8 @@ class AddLogWithChosenDateAlertDialog extends StatelessWidget with ChangeNotifie
             enteredTextForLogValueIsParsable = false;
           }
           if (enteredTextForLogValueIsParsable) {
-            Log<int> createdLog = Log<int>(
-                enteredLogValue, timeStamp: _selectedDate);
+            Log<int> createdLog =
+                Log<int>(enteredLogValue, timeStamp: _selectedDate);
             Navigator.of(context).pop(createdLog);
           }
           break;
@@ -99,7 +117,9 @@ class AddLogWithChosenDateAlertDialog extends StatelessWidget with ChangeNotifie
             width: screenWidth > 300 ? 300.0 : screenWidth,
             child: datePicker,
           ),
-          ChangeNotifierProvider(create: (context) => ChangeNotifier(),
+          textAboveSelectLogValueSection,
+          ChangeNotifierProvider(
+              create: (context) => ChangeNotifier(),
               child: _chooseLogValueSection),
           Align(
             child: addLogWithChosenDateButton,

@@ -28,11 +28,6 @@ class _ChooseBooleanLogValueSectionState
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
-        Padding(
-          child: Text(
-              'Did "${widget._trackerToWhichToAddLog.name}" happen on that day?'),
-          padding: const EdgeInsets.only(top: 8.0),
-        ),
         Row(
           children: <Widget>[
             const Icon(Icons.arrow_forward),
@@ -72,7 +67,8 @@ class _ChooseBooleanLogValueSectionState
 
 class ChooseIntegerLogValueSection extends StatefulWidget {
   final Tracker _trackerToWhichToAddLog;
-  final TextEditingController _logValueTextFieldController = TextEditingController();
+  final TextEditingController _logValueTextFieldController =
+      TextEditingController();
 
   String get chosenValueAsString => _logValueTextFieldController.text;
 
@@ -108,7 +104,6 @@ class _ChooseIntegerLogValueSectionState
 
   @override
   Widget build(BuildContext context) {
-
     final TextField logValueTextField = TextField(
       controller: widget._logValueTextFieldController,
       keyboardType: TextInputType.number,
@@ -137,7 +132,8 @@ class _ChooseIntegerLogValueSectionState
       },
       onChanged: (String enteredValue) {
         // keeps the cursor behind the last digit
-        widget._logValueTextFieldController.selection = TextSelection.fromPosition(
+        widget._logValueTextFieldController.selection =
+            TextSelection.fromPosition(
           TextPosition(
             offset: widget._logValueTextFieldController.text.length,
           ),
@@ -200,11 +196,6 @@ class _ChooseIntegerLogValueSectionState
       crossAxisAlignment: CrossAxisAlignment.center,
       mainAxisSize: MainAxisSize.min,
       children: <Widget>[
-        Padding(
-          padding: const EdgeInsets.only(bottom: 8.0),
-          child: Text(
-              'Value of "${widget._trackerToWhichToAddLog.name}" on the chosen date'),
-        ),
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
           mainAxisSize: MainAxisSize.min,
@@ -227,7 +218,7 @@ class _ChooseIntegerLogValueSectionState
         Padding(
           padding: const EdgeInsets.only(top: 8.0),
           child:
-          _showInputNotParsableWarning ? inputNotParsableWarning : Text(''),
+              _showInputNotParsableWarning ? inputNotParsableWarning : Text(''),
         ),
       ],
     );
