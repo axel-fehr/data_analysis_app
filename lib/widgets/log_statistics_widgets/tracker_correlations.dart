@@ -135,7 +135,6 @@ class ListOfCorrelationsWithOtherTrackers extends StatelessWidget {
       if (trackerLogsOverlap(trackerCorrespondingToLogs, otherTracker)) {
         double correlation = computeCorrelationBetweenTwoTrackers(
             trackerCorrespondingToLogs, otherTracker);
-        print('\ncorrelation: ${correlation.toStringAsFixed(3)}');
         correlationsWithOtherTrackers.add(correlation);
         namesOfOtherTrackers.add(otherTracker.name);
       }
