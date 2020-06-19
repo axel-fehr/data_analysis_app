@@ -127,18 +127,21 @@ class _EditIntegerLogAlertDialogState extends State<EditIntegerLogAlertDialog> {
 
     return AlertDialog(
       title: const Center(child: Text('Edit Log')),
-      content: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: <Widget>[
-          _chooseIntegerLogValueSection,
-          const Padding(
-            padding: EdgeInsets.only(top: 8.0),
-            child: Text(
-              'If you tap "Change value", the log value will be set to the your chosen value',
-              style: TextStyle(fontSize: 12, color: Colors.grey),
+      content: SingleChildScrollView(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: <Widget>[
+            _chooseIntegerLogValueSection,
+            const Padding(
+              padding: EdgeInsets.only(top: 8.0),
+              child: Text(
+                'If you tap "Change value", the log value will be set to the '
+                    'your chosen value',
+                style: TextStyle(fontSize: 12, color: Colors.grey),
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
       actions: <Widget>[changeLogButton, deleteLogButton],
     );
