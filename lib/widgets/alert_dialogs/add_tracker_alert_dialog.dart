@@ -169,11 +169,11 @@ class ExplainAppBasicsAlertDialog extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      title: Text('Things you should know'),
+      title: const Text('Things you should know'),
       content: SingleChildScrollView(
         child: Column(
           children: <Widget>[
-            BulletedList([
+            const BulletedList([
               'You can add one log per day per tracker',
               'Tap on a tracker in the list to see more detailed statistics',
               "These statistics aren't very insightful at the beginning since "
@@ -182,7 +182,7 @@ class ExplainAppBasicsAlertDialog extends StatelessWidget {
             ]),
             Align(
               child: FlatButton(
-                child: Text(
+                child: const Text(
                   'Got it',
                   style: TextStyle(color: Colors.blue),
                 ),
@@ -218,23 +218,23 @@ class _TrackerTypeChoiceListState extends State<TrackerTypeChoiceList> {
       shrinkWrap: true,
       children: <Widget>[
         RadioListTile(
-          title: Text('Yes/No'),
-          subtitle: Text('Example: whether you exercised or not'),
+          title: const Text('Yes/No'),
+          subtitle: const Text('Example: whether you exercised or not'),
           value: TrackerType.yesNo,
           groupValue: widget._chosenTrackerType,
           onChanged: (TrackerType value) => setChosenTrackerType(value),
         ),
         RadioListTile(
-          title: Text('Whole numbers'),
-          subtitle: Text(
+          title: const Text('Whole numbers'),
+          subtitle: const Text(
               'Examples: 1, 2, 3 etc. (e.g. how many cups of coffee you drank)'),
           value: TrackerType.integer,
           groupValue: widget._chosenTrackerType,
           onChanged: (TrackerType value) => setChosenTrackerType(value),
         ),
         RadioListTile(
-          title: Text('Decimal numbers'),
-          subtitle: Text(
+          title: const Text('Decimal numbers'),
+          subtitle: const Text(
               'Examples: 0.2, 82.7, 7.5 etc. (e.g. how many hours you slept)'),
           value: TrackerType.decimal,
           groupValue: widget._chosenTrackerType,
