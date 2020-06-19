@@ -89,18 +89,58 @@ class _EditIntegerLogAlertDialogState extends State<EditIntegerLogAlertDialog> {
     ChooseIntegerLogValueSection _chooseIntegerLogValueSection =
         ChooseIntegerLogValueSection();
 
+    TrackerList listOfTrackers = Provider.of<TrackerList>(context);
+
+    Widget changeLogButton = FlatButton(
+      child: const Text('Change value'),
+      onPressed: () {
+        bool enteredValueIsParableAsInt;
+        int newLogValue;
+        try {
+          newLogValue =
+              int.parse(_chooseIntegerLogValueSection.chosenValueAsString);
+          enteredValueIsParableAsInt = true;
+        } on Error {
+          enteredValueIsParableAsInt = false;
+        }
+        if (enteredValueIsParableAsInt) {
+          listOfTrackers.changeLogValue(
+            widget._trackerCorrespondingToLog,
+            widget._log.timeStamp,
+            newLogValue,
+          );
+          Navigator.of(context).pop();
+        }
+      },
+    );
+
+    Widget deleteLogButton = FlatButton(
+      child: const Icon(Icons.delete),
+      onPressed: () {
+        listOfTrackers.deleteLog(
+          widget._trackerCorrespondingToLog,
+          widget._log.timeStamp,
+        );
+        Navigator.of(context).pop();
+      },
+    );
+
     return AlertDialog(
-      title: Center(child: Text('Edit Log')),
+      title: const Center(child: Text('Edit Log')),
       content: Column(
         mainAxisSize: MainAxisSize.min,
         children: <Widget>[
           _chooseIntegerLogValueSection,
-          Text(
-            'If you tap "Change value", the log value will be set to the your chosen value',
-            style: TextStyle(fontSize: 12, color: Colors.grey),
+          const Padding(
+            padding: EdgeInsets.only(top: 8.0),
+            child: Text(
+              'If you tap "Change value", the log value will be set to the your chosen value',
+              style: TextStyle(fontSize: 12, color: Colors.grey),
+            ),
           ),
         ],
       ),
+      actions: <Widget>[changeLogButton, deleteLogButton],
     );
   }
 }

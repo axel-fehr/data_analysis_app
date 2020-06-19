@@ -91,7 +91,10 @@ class TrackerList with ChangeNotifier {
   ///                         to be changed
   /// newLogValue: value that the log will have after the change
   void changeLogValue(
-      Tracker tracker, DateTime timeStampOfLogToChange, bool newLogValue) {
+    Tracker tracker,
+    DateTime timeStampOfLogToChange,
+    dynamic newLogValue,
+  ) {
     tracker.changeLogValue(timeStampOfLogToChange, newLogValue);
     notifyListeners();
   }
