@@ -32,9 +32,9 @@ class AddLogAlertDialog extends StatelessWidget {
       case int:
         return AddIntegerLogAlertDialog(
             _trackerToWhichToAddLog, _triggerTrackerListRebuild);
-      // TODO: add alert dialog for decimal logs
-//      case double:
-//        return ;
+      case double:
+        return AddDoubleLogAlertDialog(
+            _trackerToWhichToAddLog, _triggerTrackerListRebuild);
       default:
         throw ('Unexpected log type encountered: ${_trackerToWhichToAddLog.logType}');
     }
@@ -273,6 +273,174 @@ class _AddIntegerLogAlertDialogState extends State<AddIntegerLogAlertDialog> {
               ),
               incrementValueButton,
             ],
+          ),
+          Visibility(
+            child: Padding(
+              padding: const EdgeInsets.only(top: 8.0),
+              child: inputNotParsableWarning,
+            ),
+            visible: showInputNotParsableWarning,
+          ),
+        ],
+      ),
+    );
+
+    final FlatButton addLogButton = FlatButton(
+      child: const Text(
+        'Add',
+        style: TextStyle(color: Colors.blue),
+      ),
+      onPressed: () => addLogWithEnteredValue(),
+    );
+
+    return AlertDialog(
+      title: Center(child: alertDialogTitle),
+      content: alertDialogContent,
+      actions: <Widget>[addLogButton],
+    );
+  }
+}
+
+class AddDoubleLogAlertDialog extends StatefulWidget {
+  final Tracker _trackerToWhichToAddLog;
+  final VoidCallback _triggerTrackerListRebuild;
+
+  const AddDoubleLogAlertDialog(
+      this._trackerToWhichToAddLog, this._triggerTrackerListRebuild);
+
+  @override
+  _AddDoubleLogAlertDialogState createState() =>
+      _AddDoubleLogAlertDialogState();
+}
+
+class _AddDoubleLogAlertDialogState extends State<AddDoubleLogAlertDialog> {
+  TextEditingController logValueTextFieldController = TextEditingController();
+
+  /// a text that tells the user that the entered text for the value is not
+  /// parsable as a number
+  static const Text inputNotParsableWarning = Text(
+    'Please enter a valid number',
+    style: TextStyle(color: Colors.redAccent),
+  );
+
+  /// determines whether a warning is shown that tells the user the entered
+  /// value is not parsable (e.g. when there are two minus signs)
+  bool showInputNotParsableWarning = false;
+
+  /// indicates whether the user wanted to add a log with an entered value that
+  /// was not parable as a number
+  bool userTriedToAddUnparsableLogValue = false;
+
+  @override
+  void initState() {
+    super.initState();
+    logValueTextFieldController.text = '0.0';
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final TrackerList listOfTrackers = Provider.of<TrackerList>(context);
+
+    void addLogWithEnteredValue() {
+      double enteredLogValue;
+      bool enteredTextForLogValueIsParsable;
+      try {
+        enteredLogValue = double.parse(logValueTextFieldController.text);
+        enteredTextForLogValueIsParsable = true;
+      } on FormatException {
+        enteredTextForLogValueIsParsable = false;
+        setState(() {
+          userTriedToAddUnparsableLogValue = true;
+          showInputNotParsableWarning = true;
+        });
+      }
+      if (enteredTextForLogValueIsParsable) {
+        listOfTrackers.addLog(
+          widget._trackerToWhichToAddLog,
+          Log<double>(enteredLogValue),
+        );
+        widget._triggerTrackerListRebuild();
+        Navigator.of(context).pop();
+      }
+    }
+
+    final TextField logValueTextField = TextField(
+      controller: logValueTextFieldController,
+      keyboardType: TextInputType.number,
+      inputFormatters: <TextInputFormatter>[
+        // accept digits, points and minus signs
+        WhitelistingTextInputFormatter(RegExp('[0-9-.]')),
+      ], // Only numbers can be entered
+      decoration: InputDecoration(
+        border: InputBorder.none,
+        contentPadding: EdgeInsets.all(8.0),
+      ),
+      textAlign: TextAlign.center,
+      showCursor: false,
+      onTap: () {
+        // resets the input value so that a number can be entered immediately
+        // without having to delete the '0' that the field is initialized with
+        logValueTextFieldController.text = '';
+
+        if (userTriedToAddUnparsableLogValue && showInputNotParsableWarning) {
+          // do not show the warning since the entered text was reset
+          setState(() {
+            showInputNotParsableWarning = false;
+          });
+        }
+      },
+      onChanged: (String enteredValue) {
+        // keeps the cursor behind the last digit
+        logValueTextFieldController.selection = TextSelection.fromPosition(
+          TextPosition(
+            offset: logValueTextFieldController.text.length,
+          ),
+        );
+
+        try {
+          // used to test whether the input is parable as a number
+          int parsedLogValue = int.parse(enteredValue);
+
+          if (userTriedToAddUnparsableLogValue && showInputNotParsableWarning) {
+            // do not show the warning since the entered value is parsable
+            setState(() {
+              showInputNotParsableWarning = false;
+            });
+          }
+        } on Exception {
+          if (userTriedToAddUnparsableLogValue &&
+              !showInputNotParsableWarning) {
+            setState(() {
+              showInputNotParsableWarning = true;
+            });
+          }
+        }
+      },
+      onSubmitted: (String textFieldInput) => addLogWithEnteredValue(),
+    );
+
+    const Text alertDialogTitle = Text('Adding log');
+    Widget alertDialogContent = SingleChildScrollView(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        mainAxisSize: MainAxisSize.min,
+        children: <Widget>[
+          Padding(
+            padding: const EdgeInsets.only(bottom: 8.0),
+            child:
+            Text('Value of "${widget._trackerToWhichToAddLog.name}" today'),
+          ),
+          Container(
+            child: logValueTextField,
+            width: 50,
+            foregroundDecoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(5.0),
+              border: Border.all(
+                color: Colors.blueGrey,
+                width: 2.0,
+              ),
+            ),
           ),
           Visibility(
             child: Padding(
