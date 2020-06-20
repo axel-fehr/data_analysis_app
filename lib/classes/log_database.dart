@@ -57,16 +57,29 @@ class LogDatabase<T> {
     Future<Database> database = openDatabase(
       databasePath,
       onCreate: (db, version) {
-        // TODO: change this depending on T
+        String dataTypeForValueColumn = _getSQLiteDataTypeAsString();
         String command =
             'CREATE TABLE IF NOT EXISTS $tableNameInDoubleQuotationMarks('
             'timeStamp DATETIME PRIMARY KEY, '
-            'value INTEGER)';
+            'value $dataTypeForValueColumn)';
         return db.execute(command);
       },
       version: 1,
     );
     return database;
+  }
+
+  /// Returns a string that contains the SQLite data type that corresponds to
+  /// the the type T (T is the generic type that was specified when the object
+  /// was instantiated.
+  String _getSQLiteDataTypeAsString() {
+    if (T == bool || T == int) {
+      return 'INTEGER';
+    } else if (T == double) {
+      return 'REAL';
+    } else {
+      throw ('Storing values of type "$T" is not supported.');
+    }
   }
 
   /// Updates the name of the tracker the database belongs to (only the
@@ -161,6 +174,12 @@ class LogDatabase<T> {
         logValue = maps[i]['value'];
       } else {
         throw ('Unexpected value for the generic type: $T');
+      }
+
+      // ensures that values that are read as integers get converted to doubles
+      // if the tracker type is double
+      if(T == double && logValue.runtimeType == int) {
+        logValue = logValue.toDouble();
       }
 
       return Log<T>(
