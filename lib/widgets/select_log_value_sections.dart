@@ -224,3 +224,120 @@ class _ChooseIntegerLogValueSectionState
     );
   }
 }
+
+class ChooseDecimalLogValueSection extends StatefulWidget {
+  final TextEditingController _logValueTextFieldController =
+      TextEditingController();
+
+  String get chosenValueAsString => _logValueTextFieldController.text;
+
+  ChooseDecimalLogValueSection();
+
+  @override
+  _ChooseDecimalLogValueSectionState createState() =>
+      _ChooseDecimalLogValueSectionState();
+}
+
+class _ChooseDecimalLogValueSectionState
+    extends State<ChooseDecimalLogValueSection> {
+  /// a text that tells the user that the entered text for the value is not
+  /// parsable as a number
+  static const Text inputNotParsableWarning = Text(
+    'Please enter a valid number',
+    style: TextStyle(color: Colors.redAccent),
+  );
+
+  /// determines whether a warning is shown that tells the user the entered
+  /// value is not parsable (e.g. when there is more than one minus sign)
+  bool _showInputNotParsableWarning = false;
+
+  @override
+  void initState() {
+    super.initState();
+    widget._logValueTextFieldController.text = '0.0';
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final TextField logValueTextField = TextField(
+      controller: widget._logValueTextFieldController,
+      keyboardType: TextInputType.number,
+      inputFormatters: <TextInputFormatter>[
+        // accept digits, minus signs and points
+        WhitelistingTextInputFormatter(RegExp('[0-9-.]')),
+      ],
+      // Only numbers can be entered
+      decoration: InputDecoration(
+        border: InputBorder.none,
+        contentPadding: EdgeInsets.all(8.0),
+      ),
+      textAlign: TextAlign.center,
+      showCursor: false,
+      onTap: () {
+        // resets the input value so that a number can be entered immediately
+        // without having to delete the '0' that the field is initialized with
+        widget._logValueTextFieldController.text = '';
+
+        if (_showInputNotParsableWarning) {
+          // do not show the warning since the entered text was reset
+          setState(() {
+            _showInputNotParsableWarning = false;
+          });
+        }
+      },
+      onChanged: (String enteredValue) {
+        // keeps the cursor behind the last digit
+        widget._logValueTextFieldController.selection =
+            TextSelection.fromPosition(
+          TextPosition(
+            offset: widget._logValueTextFieldController.text.length,
+          ),
+        );
+
+        try {
+          // used to test whether the input is parable as a number
+          int parsedLogValue = int.parse(enteredValue);
+
+          if (_showInputNotParsableWarning) {
+            // do not show the warning since the entered value is parsable
+            setState(() {
+              _showInputNotParsableWarning = false;
+            });
+          }
+        } on Exception {
+          if (!_showInputNotParsableWarning) {
+            setState(() {
+              _showInputNotParsableWarning = true;
+            });
+          }
+        }
+      },
+    );
+
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.start,
+      crossAxisAlignment: CrossAxisAlignment.center,
+      mainAxisSize: MainAxisSize.min,
+      children: <Widget>[
+        Container(
+          child: logValueTextField,
+          width: 50,
+          foregroundDecoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(5.0),
+            border: Border.all(
+              color: Colors.blueGrey,
+              width: 2.0,
+            ),
+          ),
+        ),
+        Visibility(
+          child: Padding(
+            padding: const EdgeInsets.only(top: 8.0),
+            child: inputNotParsableWarning,
+          ),
+          visible: _showInputNotParsableWarning,
+        ),
+      ],
+    );
+  }
+}

@@ -23,9 +23,8 @@ class EditLogAlertDialog extends StatelessWidget {
         return EditBooleanLogAlertDialog(_log, _trackerCorrespondingToLog);
       case int:
         return EditIntegerLogAlertDialog(_log, _trackerCorrespondingToLog);
-      // TODO: add alert dialog for decimal logs
-//      case double:
-//        return ;
+     case double:
+       return EditDecimalLogAlertDialog(_log, _trackerCorrespondingToLog);
       default:
         throw ('Unexpected log type encountered: ${_trackerCorrespondingToLog.logType}');
     }
@@ -147,3 +146,80 @@ class _EditIntegerLogAlertDialogState extends State<EditIntegerLogAlertDialog> {
     );
   }
 }
+
+class EditDecimalLogAlertDialog extends StatefulWidget {
+  final Log _log;
+  final Tracker _trackerCorrespondingToLog;
+
+  const EditDecimalLogAlertDialog(this._log, this._trackerCorrespondingToLog);
+
+  @override
+  _EditDecimalLogAlertDialogState createState() =>
+      _EditDecimalLogAlertDialogState();
+}
+
+class _EditDecimalLogAlertDialogState extends State<EditDecimalLogAlertDialog> {
+  @override
+  Widget build(BuildContext context) {
+    ChooseDecimalLogValueSection _chooseDecimalLogValueSection =
+        ChooseDecimalLogValueSection();
+
+    TrackerList listOfTrackers = Provider.of<TrackerList>(context);
+
+    Widget changeLogButton = FlatButton(
+      child: const Text('Change value'),
+      onPressed: () {
+        bool enteredValueIsParableAsInt;
+        double newLogValue;
+        try {
+          newLogValue =
+              double.parse(_chooseDecimalLogValueSection.chosenValueAsString);
+          enteredValueIsParableAsInt = true;
+        } on Error {
+          enteredValueIsParableAsInt = false;
+        }
+        if (enteredValueIsParableAsInt) {
+          listOfTrackers.changeLogValue(
+            widget._trackerCorrespondingToLog,
+            widget._log.timeStamp,
+            newLogValue,
+          );
+          Navigator.of(context).pop();
+        }
+      },
+    );
+
+    Widget deleteLogButton = FlatButton(
+      child: const Icon(Icons.delete),
+      onPressed: () {
+        listOfTrackers.deleteLog(
+          widget._trackerCorrespondingToLog,
+          widget._log.timeStamp,
+        );
+        Navigator.of(context).pop();
+      },
+    );
+
+    return AlertDialog(
+      title: const Center(child: Text('Edit Log')),
+      content: SingleChildScrollView(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: <Widget>[
+            _chooseDecimalLogValueSection,
+            const Padding(
+              padding: EdgeInsets.only(top: 8.0),
+              child: Text(
+                'If you tap "Change value", the log value will be set to the '
+                    'your chosen value',
+                style: TextStyle(fontSize: 12, color: Colors.grey),
+              ),
+            ),
+          ],
+        ),
+      ),
+      actions: <Widget>[changeLogButton, deleteLogButton],
+    );
+  }
+}
+
