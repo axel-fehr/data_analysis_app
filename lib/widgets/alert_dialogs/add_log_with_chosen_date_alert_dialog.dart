@@ -13,6 +13,7 @@ class AddLogWithChosenDateAlertDialog extends StatelessWidget
   final Tracker _trackerToWhichToAddLog;
   ChooseBooleanLogValueSection _chooseBooleanLogValueSection;
   ChooseIntegerLogValueSection _chooseIntegerLogValueSection;
+  ChooseDecimalLogValueSection _chooseDecimalLogValueSection;
 
   /// used as a placeholder for the widget that is used to choose the log value
   Widget _chooseLogValueSection;
@@ -20,6 +21,9 @@ class AddLogWithChosenDateAlertDialog extends StatelessWidget
   /// Text that serves as a hint to the user that the below section is for
   /// choosing the log value of the log on the selected date
   Widget textAboveSelectLogValueSection;
+
+  /// The date that was selected
+  DateTime _selectedDate;
 
   AddLogWithChosenDateAlertDialog(this._trackerToWhichToAddLog) {
     // only initialize the object that is needed
@@ -40,7 +44,15 @@ class AddLogWithChosenDateAlertDialog extends StatelessWidget
             'Value of "${_trackerToWhichToAddLog.name}" on the chosen date:'),
       );
     }
-    // TODO: implement log value section for double logs
+    else if (_trackerToWhichToAddLog.logType == double) {
+      _chooseDecimalLogValueSection = ChooseDecimalLogValueSection();
+      _chooseLogValueSection = _chooseDecimalLogValueSection;
+      textAboveSelectLogValueSection = Padding(
+        padding: const EdgeInsets.symmetric(vertical: 8.0),
+        child: Text(
+            'Value of "${_trackerToWhichToAddLog.name}" on the chosen date:'),
+      );
+    }
     else {
       throw ('There is no widget for the selection of the given log type '
           '"${_trackerToWhichToAddLog.logType}"');
@@ -49,8 +61,6 @@ class AddLogWithChosenDateAlertDialog extends StatelessWidget
 
   @override
   Widget build(BuildContext context) {
-    DateTime _selectedDate;
-
     DateTime currentDate = convertTimeStampToDate(DateTime.now());
     CupertinoDatePicker datePicker = CupertinoDatePicker(
       mode: CupertinoDatePickerMode.date,
@@ -91,6 +101,26 @@ class AddLogWithChosenDateAlertDialog extends StatelessWidget
             Navigator.of(context).pop(createdLog);
           }
           break;
+        case double:
+          double enteredLogValue;
+          bool enteredTextForLogValueIsParsable;
+          try {
+            enteredLogValue =
+                double.parse(_chooseDecimalLogValueSection.chosenValueAsString);
+            enteredTextForLogValueIsParsable = true;
+          } on FormatException {
+            // nothing is done when the entered value cannot be parsed (a
+            // warning is shown to the user in another widget)
+            enteredTextForLogValueIsParsable = false;
+          }
+          if (enteredTextForLogValueIsParsable) {
+            Log<double> createdLog =
+                Log<double>(enteredLogValue, timeStamp: _selectedDate);
+            Navigator.of(context).pop(createdLog);
+          }
+          break;
+        default:
+          throw('Unexpected log type "${_trackerToWhichToAddLog.logType}"');
       }
     }
 
