@@ -399,7 +399,7 @@ class _AddDoubleLogAlertDialogState extends State<AddDoubleLogAlertDialog> {
 
         try {
           // used to test whether the input is parable as a number
-          int parsedLogValue = int.parse(enteredValue);
+          double parsedLogValue = double.parse(enteredValue);
 
           if (userTriedToAddUnparsableLogValue && showInputNotParsableWarning) {
             // do not show the warning since the entered value is parsable
