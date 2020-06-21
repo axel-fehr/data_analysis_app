@@ -38,10 +38,9 @@ class TrackerOverallStats extends StatelessWidget {
       case int:
         statsToDisplay = _addStatsForIntegerTrackers(statsToDisplay);
         break;
-      // TODO: implement this:
-//      case double:
-//        statsToDisplay = addStatsForDecimalTrackers(statsToDisplay);
-//        break;
+      case double:
+        statsToDisplay = _addStatsForDecimalTrackers(statsToDisplay);
+        break;
       default:
         throw ('Unexpected log type "${trackerToComputeStatsWith.logType}" encountered');
     }
@@ -115,6 +114,26 @@ class TrackerOverallStats extends StatelessWidget {
       }
     }
 
+    return statsToDisplay;
+  }
+
+  List<Widget> _addStatsForDecimalTrackers(List<Widget> statsToDisplay) {
+    if (trackerToComputeStatsWith.logs.isNotEmpty) {
+      List<double> logValues = List.generate(
+          trackerToComputeStatsWith.logs.length,
+          (index) => trackerToComputeStatsWith.logs[index].value);
+
+      double meanValue = mean(logValues);
+      double medianValue = median(logValues);
+
+      String meanStatistic = 'Mean: ${meanValue.toStringAsFixed(2)}';
+      statsToDisplay.add(StatisticWithPadding(meanStatistic));
+
+      if (logValues.length > 1) {
+        String medianStatistic = 'Median: ${medianValue.toStringAsFixed(2)}';
+        statsToDisplay.add(StatisticWithPadding(medianStatistic));
+      }
+    }
     return statsToDisplay;
   }
 }
