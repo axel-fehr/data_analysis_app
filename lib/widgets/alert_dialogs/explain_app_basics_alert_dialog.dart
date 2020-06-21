@@ -6,7 +6,6 @@ import '../bulleted_list.dart';
 /// An alert dialog that explains the basics of the app to the user so that he
 /// knows how to use the app.
 class ExplainAppBasicsAlertDialog extends StatelessWidget {
-
   const ExplainAppBasicsAlertDialog();
 
   @override
