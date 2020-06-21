@@ -7,8 +7,8 @@ import 'package:tracking_app/enumerations/user_interaction.dart';
 import '../../providers/tracker_list.dart';
 import '../../classes/tracker.dart';
 import '../../classes/user_interaction_database.dart';
-import '../bulleted_list.dart';
 import '../../enumerations/tracker_type.dart';
+import './explain_app_basics_alert_dialog.dart';
 
 class AddTrackerAlertDialog extends StatefulWidget {
   @override
@@ -154,46 +154,12 @@ class _AddTrackerAlertDialogState extends State<AddTrackerAlertDialog> {
     return showDialog(
       context: context,
       builder: (context) {
-        return ExplainAppBasicsAlertDialog();
+        return const ExplainAppBasicsAlertDialog();
       },
       // Disables the dismissal of the alert dialog by tapping the area outside
       // it. This prevents the user from accidentally dismissing it before
       // having read everything.
       barrierDismissible: false,
-    );
-  }
-}
-
-/// An alert dialog that explains the basics of the app to the user so that he
-/// knows how to use the app.
-class ExplainAppBasicsAlertDialog extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return AlertDialog(
-      title: const Text('Things you should know'),
-      content: SingleChildScrollView(
-        child: Column(
-          children: <Widget>[
-            const BulletedList([
-              'You can add one log per day per tracker',
-              'Tap on a tracker in the list to see more detailed statistics',
-              "These statistics aren't very insightful at the beginning since "
-                  'there is not a lot of data yet. But the more logs you add '
-                  'over time, the more insightful these statistics will become!'
-            ]),
-            Align(
-              child: FlatButton(
-                child: const Text(
-                  'Got it',
-                  style: TextStyle(color: Colors.blue),
-                ),
-                onPressed: () => Navigator.of(context).pop(),
-              ),
-              alignment: Alignment.centerRight,
-            ),
-          ],
-        ),
-      ),
     );
   }
 }
