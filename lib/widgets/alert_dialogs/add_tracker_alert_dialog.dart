@@ -83,6 +83,17 @@ class _AddTrackerAlertDialogState extends State<AddTrackerAlertDialog> {
                 child: _showTrackerNameWarning ? _trackerNameWarning : Text(''),
               ),
             ),
+            const Padding(
+              padding:
+                  EdgeInsets.symmetric(horizontal: defaultContentPaddingValue),
+              child: Text(
+                'Tracker type:',
+                style: TextStyle(
+                  fontSize: 18,
+                  decoration: TextDecoration.underline,
+                ),
+              ),
+            ),
             Container(
               child: Column(
                 mainAxisSize: MainAxisSize.min,
@@ -135,7 +146,7 @@ class _AddTrackerAlertDialogState extends State<AddTrackerAlertDialog> {
                       initializeWithEmptyLogList: true);
                   break;
                 default:
-                  throw('Unexpected tracker type: ${_trackerTypeChoiceList.chosenTrackerType}');
+                  throw ('Unexpected tracker type: ${_trackerTypeChoiceList.chosenTrackerType}');
               }
               Navigator.of(context).pop(trackerToAdd);
 
