@@ -16,7 +16,7 @@ class AddTrackerAlertDialog extends StatefulWidget {
 }
 
 class _AddTrackerAlertDialogState extends State<AddTrackerAlertDialog> {
-  // shown when a tracker with the entered name already exists
+  /// shown when a tracker with the entered name already exists
   static const Text _trackerNameWarning = Text(
     'Name already exists!',
     style: TextStyle(color: Colors.redAccent),
@@ -24,9 +24,11 @@ class _AddTrackerAlertDialogState extends State<AddTrackerAlertDialog> {
 
   final TextEditingController _customController = TextEditingController();
 
-  // determines whether a warning is shown that tells the user that he must
-  // not add a tracker with a name that already exists
-  bool showTrackerNameWarning = false;
+  /// determines whether a warning is shown that tells the user that he must
+  /// not add a tracker with a name that already exists
+  bool _showTrackerNameWarning = false;
+
+  final TrackerTypeChoiceList _trackerTypeChoiceList = TrackerTypeChoiceList();
 
   @override
   Widget build(BuildContext context) {
@@ -41,19 +43,18 @@ class _AddTrackerAlertDialogState extends State<AddTrackerAlertDialog> {
       onChanged: (String enteredText) {
         if (trackerNames.contains(_customController.text.toString())) {
           setState(() {
-            showTrackerNameWarning = true;
+            _showTrackerNameWarning = true;
           });
         }
         // removes the warning if entered text is not an existing name
-        else if (showTrackerNameWarning = true) {
+        else if (_showTrackerNameWarning = true) {
           setState(() {
-            showTrackerNameWarning = false;
+            _showTrackerNameWarning = false;
           });
         }
       },
     );
 
-    TrackerTypeChoiceList trackerTypeChoiceList = TrackerTypeChoiceList();
     const double defaultContentPaddingValue = 20.0;
 
     return AlertDialog(
@@ -79,7 +80,7 @@ class _AddTrackerAlertDialogState extends State<AddTrackerAlertDialog> {
               alignment: Alignment.topCenter,
               child: Padding(
                 padding: const EdgeInsets.only(bottom: 8.0),
-                child: showTrackerNameWarning ? _trackerNameWarning : Text(''),
+                child: _showTrackerNameWarning ? _trackerNameWarning : Text(''),
               ),
             ),
             Container(
@@ -87,7 +88,7 @@ class _AddTrackerAlertDialogState extends State<AddTrackerAlertDialog> {
                 mainAxisSize: MainAxisSize.min,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
-                  trackerTypeChoiceList,
+                  _trackerTypeChoiceList,
                 ],
               ),
               // TODO: figure out a way to adjust the size and width to the content without having to set a specific height and width
@@ -120,7 +121,7 @@ class _AddTrackerAlertDialogState extends State<AddTrackerAlertDialog> {
               }
 
               Tracker trackerToAdd;
-              switch (trackerTypeChoiceList.chosenTrackerType) {
+              switch (_trackerTypeChoiceList.chosenTrackerType) {
                 case TrackerType.yesNo:
                   trackerToAdd = Tracker<bool>(enteredTrackerName,
                       initializeWithEmptyLogList: true);
@@ -134,7 +135,7 @@ class _AddTrackerAlertDialogState extends State<AddTrackerAlertDialog> {
                       initializeWithEmptyLogList: true);
                   break;
                 default:
-                  throw('Unexpected tracker type: ${trackerTypeChoiceList.chosenTrackerType}');
+                  throw('Unexpected tracker type: ${_trackerTypeChoiceList.chosenTrackerType}');
               }
               Navigator.of(context).pop(trackerToAdd);
 
