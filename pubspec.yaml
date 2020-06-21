@@ -11,7 +11,7 @@ description: A new Flutter application used to track things about yourself and a
 # In iOS, build-name is used as CFBundleShortVersionString while build-number used as CFBundleVersion.
 # Read more about iOS versioning at
 # https://developer.apple.com/library/archive/documentation/General/Reference/InfoPlistKeyReference/Articles/CoreFoundationKeys.html
-version: 0.3.0+30 # number before '+' is the version name, the number after it is version code
+version: 0.3.1+31 # number before '+' is the version name, the number after it is version code
 
 environment:
   sdk: ">=2.3.0 <3.0.0"
