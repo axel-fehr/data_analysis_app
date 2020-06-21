@@ -82,17 +82,16 @@ class TrackerOverallStats extends StatelessWidget {
       });
 
       double meanValue = mean(logValuesAsDoubles);
-      double medianValue = median(logValuesAsDoubles);
-      List<int> modeValues = mode(logValuesAsInt);
-
       String meanStatistic = 'Mean: ${meanValue.toStringAsFixed(2)}';
       statsToDisplay.add(StatisticWithPadding(meanStatistic));
 
       if (logValuesAsInt.length > 1) {
+        double medianValue = median(logValuesAsDoubles);
         String medianStatistic = 'Median: ${medianValue.toStringAsFixed(2)}';
         statsToDisplay.add(StatisticWithPadding(medianStatistic));
       }
 
+      List<int> modeValues = mode(logValuesAsInt);
       if (modeValues.isNotEmpty) {
         String medianStatistic = 'Mode: ';
 
@@ -124,12 +123,11 @@ class TrackerOverallStats extends StatelessWidget {
           (index) => trackerToComputeStatsWith.logs[index].value);
 
       double meanValue = mean(logValues);
-      double medianValue = median(logValues);
-
       String meanStatistic = 'Mean: ${meanValue.toStringAsFixed(2)}';
       statsToDisplay.add(StatisticWithPadding(meanStatistic));
 
       if (logValues.length > 1) {
+        double medianValue = median(logValues);
         String medianStatistic = 'Median: ${medianValue.toStringAsFixed(2)}';
         statsToDisplay.add(StatisticWithPadding(medianStatistic));
       }
