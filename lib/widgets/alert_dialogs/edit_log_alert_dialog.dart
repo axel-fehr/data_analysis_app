@@ -8,7 +8,7 @@ import 'package:tracking_app/classes/tracker.dart';
 import 'package:tracking_app/classes/log.dart';
 import '../select_log_value_sections.dart';
 
-/// An alert dialog changes depending on the type of log that is being edited
+/// An alert dialog that changes depending on the type of log that is being edited
 /// and can therefore be used for the editing of any type of log.
 class EditLogAlertDialog extends StatelessWidget {
   final Log _log;
@@ -23,8 +23,8 @@ class EditLogAlertDialog extends StatelessWidget {
         return EditBooleanLogAlertDialog(_log, _trackerCorrespondingToLog);
       case int:
         return EditIntegerLogAlertDialog(_log, _trackerCorrespondingToLog);
-     case double:
-       return EditDecimalLogAlertDialog(_log, _trackerCorrespondingToLog);
+      case double:
+        return EditDecimalLogAlertDialog(_log, _trackerCorrespondingToLog);
       default:
         throw ('Unexpected log type encountered: ${_trackerCorrespondingToLog.logType}');
     }
@@ -135,7 +135,7 @@ class _EditIntegerLogAlertDialogState extends State<EditIntegerLogAlertDialog> {
               padding: EdgeInsets.only(top: 8.0),
               child: Text(
                 'If you tap "Change value", the log value will be set to the '
-                    'your chosen value',
+                'your chosen value',
                 style: TextStyle(fontSize: 12, color: Colors.grey),
               ),
             ),
@@ -211,7 +211,7 @@ class _EditDecimalLogAlertDialogState extends State<EditDecimalLogAlertDialog> {
               padding: EdgeInsets.only(top: 8.0),
               child: Text(
                 'If you tap "Change value", the log value will be set to the '
-                    'your chosen value',
+                'your chosen value',
                 style: TextStyle(fontSize: 12, color: Colors.grey),
               ),
             ),
@@ -222,4 +222,3 @@ class _EditDecimalLogAlertDialogState extends State<EditDecimalLogAlertDialog> {
     );
   }
 }
-
