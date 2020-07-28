@@ -2,7 +2,7 @@ import 'package:test/test.dart';
 
 import 'package:tracking_app/classes/log.dart';
 import 'package:tracking_app/utils/statistics_utils/correlation.dart'
-    show getIndicesOfLogsAddedOnTheSameDay;
+    show getIndicesOfLogsAddedOnTheSameDate;
 
 void main() {
   test(
@@ -18,9 +18,9 @@ void main() {
     ];
 
     List<List<int>> indicesList =
-        getIndicesOfLogsAddedOnTheSameDay(listOfLogs1, listOfLogs2);
+        getIndicesOfLogsAddedOnTheSameDate(listOfLogs1, listOfLogs2);
     List<List<int>> indicesListWithSwappedArguments =
-        getIndicesOfLogsAddedOnTheSameDay(listOfLogs2, listOfLogs1);
+        getIndicesOfLogsAddedOnTheSameDate(listOfLogs2, listOfLogs1);
 
     List<List<int>> expectedResult = [
       [0],
@@ -41,9 +41,9 @@ void main() {
       Log<bool>(true, timeStamp: DateTime(2020, 3, 9)),
     ];
 
-    indicesList = getIndicesOfLogsAddedOnTheSameDay(listOfLogs1, listOfLogs2);
+    indicesList = getIndicesOfLogsAddedOnTheSameDate(listOfLogs1, listOfLogs2);
     indicesListWithSwappedArguments =
-        getIndicesOfLogsAddedOnTheSameDay(listOfLogs2, listOfLogs1);
+        getIndicesOfLogsAddedOnTheSameDate(listOfLogs2, listOfLogs1);
 
     expectedResult = [
       [1, 2],
@@ -64,9 +64,9 @@ void main() {
       Log<bool>(false, timeStamp: DateTime(2021, 5, 22)),
     ];
 
-    indicesList = getIndicesOfLogsAddedOnTheSameDay(listOfLogs1, listOfLogs2);
+    indicesList = getIndicesOfLogsAddedOnTheSameDate(listOfLogs1, listOfLogs2);
     indicesListWithSwappedArguments =
-        getIndicesOfLogsAddedOnTheSameDay(listOfLogs2, listOfLogs1);
+        getIndicesOfLogsAddedOnTheSameDate(listOfLogs2, listOfLogs1);
 
     expectedResult = [
       [1],
@@ -87,9 +87,9 @@ void main() {
     ];
 
     List<List<int>> indicesList =
-        getIndicesOfLogsAddedOnTheSameDay(listOfLogs1, listOfLogs2);
+        getIndicesOfLogsAddedOnTheSameDate(listOfLogs1, listOfLogs2);
     List<List<int>> indicesListWithSwappedArguments =
-        getIndicesOfLogsAddedOnTheSameDay(listOfLogs2, listOfLogs1);
+        getIndicesOfLogsAddedOnTheSameDate(listOfLogs2, listOfLogs1);
 
     List<List<int>> expectedResult = [[], []];
     expect(indicesList, expectedResult);
@@ -107,9 +107,9 @@ void main() {
       Log<bool>(true, timeStamp: DateTime(2020, 4, 7)),
     ];
 
-    indicesList = getIndicesOfLogsAddedOnTheSameDay(listOfLogs1, listOfLogs2);
+    indicesList = getIndicesOfLogsAddedOnTheSameDate(listOfLogs1, listOfLogs2);
     indicesListWithSwappedArguments =
-        getIndicesOfLogsAddedOnTheSameDay(listOfLogs2, listOfLogs1);
+        getIndicesOfLogsAddedOnTheSameDate(listOfLogs2, listOfLogs1);
 
     expectedResult = [[], []];
     expect(indicesList, expectedResult);
@@ -124,9 +124,9 @@ void main() {
     ];
 
     List<List<int>> indicesList =
-        getIndicesOfLogsAddedOnTheSameDay(listOfLogs1, listOfLogs2);
+        getIndicesOfLogsAddedOnTheSameDate(listOfLogs1, listOfLogs2);
     List<List<int>> indicesListWithSwappedArguments =
-        getIndicesOfLogsAddedOnTheSameDay(listOfLogs2, listOfLogs1);
+        getIndicesOfLogsAddedOnTheSameDate(listOfLogs2, listOfLogs1);
 
     List<List<int>> expectedResult = [[], []];
     expect(indicesList, expectedResult);
@@ -139,9 +139,9 @@ void main() {
     List<Log> listOfLogs2 = [];
 
     List<List<int>> indicesList =
-        getIndicesOfLogsAddedOnTheSameDay(listOfLogs1, listOfLogs2);
+        getIndicesOfLogsAddedOnTheSameDate(listOfLogs1, listOfLogs2);
     List<List<int>> indicesListWithSwappedArguments =
-        getIndicesOfLogsAddedOnTheSameDay(listOfLogs2, listOfLogs1);
+        getIndicesOfLogsAddedOnTheSameDate(listOfLogs2, listOfLogs1);
 
     List<List<int>> expectedResult = [[], []];
     expect(indicesList, expectedResult);

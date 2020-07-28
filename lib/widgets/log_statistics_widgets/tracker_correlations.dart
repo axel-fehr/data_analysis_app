@@ -87,7 +87,6 @@ class ListOfCorrelationsWithOtherTrackers extends StatelessWidget {
         listOfTrackers.length - 1 != sortedCorrelations.length;
     if (trackersWithNoCorrelationValuesExist) {
       for (int i = 0; i < listOfTrackers.length; i++) {
-        // TODO: add comments to explain stuff or rename variables appropriately if possible
         if (!sortedTrackerNames.contains(listOfTrackers[i].name) &&
             listOfTrackers[i].name != nameOfTrackerBeingAnalyzed) {
           correlationTableRows.add(TrackerCorrelationListTile(
@@ -103,8 +102,8 @@ class ListOfCorrelationsWithOtherTrackers extends StatelessWidget {
         children: correlationTableRows,
       ),
     );
-    // TODO: would be nice to display how many values the correlation was computed with
-    // TODO: is it possible to give some kind of 'confidence' about the correlation based on the number of samples? If yes, do that
+    // TODO: display how many values the correlation was computed with
+    // TODO: display a measure for the confidence or uncertainty of the result
   }
 
   /// Returns a map containing the correlation coefficients between the logs
@@ -133,8 +132,21 @@ class ListOfCorrelationsWithOtherTrackers extends StatelessWidget {
     List<String> namesOfOtherTrackers = [];
     trackerListCopy.forEach((otherTracker) {
       if (trackerLogsOverlap(trackerCorrespondingToLogs, otherTracker)) {
-        double correlation = computeCorrelationBetweenTwoTrackers(
-            trackerCorrespondingToLogs, otherTracker);
+        double correlation;
+
+        if (trackerCorrespondingToLogs.logType == bool ||
+            otherTracker.logType == bool) {
+          // compute the pearson correlation coefficient, which is the same
+          // as the phi coefficient when computed with two binary trackers and
+          // the point-biserial coefficient when computed with a binary and a
+          // numerical tracker (assuming binary values are 0s and 1s)
+          correlation = computePearsonCorrelationBetweenTwoTrackers(
+              trackerCorrespondingToLogs, otherTracker);
+        } else {
+          correlation = computeSpearmanCorrelationBetweenTwoTrackers(
+              trackerCorrespondingToLogs, otherTracker);
+        }
+
         correlationsWithOtherTrackers.add(correlation);
         namesOfOtherTrackers.add(otherTracker.name);
       }

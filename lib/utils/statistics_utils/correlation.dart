@@ -8,35 +8,96 @@ import '../../classes/log.dart';
 import '../general.dart';
 import '../math_utils.dart';
 
-/// Computes the correlation coefficient between the logs of the two given
-/// trackers.
+/// Computes the Pearson correlation coefficient between the logs of the two
+/// given trackers.
 ///
 /// The coefficient is only computed with logs where a log with the same time
 /// stamp date can also be found in the other tracker. The remaining logs are
 /// ignored.
-double computeCorrelationBetweenTwoTrackers(
+double computePearsonCorrelationBetweenTwoTrackers(
     Tracker tracker1, Tracker tracker2) {
   assert(tracker1.logs.isNotEmpty && tracker2.logs.isNotEmpty,
       'Both trackers must have logs.');
 
+  List<List<double>> valuesOfMatchingLogs = getLogValuesFromTheSameDate(
+    tracker1,
+    tracker2,
+  );
+  List<double> tracker1LogValues = valuesOfMatchingLogs[0];
+  List<double> tracker2LogValues = valuesOfMatchingLogs[1];
+
+  double correlation = computePearsonCorrelationWithListsOfNumbers(
+    tracker1LogValues,
+    tracker2LogValues,
+  );
+
+  return correlation;
+}
+
+/// Computes the Spearman correlation coefficient between the logs of the two
+/// given trackers.
+///
+/// The coefficient is only computed with logs where a log with the same time
+/// stamp date can also be found in the other tracker. The remaining logs are
+/// ignored.
+double computeSpearmanCorrelationBetweenTwoTrackers(
+    Tracker tracker1, Tracker tracker2) {
+  assert(tracker1.logs.isNotEmpty && tracker2.logs.isNotEmpty,
+      'Both trackers must have logs.');
+
+  List<List<double>> valuesOfMatchingLogs = getLogValuesFromTheSameDate(
+    tracker1,
+    tracker2,
+  );
+  List<double> tracker1LogValues = valuesOfMatchingLogs[0];
+  List<double> tracker2LogValues = valuesOfMatchingLogs[1];
+
+  Map<double, double> valueToRankMapOfTracker1 = rankValues(tracker1LogValues);
+  Map<double, double> valueToRankMapOfTracker2 = rankValues(tracker2LogValues);
+
+  List<double> logValueRanksTracker1 = List.generate(
+    tracker1LogValues.length,
+    (index) => valueToRankMapOfTracker1[tracker1LogValues[index]],
+  );
+  List<double> logValueRanksTracker2 = List.generate(
+    tracker2LogValues.length,
+    (index) => valueToRankMapOfTracker2[tracker2LogValues[index]],
+  );
+
+  double correlation = computePearsonCorrelationWithListsOfNumbers(
+    logValueRanksTracker1,
+    logValueRanksTracker2,
+  );
+
+  return correlation;
+}
+
+/// Returns a list of two lists of equal length, where values with the same
+/// index in the two lists are values from logs that were added on the same
+/// date.
+///
+/// The first and the second list correspond to the log values for the first
+/// and second input argument, respectively.
+/// The log values are always cast to doubles (false is mapped to 0.0 and true
+/// is mapped to 1.0 in the case of Boolean log values).
+List<List<double>> getLogValuesFromTheSameDate(
+    Tracker tracker1, Tracker tracker2) {
   List<List<int>> sameDateLogsIndices =
-      getIndicesOfLogsAddedOnTheSameDay(tracker1.logs, tracker2.logs);
+      getIndicesOfLogsAddedOnTheSameDate(tracker1.logs, tracker2.logs);
   List<int> tracker1MatchingLogIndices = sameDateLogsIndices[0];
   List<int> tracker2MatchingLogIndices = sameDateLogsIndices[1];
 
   List<Log> tracker1MatchingLogs = List.generate(
       tracker1MatchingLogIndices.length,
       (index) => tracker1.logs[tracker1MatchingLogIndices[index]]);
+  List<double> tracker1LogValues = getLogValuesAsDoubles(tracker1MatchingLogs);
+
   List<Log> tracker2MatchingLogs = List.generate(
       tracker2MatchingLogIndices.length,
       (index) => tracker2.logs[tracker2MatchingLogIndices[index]]);
+  List<double> tracker2LogValues = getLogValuesAsDoubles(tracker2MatchingLogs);
 
-  double correlation = computeCorrelationWithListsOfNumbers(
-    getLogValuesAsDoubles(tracker1MatchingLogs),
-    getLogValuesAsDoubles(tracker2MatchingLogs),
-  );
-
-  return correlation;
+  return [tracker1LogValues, tracker2LogValues];
 }
 
 /// Returns the values of logs in the given list of logs as a list of doubles.
@@ -96,7 +157,7 @@ double mapBoolToDouble(bool booleanValue) {
 /// Returns a list of two lists, where both lists contain the indices of the
 /// logs in the first and second list that have the same time stamp dates,
 /// respectively.
-List<List<int>> getIndicesOfLogsAddedOnTheSameDay(
+List<List<int>> getIndicesOfLogsAddedOnTheSameDate(
     List<Log> logs1, List<Log> logs2) {
   List<DateTime> logDates1 = [];
   logs1.forEach((log) => logDates1.add(convertTimeStampToDate(log.timeStamp)));
@@ -116,7 +177,54 @@ List<List<int>> getIndicesOfLogsAddedOnTheSameDay(
   return [logs1MatchingIndices, logs2MatchingIndices];
 }
 
-double computeCorrelationWithListsOfNumbers(List<double> x, List<double> y) {
+/// Returns a map that maps a value from the given list to a rank (i.e. the keys
+/// are the values and the values are the ranks).
+///
+/// All ranks are greater than 0. The smaller values in the list get a lower
+/// rank than higher values. If a value occurs more than once in the given list,
+/// a fractional rank is computed (i.e. the mean rank of the elements with the
+/// given value).
+Map<double, double> rankValues(List<double> values) {
+  assert(values.isNotEmpty, 'List of values must not be empty');
+
+  // sorts the values in ascending order
+  List<double> sortedValues = List.from(values);
+  sortedValues.sort();
+
+  List<double> uniqueValues = sortedValues.toSet().toList();
+
+  Map<double, double> valueToRankMap = {};
+
+  /// Saves the index of the last value for which the rank was computed.
+  /// This is needed to compute the rank correctly for fractional ranks.
+  /// -1 indicates that the rank has not been computed for any value yet.
+  int indexOfLastValueForWhichRankWasComputed = -1;
+
+  uniqueValues.forEach((uniqueValue) {
+    List<double> matchingValues =
+        sortedValues.where((value) => value == uniqueValue).toList();
+    if (matchingValues.length == 1) {
+      int rank = sortedValues.indexOf(uniqueValue) + 1;
+      valueToRankMap[uniqueValue] = rank.toDouble();
+      indexOfLastValueForWhichRankWasComputed = rank - 1;
+    } else {
+      // computes a fractional rank for the values that occur more than once
+      List<double> ranksOfEqualValues = List.generate(
+          matchingValues.length,
+          (index) =>
+              indexOfLastValueForWhichRankWasComputed + 2 + index.toDouble());
+      double fractionalRank = mean(ranksOfEqualValues);
+      valueToRankMap[uniqueValue] = fractionalRank;
+      indexOfLastValueForWhichRankWasComputed =
+          sortedValues.lastIndexOf(uniqueValue);
+    }
+  });
+
+  return valueToRankMap;
+}
+
+double computePearsonCorrelationWithListsOfNumbers(
+    List<double> x, List<double> y) {
   if (x.length != y.length) {
     throw ArgumentError('Input lists must have the same length.');
   }
@@ -127,10 +235,8 @@ double computeCorrelationWithListsOfNumbers(List<double> x, List<double> y) {
   double meanX = sum(x) / x.length;
   double meanY = sum(y) / y.length;
 
-  List<double> xValuesMinusMean =
-      x.map((value) => value - meanX).toList();
-  List<double> yValuesMinusMean =
-      y.map((value) => value - meanY).toList();
+  List<double> xValuesMinusMean = x.map((value) => value - meanX).toList();
+  List<double> yValuesMinusMean = y.map((value) => value - meanY).toList();
 
   double sumOfProducts = 0;
   for (int i = 0; i < xValuesMinusMean.length; i++) {

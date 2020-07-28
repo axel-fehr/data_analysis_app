@@ -3,7 +3,7 @@ import 'package:test/test.dart';
 import 'package:tracking_app/classes/log.dart';
 import 'package:tracking_app/classes/tracker.dart';
 import 'package:tracking_app/utils/statistics_utils/correlation.dart'
-    show computeCorrelationBetweenTwoTrackers;
+    show computeSpearmanCorrelationBetweenTwoTrackers;
 
 void main() {
   test(
@@ -27,9 +27,13 @@ void main() {
         ],
       );
 
-      expect(() => computeCorrelationBetweenTwoTrackers(tracker1, tracker2),
+      expect(
+          () =>
+              computeSpearmanCorrelationBetweenTwoTrackers(tracker1, tracker2),
           throwsArgumentError);
-      expect(() => computeCorrelationBetweenTwoTrackers(tracker2, tracker1),
+      expect(
+          () =>
+              computeSpearmanCorrelationBetweenTwoTrackers(tracker2, tracker1),
           throwsArgumentError);
 
       // Test 2
@@ -50,9 +54,13 @@ void main() {
         ],
       );
 
-      expect(() => computeCorrelationBetweenTwoTrackers(tracker1, tracker2),
+      expect(
+          () =>
+              computeSpearmanCorrelationBetweenTwoTrackers(tracker1, tracker2),
           throwsArgumentError);
-      expect(() => computeCorrelationBetweenTwoTrackers(tracker2, tracker1),
+      expect(
+          () =>
+              computeSpearmanCorrelationBetweenTwoTrackers(tracker2, tracker1),
           throwsArgumentError);
     },
   );
@@ -60,11 +68,11 @@ void main() {
   test(
     'Correlation is NaN if there is only one pair of logs from the same day',
     () async {
-      Tracker tracker1 = Tracker<bool>(
+      Tracker tracker1 = Tracker<double>(
         'tracker1',
         logs: [
-          Log<bool>(true, timeStamp: DateTime(2020, 4, 15)),
-          Log<bool>(false, timeStamp: DateTime(2020, 4, 16)),
+          Log<double>(1, timeStamp: DateTime(2020, 4, 15)),
+          Log<double>(2, timeStamp: DateTime(2020, 4, 16)),
         ],
       );
       Tracker tracker2 = Tracker<int>(
@@ -76,9 +84,9 @@ void main() {
       );
 
       double correlation =
-          computeCorrelationBetweenTwoTrackers(tracker1, tracker2);
+          computeSpearmanCorrelationBetweenTwoTrackers(tracker1, tracker2);
       double correlationWithReversedInput =
-          computeCorrelationBetweenTwoTrackers(tracker2, tracker1);
+          computeSpearmanCorrelationBetweenTwoTrackers(tracker2, tracker1);
 
       expect(correlation.isNaN, true);
       expect(correlationWithReversedInput.isNaN, true);
@@ -109,9 +117,9 @@ void main() {
       );
 
       double correlation =
-          computeCorrelationBetweenTwoTrackers(tracker1, tracker2);
+          computeSpearmanCorrelationBetweenTwoTrackers(tracker1, tracker2);
       double correlationWithReversedInput =
-          computeCorrelationBetweenTwoTrackers(tracker2, tracker1);
+          computeSpearmanCorrelationBetweenTwoTrackers(tracker2, tracker1);
 
       expect(correlation.isNaN, true);
       expect(correlationWithReversedInput.isNaN, true);
@@ -133,9 +141,10 @@ void main() {
         ],
       );
 
-      correlation = computeCorrelationBetweenTwoTrackers(tracker1, tracker2);
+      correlation =
+          computeSpearmanCorrelationBetweenTwoTrackers(tracker1, tracker2);
       correlationWithReversedInput =
-          computeCorrelationBetweenTwoTrackers(tracker2, tracker1);
+          computeSpearmanCorrelationBetweenTwoTrackers(tracker2, tracker1);
 
       expect(correlation.isNaN, true);
       expect(correlationWithReversedInput.isNaN, true);
@@ -156,9 +165,10 @@ void main() {
         ],
       );
 
-      correlation = computeCorrelationBetweenTwoTrackers(tracker1, tracker2);
+      correlation =
+          computeSpearmanCorrelationBetweenTwoTrackers(tracker1, tracker2);
       correlationWithReversedInput =
-          computeCorrelationBetweenTwoTrackers(tracker2, tracker1);
+          computeSpearmanCorrelationBetweenTwoTrackers(tracker2, tracker1);
 
       expect(correlation.isNaN, true);
       expect(correlationWithReversedInput.isNaN, true);
@@ -171,86 +181,32 @@ void main() {
     'equal to all the log values)',
     () async {
       // Test 1
-      Tracker tracker1 = Tracker<bool>(
+      Tracker tracker1 = Tracker<int>(
         'tracker1',
         logs: [
-          Log<bool>(true, timeStamp: DateTime(2020, 1, 29)),
-          Log<bool>(false, timeStamp: DateTime(2020, 1, 30)),
-          Log<bool>(true, timeStamp: DateTime(2020, 1, 31)),
+          Log<int>(1, timeStamp: DateTime(2020, 1, 29)),
+          Log<int>(2, timeStamp: DateTime(2020, 1, 30)),
+          Log<int>(3, timeStamp: DateTime(2020, 1, 31)),
         ],
       );
-      Tracker tracker2 = Tracker<bool>(
+      Tracker tracker2 = Tracker<int>(
         'tracker2',
         logs: [
-          Log<bool>(true, timeStamp: DateTime(2020, 1, 28)),
-          Log<bool>(true, timeStamp: DateTime(2020, 1, 30)),
-          Log<bool>(false, timeStamp: DateTime(2020, 1, 31)),
+          Log<int>(3, timeStamp: DateTime(2020, 1, 28)),
+          Log<int>(2, timeStamp: DateTime(2020, 1, 30)),
+          Log<int>(1, timeStamp: DateTime(2020, 1, 31)),
         ],
       );
 
       double correlation =
-          computeCorrelationBetweenTwoTrackers(tracker1, tracker2);
+          computeSpearmanCorrelationBetweenTwoTrackers(tracker1, tracker2);
       double correlationWithReversedInput =
-          computeCorrelationBetweenTwoTrackers(tracker2, tracker1);
+          computeSpearmanCorrelationBetweenTwoTrackers(tracker2, tracker1);
 
       expect(correlation, -1.0);
       expect(correlationWithReversedInput, -1.0);
 
       // Test 2
-      tracker1 = Tracker<bool>(
-        'tracker1',
-        logs: [
-          Log<bool>(true, timeStamp: DateTime(2019, 12, 31)),
-          Log<bool>(false, timeStamp: DateTime(2020, 1, 1)),
-          Log<bool>(false, timeStamp: DateTime(2020, 1, 2)),
-        ],
-      );
-      tracker2 = Tracker<bool>(
-        'tracker2',
-        logs: [
-          Log<bool>(true, timeStamp: DateTime(2019, 12, 31)),
-          Log<bool>(false, timeStamp: DateTime(2020, 1, 1)),
-          Log<bool>(true, timeStamp: DateTime(2020, 1, 2)),
-          Log<bool>(false, timeStamp: DateTime(2020, 1, 3)),
-        ],
-      );
-
-      correlation = computeCorrelationBetweenTwoTrackers(tracker1, tracker2);
-      correlationWithReversedInput =
-          computeCorrelationBetweenTwoTrackers(tracker2, tracker1);
-
-      expect(correlation, 0.5);
-      expect(correlationWithReversedInput, 0.5);
-
-      // Test 3
-      tracker1 = Tracker<int>(
-        'tracker1',
-        logs: [
-          Log<int>(1, timeStamp: DateTime(2021, 10, 3)),
-          Log<int>(2, timeStamp: DateTime(2021, 10, 4)),
-          Log<int>(3, timeStamp: DateTime(2021, 10, 5)),
-          Log<int>(4, timeStamp: DateTime(2021, 10, 18)),
-          Log<int>(5, timeStamp: DateTime(2021, 11, 2)),
-        ],
-      );
-      tracker2 = Tracker<int>(
-        'tracker2',
-        logs: [
-          Log<int>(0, timeStamp: DateTime(2021, 10, 3)),
-          Log<int>(1, timeStamp: DateTime(2021, 10, 5)),
-          Log<int>(2, timeStamp: DateTime(2021, 10, 18)),
-          Log<int>(3, timeStamp: DateTime(2021, 11, 2)),
-        ],
-      );
-
-      correlation = computeCorrelationBetweenTwoTrackers(tracker1, tracker2);
-      correlationWithReversedInput =
-          computeCorrelationBetweenTwoTrackers(tracker2, tracker1);
-
-      expect(correlation.toStringAsFixed(5), '0.98271');
-      expect(correlationWithReversedInput.toStringAsFixed(5), '0.98271');
-
-      // Test 4
       tracker1 = Tracker<double>(
         'tracker1',
         logs: [
@@ -269,95 +225,109 @@ void main() {
         ],
       );
 
-      correlation = computeCorrelationBetweenTwoTrackers(tracker1, tracker2);
+      correlation =
+          computeSpearmanCorrelationBetweenTwoTrackers(tracker1, tracker2);
       correlationWithReversedInput =
-          computeCorrelationBetweenTwoTrackers(tracker2, tracker1);
+          computeSpearmanCorrelationBetweenTwoTrackers(tracker2, tracker1);
 
-      expect(correlation.toStringAsFixed(5), '-0.87723');
-      expect(correlationWithReversedInput.toStringAsFixed(5), '-0.87723');
+      expect(correlation, -1.0);
+      expect(correlationWithReversedInput, -1.0);
+
+      // Test 3
+      tracker1 = Tracker<int>(
+        'tracker1',
+        logs: [
+          Log<int>(3, timeStamp: DateTime(2019, 10, 3)),
+          Log<int>(1, timeStamp: DateTime(2019, 10, 4)),
+          Log<int>(-16, timeStamp: DateTime(2019, 10, 5)),
+          Log<int>(-7, timeStamp: DateTime(2019, 10, 6)),
+          Log<int>(2, timeStamp: DateTime(2019, 11, 18)),
+          Log<int>(11, timeStamp: DateTime(2019, 11, 2)),
+        ],
+      );
+      tracker2 = Tracker<double>(
+        'tracker2',
+        logs: [
+          Log<double>(3.5, timeStamp: DateTime(2019, 10, 4)),
+          Log<double>(2.15, timeStamp: DateTime(2019, 10, 5)),
+          Log<double>(0.2, timeStamp: DateTime(2019, 11, 18)),
+          Log<double>(5.1, timeStamp: DateTime(2019, 10, 24)),
+          Log<double>(18.5, timeStamp: DateTime(2019, 11, 2)),
+        ],
+      );
+
+      correlation =
+          computeSpearmanCorrelationBetweenTwoTrackers(tracker1, tracker2);
+      correlationWithReversedInput =
+          computeSpearmanCorrelationBetweenTwoTrackers(tracker2, tracker1);
+
+      expect(correlation, 0.4);
+      expect(correlationWithReversedInput, 0.4);
 
       // Test 4
       tracker1 = Tracker<int>(
         'tracker1',
         logs: [
-          Log<int>(3, timeStamp: DateTime(2019, 10, 3)),
-          Log<int>(14, timeStamp: DateTime(2019, 10, 4)),
-          Log<int>(-16, timeStamp: DateTime(2019, 10, 5)),
-          Log<int>(2, timeStamp: DateTime(2019, 11, 18)),
-          Log<int>(11, timeStamp: DateTime(2019, 11, 2)),
+          Log<int>(1, timeStamp: DateTime(2021, 10, 3)),
+          Log<int>(2, timeStamp: DateTime(2021, 10, 4)),
+          Log<int>(3, timeStamp: DateTime(2021, 10, 5)),
+          Log<int>(2, timeStamp: DateTime(2021, 10, 18)),
+          Log<int>(0, timeStamp: DateTime(2021, 11, 2)),
+          Log<int>(3, timeStamp: DateTime(2021, 11, 3)),
         ],
       );
-      tracker2 = Tracker<double>(
+      tracker2 = Tracker<int>(
         'tracker2',
         logs: [
-          Log<double>(2.15, timeStamp: DateTime(2019, 10, 4)),
-          Log<double>(3.5, timeStamp: DateTime(2019, 10, 5)),
-          Log<double>(0.2, timeStamp: DateTime(2019, 10, 18)),
-          Log<double>(18.5, timeStamp: DateTime(2019, 11, 2)),
+          Log<int>(1, timeStamp: DateTime(2021, 10, 4)),
+          Log<int>(2, timeStamp: DateTime(2021, 10, 5)),
+          Log<int>(2, timeStamp: DateTime(2021, 10, 18)),
+          Log<int>(3, timeStamp: DateTime(2021, 11, 2)),
+          Log<int>(3, timeStamp: DateTime(2021, 11, 3)),
         ],
       );
 
-      correlation = computeCorrelationBetweenTwoTrackers(tracker1, tracker2);
+      correlation =
+          computeSpearmanCorrelationBetweenTwoTrackers(tracker1, tracker2);
       correlationWithReversedInput =
-          computeCorrelationBetweenTwoTrackers(tracker2, tracker1);
+          computeSpearmanCorrelationBetweenTwoTrackers(tracker2, tracker1);
 
-      expect(correlation.toStringAsFixed(5), '0.35063');
-      expect(correlationWithReversedInput.toStringAsFixed(5), '0.35063');
+      expect(correlation.toStringAsFixed(5), '-0.02778');
+      expect(correlationWithReversedInput.toStringAsFixed(5), '-0.02778');
 
       // Test 5
-      tracker1 = Tracker<int>(
+      tracker1 = Tracker<double>(
         'tracker1',
         logs: [
-          Log<int>(3, timeStamp: DateTime(2019, 10, 3)),
-          Log<int>(14, timeStamp: DateTime(2019, 10, 4)),
-          Log<int>(-16, timeStamp: DateTime(2019, 10, 5)),
-          Log<int>(2, timeStamp: DateTime(2019, 11, 18)),
-          Log<int>(11, timeStamp: DateTime(2019, 11, 2)),
+          Log<double>(8, timeStamp: DateTime(2019, 10, 2)),
+          Log<double>(7.5, timeStamp: DateTime(2019, 10, 3)),
+          Log<double>(7.8, timeStamp: DateTime(2019, 10, 4)),
+          Log<double>(7.5, timeStamp: DateTime(2019, 10, 6)),
+          Log<double>(8, timeStamp: DateTime(2019, 11, 18)),
+          Log<double>(7.5, timeStamp: DateTime(2019, 11, 19)),
+          Log<double>(8.5, timeStamp: DateTime(2019, 11, 20)),
+          Log<double>(7.5, timeStamp: DateTime(2019, 11, 21)),
         ],
       );
-      tracker2 = Tracker<bool>(
+      tracker2 = Tracker<int>(
         'tracker2',
         logs: [
-          Log<bool>(true, timeStamp: DateTime(2019, 10, 4)),
-          Log<bool>(true, timeStamp: DateTime(2019, 10, 5)),
-          Log<bool>(true, timeStamp: DateTime(2019, 10, 18)),
-          Log<bool>(false, timeStamp: DateTime(2019, 11, 2)),
+          Log<int>(2, timeStamp: DateTime(2019, 10, 4)),
+          Log<int>(2, timeStamp: DateTime(2019, 10, 5)),
+          Log<int>(2, timeStamp: DateTime(2019, 10, 6)),
+          Log<int>(0, timeStamp: DateTime(2019, 11, 18)),
+          Log<int>(2, timeStamp: DateTime(2019, 11, 19)),
+          Log<int>(1, timeStamp: DateTime(2019, 11, 20)),
+          Log<int>(2, timeStamp: DateTime(2019, 11, 21)),
         ],
       );
-
-      correlation = computeCorrelationBetweenTwoTrackers(tracker1, tracker2);
+      correlation =
+          computeSpearmanCorrelationBetweenTwoTrackers(tracker1, tracker2);
       correlationWithReversedInput =
-          computeCorrelationBetweenTwoTrackers(tracker2, tracker1);
+          computeSpearmanCorrelationBetweenTwoTrackers(tracker2, tracker1);
 
-      expect(correlation.toStringAsFixed(5), '-0.41931');
-      expect(correlationWithReversedInput.toStringAsFixed(5), '-0.41931');
-
-      // Test 6
-      tracker1 = Tracker<bool>(
-        'tracker1',
-        logs: [
-          Log<bool>(false, timeStamp: DateTime(2019, 10, 4)),
-          Log<bool>(true, timeStamp: DateTime(2019, 10, 5)),
-          Log<bool>(false, timeStamp: DateTime(2019, 10, 18)),
-          Log<bool>(false, timeStamp: DateTime(2019, 11, 2)),
-        ],
-      );
-      tracker2 = Tracker<double>(
-        'tracker2',
-        logs: [
-          Log<double>(-20.4, timeStamp: DateTime(2019, 10, 4)),
-          Log<double>(78.5, timeStamp: DateTime(2019, 10, 5)),
-          Log<double>(42.9, timeStamp: DateTime(2019, 10, 18)),
-          Log<double>(18.5, timeStamp: DateTime(2020, 2, 2)),
-        ],
-      );
-
-      correlation = computeCorrelationBetweenTwoTrackers(tracker1, tracker2);
-      correlationWithReversedInput =
-          computeCorrelationBetweenTwoTrackers(tracker2, tracker1);
-
-      expect(correlation.toStringAsFixed(5), '0.77510');
-      expect(correlationWithReversedInput.toStringAsFixed(5), '0.77510');
+      expect(correlation.toStringAsFixed(5), '-0.82618');
+      expect(correlationWithReversedInput.toStringAsFixed(5), '-0.82618');
     },
   );
 }
