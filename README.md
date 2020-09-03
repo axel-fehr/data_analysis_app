@@ -1,3 +1,3 @@
 # tracking_app
 
-A new Flutter application used to track things about yourself and analyze your personal data.
+This is a mobile application implemented with Flutter that can be used to track things (e.g. sleep) about yourself, analyze your data and get insights.
